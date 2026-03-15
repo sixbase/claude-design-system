@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbShort } from '../../components/BreadcrumbGallery';
+import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbTruncated, BreadcrumbShort } from '../../components/BreadcrumbGallery';
 ---
 
 <BaseLayout title="Breadcrumb">
@@ -15,7 +15,7 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbShort } from '.
     <pre><code>{`import { Breadcrumb } from '@ds/components';`}</code></pre>
 
     <h2>Default</h2>
-    <p>Pass an array of items. The last item renders as plain text.</p>
+    <p>Pass an array of items. The last item renders as plain text with a chevron (›) separator.</p>
     <BreadcrumbDefault client:load />
     <pre><code>{`<Breadcrumb
   items={[
@@ -26,13 +26,24 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbShort } from '.
   ]}
 />`}</code></pre>
 
-    <h2>Custom separator</h2>
-    <p>Override the default "/" separator with any string or ReactNode.</p>
-    <BreadcrumbCustomSeparator client:load />
+    <h2>Truncated</h2>
+    <p>Use <code>maxItems</code> to collapse middle items into an ellipsis. Useful for deep hierarchies on mobile.</p>
+    <BreadcrumbTruncated client:load />
     <pre><code>{`<Breadcrumb
-  items={[...]}
-  separator="›"
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Electronics', href: '#' },
+    { label: 'Phone Accessories', href: '#' },
+    { label: 'Cases & Covers', href: '#' },
+    { label: 'Aramid Fiber iPhone 17 Pro Max Case' },
+  ]}
+  maxItems={3}
 />`}</code></pre>
+
+    <h2>Custom separator</h2>
+    <p>Override the default "›" separator with any string or ReactNode.</p>
+    <BreadcrumbCustomSeparator client:load />
+    <pre><code>{`<Breadcrumb items={[...]} separator="/" />`}</code></pre>
 
     <h2>Short trail</h2>
     <BreadcrumbShort client:load />
@@ -50,7 +61,8 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbShort } from '.
       </thead>
       <tbody>
         <tr><td><code>items</code></td><td><code>BreadcrumbItem[]</code></td><td>—</td><td>Ordered list of breadcrumb items</td></tr>
-        <tr><td><code>separator</code></td><td><code>ReactNode</code></td><td><code>'/'</code></td><td>Separator between items</td></tr>
+        <tr><td><code>separator</code></td><td><code>ReactNode</code></td><td><code>'›'</code></td><td>Separator between items</td></tr>
+        <tr><td><code>maxItems</code></td><td><code>number</code></td><td>—</td><td>Max visible items. Middle items collapse to "…"</td></tr>
       </tbody>
     </table>
 
@@ -70,7 +82,7 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbShort } from '.
       <li>Renders as <code>&lt;nav aria-label="Breadcrumb"&gt;</code></li>
       <li>Uses an <code>&lt;ol&gt;</code> for ordered semantic structure</li>
       <li>Last item has <code>aria-current="page"</code></li>
-      <li>Separators are hidden from screen readers with <code>aria-hidden</code></li>
+      <li>Separators and ellipsis are hidden from screen readers with <code>aria-hidden</code></li>
     </ul>
   </div>
 </BaseLayout>

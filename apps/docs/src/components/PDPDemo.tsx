@@ -32,7 +32,7 @@ export function PDPDemo() {
 
       <div className="ds-pdp">
         <div className="ds-pdp__breadcrumb">
-          <Breadcrumb items={breadcrumbItems} />
+          <Breadcrumb items={breadcrumbItems} maxItems={3} />
         </div>
 
         <div className="ds-pdp__gallery">

@@ -5,4 +5,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   integrations: [react(), mdx()],
   output: 'static',
+  server: { host: true },
 });

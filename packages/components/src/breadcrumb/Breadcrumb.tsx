@@ -10,14 +10,25 @@ export interface BreadcrumbItem {
 export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   /** Ordered list of breadcrumb items. Last item is treated as current page. */
   items: BreadcrumbItem[];
-  /** Custom separator between items. Defaults to "/" */
+  /** Custom separator between items. Defaults to "›" */
   separator?: ReactNode;
+  /** Max visible items. When exceeded, middle items collapse to "…". */
+  maxItems?: number;
 }
 
 export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Breadcrumb(
-  { items, separator = '/', className, ...props },
+  { items, separator = '\u203A', maxItems, className, ...props },
   ref,
 ) {
+  let visibleItems = items;
+  let collapsed = false;
+
+  if (maxItems && maxItems > 1 && items.length > maxItems) {
+    const first = items[0] as BreadcrumbItem;
+    visibleItems = [first, ...items.slice(-(maxItems - 1))];
+    collapsed = true;
+  }
+
   return (
     <nav
       ref={ref}
@@ -26,8 +37,9 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Brea
       {...props}
     >
       <ol className="ds-breadcrumb__list">
-        {items.map((item, i) => {
-          const isLast = i === items.length - 1;
+        {visibleItems.map((item, i) => {
+          const isLast = i === visibleItems.length - 1;
+          const isFirst = i === 0;
           return (
             <li key={item.label} className="ds-breadcrumb__item">
               {isLast ? (
@@ -46,6 +58,16 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Brea
                   <span className="ds-breadcrumb__separator" aria-hidden="true">
                     {separator}
                   </span>
+                  {collapsed && isFirst && (
+                    <>
+                      <span className="ds-breadcrumb__ellipsis" aria-hidden="true">
+                        …
+                      </span>
+                      <span className="ds-breadcrumb__separator" aria-hidden="true">
+                        {separator}
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </li>

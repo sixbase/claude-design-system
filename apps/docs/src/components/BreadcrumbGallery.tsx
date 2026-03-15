@@ -25,7 +25,24 @@ export function BreadcrumbCustomSeparator() {
           { label: 'Collections', href: '#' },
           { label: 'Summer 2025' },
         ]}
-        separator="›"
+        separator="/"
+      />
+    </Preview>
+  );
+}
+
+export function BreadcrumbTruncated() {
+  return (
+    <Preview>
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '#' },
+          { label: 'Electronics', href: '#' },
+          { label: 'Phone Accessories', href: '#' },
+          { label: 'Cases & Covers', href: '#' },
+          { label: 'Aramid Fiber iPhone 17 Pro Max Case' },
+        ]}
+        maxItems={3}
       />
     </Preview>
   );
