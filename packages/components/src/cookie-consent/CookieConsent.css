@@ -111,8 +111,12 @@
   }
 
   .ds-cookie-consent__actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ds-cookie-consent__actions > .ds-button--primary {
+    order: -1;
   }
 
   .ds-cookie-consent__actions > * {

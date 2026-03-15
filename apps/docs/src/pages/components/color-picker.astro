@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ColorPickerDefault, ColorPickerSizes } from '../../components/ColorPickerGallery';
+---
+
+<BaseLayout title="Color Picker">
+  <div class="prose">
+    <h1>Color Picker</h1>
+    <p>
+      A group of selectable color swatches for product option selection.
+      Uses radio group semantics for full keyboard and screen reader support.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { ColorPicker } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <ColorPickerDefault client:load />
+    <pre><code>{`const COLORS = [
+  { value: 'black', color: '#1a1a1a', label: 'Carbon Black' },
+  { value: 'navy', color: '#1e3a5f', label: 'Navy Blue' },
+  { value: 'olive', color: '#556b2f', label: 'Olive Green' },
+];
+
+<ColorPicker options={COLORS} value={value} onChange={setValue} />`}</code></pre>
+
+    <h2>Sizes</h2>
+    <p>Three swatch sizes to fit different contexts.</p>
+    <ColorPickerSizes client:load />
+    <pre><code>{`<ColorPicker options={COLORS} value={value} onChange={setValue} size="sm" />
+<ColorPicker options={COLORS} value={value} onChange={setValue} size="md" />
+<ColorPicker options={COLORS} value={value} onChange={setValue} size="lg" />`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>options</code></td><td><code>ColorOption[]</code></td><td>—</td><td>Available color options. Each has <code>value</code>, <code>color</code> (CSS), and <code>label</code>.</td></tr>
+        <tr><td><code>value</code></td><td><code>string</code></td><td>—</td><td>Currently selected value</td></tr>
+        <tr><td><code>onChange</code></td><td><code>(value: string) =&gt; void</code></td><td>—</td><td>Called when a color is selected</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size of the swatches</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Uses <code>role="radiogroup"</code> on the container and <code>role="radio"</code> on each swatch</li>
+      <li>Each swatch has an <code>aria-label</code> with the color name (e.g. "Carbon Black")</li>
+      <li><code>aria-checked</code> indicates the selected swatch</li>
+      <li>Color is not the sole indicator — the active ring visually marks the selection</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

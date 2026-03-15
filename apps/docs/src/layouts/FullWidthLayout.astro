@@ -2,6 +2,8 @@
 import '@ds/tokens/css';
 import '@ds/components/styles';
 import './base.css';
+import { Header } from '@ds/components';
+import { Footer } from '@ds/components';
 
 interface Props {
   title: string;
@@ -9,6 +11,47 @@ interface Props {
 }
 
 const { title, description = 'Design system documentation' } = Astro.props;
+
+const NAV_ITEMS = [
+  { label: 'Shop', href: '/examples/homepage' },
+  { label: 'Collections', href: '/examples/collection' },
+  { label: 'About', href: '#' },
+];
+
+const FOOTER_COLUMNS = [
+  {
+    heading: 'Shop',
+    links: [
+      { label: 'Phone Cases', href: '#' },
+      { label: 'Wallets', href: '#' },
+      { label: 'Bags', href: '#' },
+      { label: 'Accessories', href: '#' },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About', href: '#' },
+      { label: 'Journal', href: '#' },
+      { label: 'Sustainability', href: '#' },
+      { label: 'Careers', href: '#' },
+    ],
+  },
+  {
+    heading: 'Support',
+    links: [
+      { label: 'Contact', href: '#' },
+      { label: 'Shipping & Returns', href: '#' },
+      { label: 'FAQ', href: '#' },
+      { label: 'Warranty', href: '#' },
+    ],
+  },
+];
+
+const LEGAL_LINKS = [
+  { label: 'Privacy Policy', href: '#' },
+  { label: 'Terms of Service', href: '#' },
+];
 ---
 
 <!doctype html>
@@ -33,347 +76,30 @@ const { title, description = 'Design system documentation' } = Astro.props;
     </script>
   </head>
   <body>
-    <header class="site-header">
-      <div class="site-header__inner">
-        <a href="/" class="site-header__logo" aria-label="Home">
-          <img src="/mason-supply-co-logo.svg" alt="Mason Supply Co." class="site-header__logo-img" />
-        </a>
-        <nav class="site-header__nav" aria-label="Main">
-          <a href="#">Shop</a>
-          <a href="#">Collections</a>
-          <a href="#">About</a>
-        </nav>
-        <div class="site-header__actions">
-          <button type="button" class="site-header__icon-btn site-header__theme-toggle" aria-label="Toggle dark mode">
-            <svg class="theme-icon theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5" />
-              <line x1="12" y1="1" x2="12" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-            <svg class="theme-icon theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-            </svg>
-          </button>
-          <button type="button" class="site-header__icon-btn site-header__cart" aria-label="Shopping bag (0 items)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 01-8 0" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </header>
+    <Header
+      client:load
+      logoSrc="/mason-supply-co-logo.svg"
+      logoAlt="Mason Supply Co."
+      navItems={NAV_ITEMS}
+      cartHref="/examples/cart"
+      cartCount={0}
+    />
     <main>
       <slot />
     </main>
-    <footer class="site-footer">
-      <div class="site-footer__inner">
-        <div class="site-footer__grid">
-          <div class="site-footer__brand">
-            <a href="/" class="site-footer__logo" aria-label="Mason Supply Co.">
-              <img src="/mason-supply-co-logo.svg" alt="Mason Supply Co." class="site-footer__logo-img" />
-            </a>
-            <p class="site-footer__tagline">Thoughtfully designed accessories for everyday carry.</p>
-          </div>
-          <div class="site-footer__column">
-            <h3 class="site-footer__heading">Shop</h3>
-            <ul class="site-footer__links">
-              <li><a href="#">Phone Cases</a></li>
-              <li><a href="#">Wallets</a></li>
-              <li><a href="#">Bags</a></li>
-              <li><a href="#">Accessories</a></li>
-            </ul>
-          </div>
-          <div class="site-footer__column">
-            <h3 class="site-footer__heading">Company</h3>
-            <ul class="site-footer__links">
-              <li><a href="#">About</a></li>
-              <li><a href="#">Journal</a></li>
-              <li><a href="#">Sustainability</a></li>
-              <li><a href="#">Careers</a></li>
-            </ul>
-          </div>
-          <div class="site-footer__column">
-            <h3 class="site-footer__heading">Support</h3>
-            <ul class="site-footer__links">
-              <li><a href="#">Contact</a></li>
-              <li><a href="#">Shipping & Returns</a></li>
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">Warranty</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="site-footer__bottom">
-          <p class="site-footer__copyright">&copy; 2026 Mason Supply Co. All rights reserved.</p>
-          <div class="site-footer__legal">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <script>
-      document.querySelector('.site-header__theme-toggle')?.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('ds-theme', isDark ? 'dark' : 'light');
-      });
-    </script>
+    <Footer
+      client:load
+      logoSrc="/mason-supply-co-logo.svg"
+      logoAlt="Mason Supply Co."
+      tagline="Thoughtfully designed accessories for everyday carry."
+      columns={FOOTER_COLUMNS}
+      copyright="&copy; 2026 Mason Supply Co. All rights reserved."
+      legalLinks={LEGAL_LINKS}
+    />
   </body>
 </html>
 
 <style>
-  /* ─── Header ──────────────────────────────────────────── */
-  .site-header {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .site-header__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--spacing-4);
-    gap: var(--spacing-4);
-  }
-
-  @media (min-width: 768px) {
-    .site-header__inner {
-      padding: var(--spacing-4) var(--spacing-8);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .site-header__inner {
-      padding: var(--spacing-4) var(--spacing-16);
-    }
-  }
-
-  .site-header__logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-  }
-
-  .site-header__logo-img {
-    display: block;
-    height: 20px;
-    width: auto;
-    color: var(--color-foreground);
-  }
-
-  .site-header__nav {
-    display: none;
-    gap: var(--spacing-6);
-  }
-
-  @media (min-width: 768px) {
-    .site-header__nav {
-      display: flex;
-    }
-  }
-
-  .site-header__nav a {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-  }
-
-  .site-header__nav a:hover {
-    color: var(--color-foreground);
-  }
-
-  .site-header__actions {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-1);
-  }
-
-  .site-header__icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--color-foreground);
-    border-radius: var(--radius-md);
-    transition: background-color var(--transition-fast);
-    padding: 0;
-  }
-
-  .site-header__icon-btn:hover {
-    background-color: var(--color-background-subtle);
-  }
-
-  .site-header__icon-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-focus-ring);
-  }
-
-  /* ─── Theme toggle icon visibility ─────────────────────── */
-  .theme-icon--moon {
-    display: none;
-  }
-
-  :global(.dark) .theme-icon--sun {
-    display: none;
-  }
-
-  :global(.dark) .theme-icon--moon {
-    display: block;
-  }
-
-  /* Invert logo in dark mode (SVG loaded as <img> can't use currentColor) */
-  :global(.dark) .site-header__logo-img {
-    filter: invert(1);
-  }
-
-  /* ─── Footer ─────────────────────────────────────────── */
-  .site-footer {
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--spacing-16);
-  }
-
-  .site-footer__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: var(--spacing-12) var(--spacing-4) var(--spacing-8);
-  }
-
-  @media (min-width: 768px) {
-    .site-footer__inner {
-      padding: var(--spacing-12) var(--spacing-8) var(--spacing-8);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .site-footer__inner {
-      padding: var(--spacing-16) var(--spacing-16) var(--spacing-8);
-    }
-  }
-
-  .site-footer__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-8);
-  }
-
-  @media (min-width: 768px) {
-    .site-footer__grid {
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: var(--spacing-8);
-    }
-  }
-
-  .site-footer__logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-  }
-
-  .site-footer__logo-img {
-    display: block;
-    height: 20px;
-    width: auto;
-    color: var(--color-foreground);
-  }
-
-  :global(.dark) .site-footer__logo-img {
-    filter: invert(1);
-  }
-
-  .site-footer__tagline {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    margin-top: var(--spacing-2);
-    line-height: var(--line-height-relaxed);
-  }
-
-  .site-footer__heading {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wider);
-    margin: 0 0 var(--spacing-3) 0;
-  }
-
-  .site-footer__links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
-  }
-
-  .site-footer__links a {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-  }
-
-  .site-footer__links a:hover {
-    color: var(--color-foreground);
-  }
-
-  .site-footer__bottom {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-3);
-    margin-top: var(--spacing-12);
-    padding-top: var(--spacing-6);
-    border-top: 1px solid var(--color-border);
-  }
-
-  @media (min-width: 768px) {
-    .site-footer__bottom {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-  }
-
-  .site-footer__copyright {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-subtle);
-    margin: 0;
-  }
-
-  .site-footer__legal {
-    display: flex;
-    gap: var(--spacing-4);
-  }
-
-  .site-footer__legal a {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-subtle);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-  }
-
-  .site-footer__legal a:hover {
-    color: var(--color-foreground);
-  }
-
   /* ─── Main ────────────────────────────────────────────── */
   main {
     max-width: 1280px;

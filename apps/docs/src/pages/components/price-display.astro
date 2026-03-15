@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PriceDisplayDefault, PriceDisplayWithCompare, PriceDisplaySizes } from '../../components/PriceDisplayGallery';
+---
+
+<BaseLayout title="Price Display">
+  <div class="prose">
+    <h1>Price Display</h1>
+    <p>
+      Displays a product price with an optional compare-at / original price
+      shown with a strikethrough. Used on product cards, PDPs, and cart line items.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { PriceDisplay } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <PriceDisplayDefault client:load />
+    <pre><code>{`<PriceDisplay price="$48.00" />`}</code></pre>
+
+    <h2>With compare price</h2>
+    <p>Show the original price with a strikethrough when an item is on sale.</p>
+    <PriceDisplayWithCompare client:load />
+    <pre><code>{`<PriceDisplay price="$89.00" comparePrice="$112.00" />`}</code></pre>
+
+    <h2>Sizes</h2>
+    <PriceDisplaySizes client:load />
+    <pre><code>{`<PriceDisplay price="$48.00" comparePrice="$65.00" size="sm" />
+<PriceDisplay price="$48.00" comparePrice="$65.00" size="md" />
+<PriceDisplay price="$48.00" comparePrice="$65.00" size="lg" />`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>price</code></td><td><code>string</code></td><td>—</td><td>Current / sale price (pre-formatted, e.g. "$48.00")</td></tr>
+        <tr><td><code>comparePrice</code></td><td><code>string</code></td><td>—</td><td>Original price shown with strikethrough</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size variant</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Compare price includes a <code>&lt;span class="ds-sr-only"&gt;Original price:&lt;/span&gt;</code> for screen readers</li>
+      <li>Strikethrough is visual only — screen readers get the semantic context from the hidden label</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

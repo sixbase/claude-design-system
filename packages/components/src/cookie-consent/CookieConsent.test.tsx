@@ -173,13 +173,13 @@ describe('CookieConsent', () => {
 
   // ─── Keyboard ───────────────────────────────────────────
 
-  it('starts closing animation when Escape is pressed', async () => {
+  it('closes when Escape is pressed', async () => {
     const user = userEvent.setup();
-    const { container } = render(<CookieConsent open />);
+    const onOpenChange = vi.fn();
+    render(<CookieConsent open onOpenChange={onOpenChange} />);
 
     await user.keyboard('{Escape}');
-    const banner = container.querySelector('.ds-cookie-consent');
-    expect(banner?.className).toContain('ds-cookie-consent--closing');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   // ─── ARIA / Accessibility ──────────────────────────────

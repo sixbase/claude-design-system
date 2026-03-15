@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { FooterDefault, FooterMinimal } from '../../components/FooterGallery';
+---
+
+<BaseLayout title="Footer">
+  <div class="prose">
+    <h1>Footer</h1>
+    <p>
+      A responsive site footer with brand section, configurable link columns,
+      copyright, and legal links. Collapses to a single column on mobile.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Footer } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <FooterDefault client:load />
+    <pre><code>{`<Footer
+  logoSrc="/logo.svg"
+  logoAlt="Brand Name"
+  tagline="Thoughtfully designed accessories."
+  columns={[
+    {
+      heading: 'Shop',
+      links: [
+        { label: 'Phone Cases', href: '/cases' },
+        { label: 'Wallets', href: '/wallets' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Careers', href: '/careers' },
+      ],
+    },
+  ]}
+  copyright="© 2026 Brand Name. All rights reserved."
+  legalLinks={[
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
+  ]}
+/>`}</code></pre>
+
+    <h2>Minimal</h2>
+    <p>Logo and copyright only — no columns or legal links.</p>
+    <FooterMinimal client:load />
+    <pre><code>{`<Footer
+  logoSrc="/logo.svg"
+  logoAlt="Brand Name"
+  copyright="© 2026 Brand Name. All rights reserved."
+/>`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>logoSrc</code></td><td><code>string</code></td><td>—</td><td>Logo image URL</td></tr>
+        <tr><td><code>logoAlt</code></td><td><code>string</code></td><td><code>'Home'</code></td><td>Logo alt text</td></tr>
+        <tr><td><code>logoHref</code></td><td><code>string</code></td><td><code>'/'</code></td><td>Logo link destination</td></tr>
+        <tr><td><code>tagline</code></td><td><code>string</code></td><td>—</td><td>Brand tagline below the logo</td></tr>
+        <tr><td><code>columns</code></td><td><code>FooterColumn[]</code></td><td><code>[]</code></td><td>Link columns</td></tr>
+        <tr><td><code>copyright</code></td><td><code>string</code></td><td>—</td><td>Copyright text</td></tr>
+        <tr><td><code>legalLinks</code></td><td><code>{'{ label, href }[]'}</code></td><td><code>[]</code></td><td>Legal links at the bottom</td></tr>
+      </tbody>
+    </table>
+
+    <h3>FooterColumn</h3>
+    <table class="props-table">
+      <thead>
+        <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>heading</code></td><td><code>string</code></td><td>Column heading text</td></tr>
+        <tr><td><code>links</code></td><td><code>{'{ label: string; href: string }[]'}</code></td><td>Links in the column</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Uses semantic <code>&lt;footer&gt;</code> element for landmark identification</li>
+      <li>Column headings use <code>&lt;h3&gt;</code> for proper document structure</li>
+      <li>Logo link has an <code>aria-label</code> for screen readers</li>
+      <li>All links have visible focus indicators and hover states</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

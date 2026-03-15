@@ -123,21 +123,25 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
 
     // ─── Handlers ───────────────────────────────────────────
 
+    const finishClose = useCallback(() => {
+      setClosing(false);
+      setShowPreferences(false);
+      if (isControlled) {
+        onOpenChange?.(false);
+      } else {
+        setInternalOpen(false);
+      }
+    }, [isControlled, onOpenChange]);
+
     const close = useCallback(() => {
       setClosing(true);
     }, []);
 
     const handleAnimationEnd = useCallback(() => {
       if (closing) {
-        setClosing(false);
-        setShowPreferences(false);
-        if (isControlled) {
-          onOpenChange?.(false);
-        } else {
-          setInternalOpen(false);
-        }
+        finishClose();
       }
-    }, [closing, isControlled, onOpenChange]);
+    }, [closing, finishClose]);
 
     const handleAcceptAll = useCallback(() => {
       const allIds = categories ? categories.map((c) => c.id) : [];
@@ -165,6 +169,22 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     const handleBack = useCallback(() => {
       setShowPreferences(false);
     }, []);
+
+    // ─── Reduced-motion fallback ─────────────────────────────
+    // When closing is set but animations are disabled (prefers-reduced-motion
+    // or no CSS animation support), onAnimationEnd won't fire. Detect this
+    // and close immediately.
+
+    useEffect(() => {
+      if (!closing) return;
+      if (typeof window === 'undefined') return;
+      const el = bannerRef.current?.parentElement;
+      if (!el) return;
+      const animName = getComputedStyle(el).animationName;
+      if (animName === 'none' || animName === '') {
+        finishClose();
+      }
+    }, [closing, finishClose]);
 
     // ─── Escape key ─────────────────────────────────────────
 
@@ -259,10 +279,10 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
           <div className="ds-cookie-consent__actions">
             {hasCategories && showPreferences ? (
               <>
-                <Button variant="secondary" size="sm" onClick={handleBack}>
+                <Button variant="secondary" size="md" onClick={handleBack}>
                   {closeLabel}
                 </Button>
-                <Button variant="primary" size="sm" onClick={handleSavePreferences}>
+                <Button variant="primary" size="md" onClick={handleSavePreferences}>
                   {saveLabel}
                 </Button>
               </>
@@ -271,16 +291,16 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
                 {hasCategories && (
                   <Button
                     variant="secondary"
-                    size="sm"
+                    size="md"
                     onClick={() => setShowPreferences(true)}
                   >
                     {preferencesLabel}
                   </Button>
                 )}
-                <Button variant="secondary" size="sm" onClick={handleReject}>
+                <Button variant="secondary" size="md" onClick={handleReject}>
                   {rejectLabel}
                 </Button>
-                <Button variant="primary" size="sm" onClick={handleAcceptAll}>
+                <Button variant="primary" size="md" onClick={handleAcceptAll}>
                   {acceptLabel}
                 </Button>
               </>

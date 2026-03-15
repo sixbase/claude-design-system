@@ -498,13 +498,14 @@ Establish these conventions and hold to them across every component:
 
 ## Component Catalog
 
-All 18 components shipped, organized by complexity tier.
+All 21 components shipped, organized by complexity tier.
 
 ### Tier 1 — Primitives (single element, no state)
 | Component | Element | Key Pattern |
 |-----------|---------|-------------|
 | Badge | `<span>` | `variant` + `size`, no interaction |
 | ColorSwatch | `<div>` | Display-only, used in docs token pages |
+| PriceDisplay | `<div>` | `price` + optional `comparePrice` (strikethrough), `size` prop |
 | Typography (Heading/Text) | `<h1>`–`<h4>`, `<p>` | `asChild` for polymorphism, semantic level prop |
 | StockIndicator | `<p>` | Status-based color + pulse animation, `status` prop maps to defaults |
 
@@ -514,6 +515,7 @@ All 18 components shipped, organized by complexity tier.
 | Button | `<button>` | `asChild` + Slot, `variant`/`size`, loading state |
 | Input | `<input>` wrapper | Compound: label + field + error, `useId()` for a11y linking |
 | Checkbox | `<input type="checkbox">` | Radix primitive, `checked`/`onCheckedChange` |
+| ColorPicker | `<div>` group | `options` array of `{ value, color, label }`, controlled `value`/`onChange`, renders ColorSwatch buttons with selection ring |
 | Select | Radix Select | Compound API, portal rendering, keyboard nav |
 | QuantitySelector | `<div>` group | Controlled stepper, `role="group"`, min/max bounds |
 | StarRating | `<div role="img">` | SVG stars with clipPath half-fill, clamped 0–5 |
@@ -534,6 +536,48 @@ All 18 components shipped, organized by complexity tier.
 | Carousel + CarouselSlide | Scroll container + children | `scroll-snap-type`, responsive `flex-basis` sizes |
 | FeatureBlock | Image + text grid | `reverse` prop uses CSS `order` swap at tablet+ |
 | CookieConsent | Accordion + Button | `position: fixed` banner, controlled/uncontrolled, i18n labels, uses `bordered` accordion with native checkbox variant |
+
+### Site-Level Layout Components
+
+These are not in `@ds/components` — they live in `apps/docs/src/layouts/` as Astro components. They form the site chrome that wraps every example page.
+
+| Component | File | Description |
+|-----------|------|-------------|
+| FullWidthLayout | `FullWidthLayout.astro` | Full-bleed layout with Header, Footer, and `<slot>` for page content. Used by all example pages (Homepage, Collection, PDP, Cart). |
+| BaseLayout | `BaseLayout.astro` | Sidebar + content layout used by docs/component pages. Includes sidebar navigation with Getting Started, Foundation, Components, and Examples sections. |
+
+#### Header (`FullWidthLayout.astro`)
+
+The site header is built directly in the layout file (not a standalone component) and contains:
+
+| Element | Implementation | Notes |
+|---------|---------------|-------|
+| Logo | `<a>` + `<img>` SVG | Links to `/`, inverted via `filter: invert(1)` in dark mode |
+| Navigation | `<nav>` with `<a>` links | Hidden on mobile (`display: none`), visible at 768px+. Links: Shop → `/examples/homepage`, Collections → `/examples/collection`, About → `#` |
+| Dark mode toggle | `<button>` with sun/moon SVG icons | Toggles `.dark` class on `<html>`, persists to `localStorage('ds-theme')`. Sun icon hidden in dark mode, moon icon hidden in light mode via `:global(.dark)` selectors. |
+| Cart icon | `<a>` with shopping bag SVG | Links to `/examples/cart`. Changed from `<button>` to `<a>` for proper navigation. |
+
+**Responsive behavior:**
+- Mobile: logo + actions only (nav hidden)
+- Tablet (768px+): nav links appear between logo and actions
+- Padding scales: `--spacing-4` → `--spacing-8` → `--spacing-16` at sm/md/lg
+
+#### Footer (`FullWidthLayout.astro`)
+
+Four-column grid footer built directly in the layout:
+
+| Column | Content |
+|--------|---------|
+| Brand | Logo + tagline ("Thoughtfully designed accessories for everyday carry.") |
+| Shop | Phone Cases, Wallets, Bags, Accessories |
+| Company | About, Journal, Sustainability, Careers |
+| Support | Contact, Shipping & Returns, FAQ, Warranty |
+
+Bottom bar: copyright + Privacy Policy / Terms of Service links.
+
+**Responsive:** Single column on mobile, `2fr 1fr 1fr 1fr` grid at 768px+. Bottom bar stacks on mobile, row with `space-between` on tablet+.
+
+**Dark mode:** Logo gets `filter: invert(1)`, all colors use CSS custom properties so they adapt automatically.
 
 ### Cookie Consent — Copy Conventions & Structure
 
@@ -558,6 +602,9 @@ Each category includes a per-category "Learn more" link (`learnMoreHref` on `Coo
 **Preferences Screen Buttons:**
 - `Back` (secondary) — returns to main dialog without saving
 - `Save Preferences` (primary) — confirms custom choices and closes banner
+
+**Mobile Button Order:**
+On small screens (<640px), buttons stack vertically with the primary action first (using CSS `order: -1` on `.ds-button--primary`). This ensures the most important action — Accept All on the main dialog, Save Preferences on the preferences screen — is always immediately visible without scrolling. Desktop keeps the conventional left-secondary / right-primary order.
 
 **Key API Props:**
 - `learnMoreHref` on `CookieConsentProps` — global learn more link in the description
@@ -607,6 +654,23 @@ The Carousel component uses native CSS scroll-snap instead of JavaScript-driven 
 ```
 
 Responsive slide widths use `flex-basis` at breakpoints (not JS resize observers).
+
+### Primary-first button stacking (CookieConsent)
+On mobile, action buttons stack vertically with the primary button promoted to the top via `order: -1`. DOM order stays secondary → primary (correct for desktop's left-to-right reading), but mobile shows the primary action first since it's the most important tap target:
+
+```css
+@media (max-width: 639px) {
+  .ds-cookie-consent__actions {
+    display: flex;
+    flex-direction: column;
+  }
+  .ds-cookie-consent__actions > .ds-button--primary {
+    order: -1;
+  }
+}
+```
+
+This pattern generalizes to any action bar where the primary CTA should lead on small screens.
 
 ### CSS order swap (FeatureBlock)
 Alternating image/text layouts use `order` instead of duplicating markup:
@@ -741,3 +805,109 @@ h2 → Accessibility (ul of ARIA/keyboard details)
 ```
 
 Props table CSS is duplicated per page (Astro scoped styles). This is intentional — no shared stylesheet needed.
+
+---
+
+## Example Page Compositions
+
+Four full-page prototypes live in `apps/docs/src/pages/examples/` and demonstrate how the component library composes into real storefront pages. Each page follows the same file pattern: an `.astro` wrapper (using `FullWidthLayout`) + a React component (`client:load`) + a CSS file for page-specific layout.
+
+### Shared Data Layer
+
+All pages consume from `apps/docs/src/data/products.ts`:
+- `Product` interface — `id`, `name`, `price` (cents), `compareAtPrice`, `image`, `category`, `badge`, `description`
+- `PRODUCTS` — 12 mock products with earthy SVG placeholder images
+- `formatPrice(cents, currency)` — `Intl.NumberFormat` currency formatter
+
+Prices are stored in **cents** (e.g., `4800` = $48.00) to avoid floating-point issues — the same convention Shopify and Stripe use.
+
+### Page: Homepage (`/examples/homepage`)
+
+| Section | Components Used | Layout Pattern |
+|---------|----------------|----------------|
+| Hero | Heading (h1, 4xl), Text (lg, muted), Button (primary, lg, `asChild` → `<a>`) | Centered flex column, `min-height: 60vh`, subtle background |
+| Featured Products | Heading (h2), Text, Carousel + CarouselSlide (sm), ProductCard | Horizontal scroll, each card links to PDP |
+| Feature Blocks | FeatureBlock (×3, alternating `reverse`) | Stacked with `--spacing-phi-21` gap |
+| Newsletter | Heading (h3), Text, Input (email), Button (primary, submit) | Centered, `max-width: 480px`, row on tablet+, stacked mobile |
+
+**State:** Single `email` string for the newsletter input. Form submit clears the field.
+
+**Key patterns:**
+- `Button asChild` wrapping `<a>` for the hero CTA — renders a link styled as a primary button
+- `CarouselSlide size="sm"` for tighter product card widths in the featured section
+- `FeatureBlock reverse={i % 2 === 1}` for alternating left/right image placement
+- Newsletter form uses `flex-direction: column` on mobile, `row` on tablet+ via media query
+
+### Page: Collection (`/examples/collection`)
+
+| Section | Components Used | Layout Pattern |
+|---------|----------------|----------------|
+| Breadcrumb | Breadcrumb | Home › Collections › All Products |
+| Header + Sort | Heading (h1, 2xl), Text (sm, muted, count), Select + SelectItem (sm) | Flex row, sort right-aligned on tablet+ |
+| Product Grid | ProductCard (×12) | CSS Grid: 2-col mobile → 3-col tablet → 4-col desktop |
+
+**State:** `sortValue` string controlling sort order via `useMemo` re-sort.
+
+**Sort options:** Newest (default order), Price Low→High, Price High→Low, Best Selling (badge-based simulation).
+
+**Key patterns:**
+- Responsive grid uses `grid-template-columns: repeat(N, 1fr)` at breakpoints — no JS resize logic
+- Sort dropdown uses `Select size="sm"` to stay compact in the header row
+- Each ProductCard is wrapped in an `<a>` linking to the PDP
+- Header row uses `flex-direction: column` on mobile, `row` with `justify-content: space-between` on tablet+
+
+### Page: Product Detail (`/examples/product-detail`)
+
+| Section | Components Used | Layout Pattern |
+|---------|----------------|----------------|
+| Gallery | ImageGallery (left thumbnails) | Golden ratio grid: `1.618fr 1fr` at lg |
+| Details | Heading, Text, Badge, StarRating, ColorPicker, Select, QuantitySelector, Button, StockIndicator | Sticky sidebar, flex column |
+| Accordion | Accordion (multiple, sm, bordered) | Product info sections |
+| Lifestyle | Carousel + CarouselSlide | Lifestyle image gallery |
+| Features | FeatureBlock (×3, alternating) | Same pattern as Homepage |
+
+**State:** Color, size, quantity selections. Pre-populated with product data.
+
+### Page: Cart (`/examples/cart`)
+
+| Section | Components Used | Layout Pattern |
+|---------|----------------|----------------|
+| Header | Heading (h1, 2xl), Text (sm, muted, item count) | Full-width span at lg |
+| Line Items | Text (sm), QuantitySelector (sm), inline SVG remove button | Grid: `80px 1fr auto` mobile, `100px 1fr auto auto` tablet+ |
+| Order Summary | Heading (h2, lg), Text, Button (primary, lg, fullWidth), Button (secondary, asChild → `<a>`) | Sticky sidebar at lg, subtle background |
+| Empty State | Heading (h3), Text (muted), Button (secondary, asChild → `<a>`) | Centered, full-width span |
+
+**State:** `CartItem[]` (product + quantity) with 3 pre-populated items. Derived values: subtotal, shipping (free over $50), total, item count.
+
+**Key patterns:**
+- Golden ratio grid (`1.618fr 1fr`) matching PDP layout at desktop
+- Sticky order summary sidebar with `position: sticky; top: var(--spacing-6)`
+- `QuantitySelector size="sm"` inline within line items — uses `align-items: start` to prevent stretch
+- Conditional shipping: free over `FREE_SHIPPING_THRESHOLD` (5000 cents / $50)
+- Empty state renders when all items are removed — centered CTA to continue shopping
+- Remove button uses inline SVG × icon with `aria-label={`Remove ${name}`}` for accessibility
+
+### Cross-Page Navigation
+
+| Link | From → To |
+|------|-----------|
+| Header "Shop" | Any page → Homepage |
+| Header "Collections" | Any page → Collection |
+| Header cart icon | Any page → Cart (`<a>` instead of `<button>`) |
+| Hero CTA | Homepage → Collection |
+| Product cards | Homepage/Collection → PDP |
+| Breadcrumb | Collection → Homepage |
+| "Continue Shopping" | Cart → Collection |
+
+### Page Layout Conventions
+
+All example pages follow these conventions established by the PDP:
+
+- **BEM with `ds-` prefix**: `.ds-homepage__hero`, `.ds-collection__grid`, `.ds-cart__line-item`
+- **Phi spacing tokens**: `--spacing-phi-34` (68px) for major section breaks, `--spacing-phi-21` (42px) for paragraph-level breaks, `--spacing-phi-13` (26px) for minor spacing
+- **Responsive breakpoints**: 640px (sm), 768px (md), 1024px (lg)
+- **Golden ratio grid**: `grid-template-columns: 1.618fr 1fr` at lg breakpoint for two-column layouts (PDP, Cart)
+- **Placeholder images**: SVG data URIs via `makePlaceholder()` (800×1000 portrait) and `makeLifestylePlaceholder()` (1000×800 landscape) — earthy tones matching the brand palette
+- **Typography**: Always use Heading/Text components, never raw HTML heading or paragraph tags
+- **Icons**: Inline SVG, no icon library dependency
+- **`asChild` for link-buttons**: Use `<Button asChild><a href="...">Label</a></Button>` instead of `onClick` navigation

@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { HeaderDefault, HeaderMinimal } from '../../components/HeaderGallery';
+---
+
+<BaseLayout title="Header">
+  <div class="prose">
+    <h1>Header</h1>
+    <p>
+      A responsive site header with logo, navigation links, theme toggle, and cart icon.
+      Navigation collapses on mobile. Designed for e-commerce storefronts.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Header } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <HeaderDefault client:load />
+    <pre><code>{`<Header
+  logoSrc="/logo.svg"
+  logoAlt="Brand Name"
+  navItems={[
+    { label: 'Shop', href: '/shop' },
+    { label: 'Collections', href: '/collections' },
+    { label: 'About', href: '/about' },
+  ]}
+  cartHref="/cart"
+  cartCount={3}
+/>`}</code></pre>
+
+    <h2>Minimal</h2>
+    <p>Logo and cart only, no nav links or theme toggle.</p>
+    <HeaderMinimal client:load />
+    <pre><code>{`<Header
+  logoSrc="/logo.svg"
+  logoAlt="Brand Name"
+  showThemeToggle={false}
+/>`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>logoSrc</code></td><td><code>string</code></td><td>—</td><td>Logo image URL</td></tr>
+        <tr><td><code>logoAlt</code></td><td><code>string</code></td><td><code>'Home'</code></td><td>Logo alt text</td></tr>
+        <tr><td><code>logoHref</code></td><td><code>string</code></td><td><code>'/'</code></td><td>Logo link destination</td></tr>
+        <tr><td><code>navItems</code></td><td><code>HeaderNavItem[]</code></td><td><code>[]</code></td><td>Main navigation links</td></tr>
+        <tr><td><code>cartHref</code></td><td><code>string</code></td><td><code>'/cart'</code></td><td>Cart icon link destination</td></tr>
+        <tr><td><code>cartCount</code></td><td><code>number</code></td><td><code>0</code></td><td>Number of items in cart</td></tr>
+        <tr><td><code>showThemeToggle</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show dark/light theme toggle</td></tr>
+      </tbody>
+    </table>
+
+    <h3>HeaderNavItem</h3>
+    <table class="props-table">
+      <thead>
+        <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>label</code></td><td><code>string</code></td><td>Link text</td></tr>
+        <tr><td><code>href</code></td><td><code>string</code></td><td>Link destination</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Navigation uses <code>&lt;nav aria-label="Main"&gt;</code> for landmark identification</li>
+      <li>Logo link has an <code>aria-label</code> for screen readers</li>
+      <li>Cart icon includes item count in its <code>aria-label</code> (e.g. "Shopping bag (3 items)")</li>
+      <li>Theme toggle button has <code>aria-label="Toggle dark mode"</code></li>
+      <li>All interactive elements have visible focus indicators</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>
