@@ -120,3 +120,144 @@
   flex-direction: column;
   gap: var(--spacing-3);
 }
+
+/* ─── Stock indicator ───────────────────────────────────── */
+.ds-pdp__stock {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-foreground-subtle);
+}
+
+.ds-pdp__stock-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: #22c55e;
+  animation: ds-pdp-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ds-pdp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Accordion lists ───────────────────────────────────── */
+.ds-pdp__accordion-list {
+  margin: 0;
+  padding-left: var(--spacing-4);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-foreground-subtle);
+}
+
+/* ─── Lifestyle carousel ────────────────────────────────── */
+.ds-pdp__lifestyle {
+  margin-top: var(--spacing-10);
+  overflow: hidden;
+}
+
+.ds-pdp__lifestyle-track {
+  display: flex;
+  gap: var(--spacing-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: var(--spacing-2);
+}
+
+.ds-pdp__lifestyle-track::-webkit-scrollbar {
+  display: none;
+}
+
+.ds-pdp__lifestyle-slide {
+  flex: 0 0 85%;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .ds-pdp__lifestyle-slide {
+    flex: 0 0 65%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-pdp__lifestyle-slide {
+    flex: 0 0 50%;
+  }
+}
+
+.ds-pdp__lifestyle-img {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
+/* ─── Feature block (image + marketing text) ────────────── */
+.ds-pdp__feature {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-10);
+}
+
+@media (min-width: 768px) {
+  .ds-pdp__feature {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-10);
+    align-items: center;
+  }
+
+  .ds-pdp__feature--reverse .ds-pdp__feature-image {
+    order: 2;
+  }
+
+  .ds-pdp__feature--reverse .ds-pdp__feature-text {
+    order: 1;
+  }
+}
+
+.ds-pdp__feature-img {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
+.ds-pdp__feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.ds-pdp__feature-title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-tight);
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .ds-pdp__feature-title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.ds-pdp__feature-desc {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-foreground-subtle);
+  margin: 0;
+}

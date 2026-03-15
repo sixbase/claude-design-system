@@ -12,3 +12,4 @@ export * from './product-card';
 export * from './breadcrumb';
 export * from './quantity-selector';
 export * from './image-gallery';
+export * from './star-rating';

@@ -1,0 +1,59 @@
+/* ─── StarRating ─────────────────────────────────────────── */
+.ds-star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-family: var(--font-family-sans);
+}
+
+.ds-star-rating__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.ds-star-rating__star {
+  flex-shrink: 0;
+}
+
+.ds-star-rating__star-fill {
+  fill: var(--color-foreground);
+}
+
+.ds-star-rating__star-bg {
+  fill: var(--color-border);
+}
+
+.ds-star-rating__count {
+  color: var(--color-foreground-subtle);
+}
+
+/* ─── Size: sm ──────────────────────────────────────────── */
+.ds-star-rating--sm .ds-star-rating__star {
+  width: 14px;
+  height: 14px;
+}
+
+.ds-star-rating--sm .ds-star-rating__count {
+  font-size: var(--font-size-xs);
+}
+
+/* ─── Size: md ──────────────────────────────────────────── */
+.ds-star-rating--md .ds-star-rating__star {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-star-rating--md .ds-star-rating__count {
+  font-size: var(--font-size-sm);
+}
+
+/* ─── Size: lg ──────────────────────────────────────────── */
+.ds-star-rating--lg .ds-star-rating__star {
+  width: 20px;
+  height: 20px;
+}
+
+.ds-star-rating--lg .ds-star-rating__count {
+  font-size: var(--font-size-base);
+}
