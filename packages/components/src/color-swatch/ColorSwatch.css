@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
-  min-width: 80px;
+  min-width: var(--spacing-20);
 }
 
 .ds-color-swatch__sample {
-  height: 48px;
+  height: var(--spacing-12);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
 }
@@ -14,7 +14,7 @@
 .ds-color-swatch__info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--spacing-phi-1);
 }
 
 .ds-color-swatch__name {

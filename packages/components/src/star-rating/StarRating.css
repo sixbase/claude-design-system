@@ -30,8 +30,8 @@
 
 /* ─── Size: sm ──────────────────────────────────────────── */
 .ds-star-rating--sm .ds-star-rating__star {
-  width: 14px;
-  height: 14px;
+  width: var(--font-size-sm);
+  height: var(--font-size-sm);
 }
 
 .ds-star-rating--sm .ds-star-rating__count {
@@ -40,8 +40,8 @@
 
 /* ─── Size: md ──────────────────────────────────────────── */
 .ds-star-rating--md .ds-star-rating__star {
-  width: 16px;
-  height: 16px;
+  width: var(--size-icon);
+  height: var(--size-icon);
 }
 
 .ds-star-rating--md .ds-star-rating__count {
@@ -50,8 +50,8 @@
 
 /* ─── Size: lg ──────────────────────────────────────────── */
 .ds-star-rating--lg .ds-star-rating__star {
-  width: 20px;
-  height: 20px;
+  width: var(--spacing-5);
+  height: var(--spacing-5);
 }
 
 .ds-star-rating--lg .ds-star-rating__count {

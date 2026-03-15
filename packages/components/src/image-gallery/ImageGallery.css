@@ -73,10 +73,10 @@
 /* ─── Thumbnail button ───────────────────────────────────── */
 .ds-image-gallery__thumb {
   flex-shrink: 0;
-  width: 64px;
-  height: 64px;
+  width: var(--spacing-16);
+  height: var(--spacing-16);
   padding: 0;
-  border: 2px solid transparent;
+  border: var(--spacing-phi-1) solid transparent;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: transparent;

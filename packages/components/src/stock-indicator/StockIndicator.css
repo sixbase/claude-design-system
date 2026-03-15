@@ -10,8 +10,8 @@
 }
 
 .ds-stock-indicator__dot {
-  width: 8px;
-  height: 8px;
+  width: var(--spacing-2);
+  height: var(--spacing-2);
   border-radius: var(--radius-full);
   flex-shrink: 0;
 }
