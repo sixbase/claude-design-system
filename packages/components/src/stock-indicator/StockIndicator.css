@@ -16,6 +16,18 @@
   flex-shrink: 0;
 }
 
+.ds-stock-indicator--in-stock .ds-stock-indicator__dot {
+  background-color: var(--color-success);
+}
+
+.ds-stock-indicator--low-stock .ds-stock-indicator__dot {
+  background-color: var(--color-warning);
+}
+
+.ds-stock-indicator--out-of-stock .ds-stock-indicator__dot {
+  background-color: var(--color-destructive);
+}
+
 .ds-stock-indicator__dot--pulse {
   animation: ds-stock-pulse 2s ease-in-out infinite;
 }

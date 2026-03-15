@@ -17,12 +17,6 @@ const defaultLabels: Record<StockStatus, string> = {
   'out-of-stock': 'Out of stock',
 };
 
-const statusColors: Record<StockStatus, string> = {
-  'in-stock': '#22c55e',
-  'low-stock': '#f59e0b',
-  'out-of-stock': '#ef4444',
-};
-
 export const StockIndicator = forwardRef<HTMLParagraphElement, StockIndicatorProps>(
   function StockIndicator(
     { status = 'in-stock', label, className, ...props },
@@ -50,7 +44,6 @@ export const StockIndicator = forwardRef<HTMLParagraphElement, StockIndicatorPro
           ]
             .filter(Boolean)
             .join(' ')}
-          style={{ backgroundColor: statusColors[status] }}
         />
         {text}
       </p>

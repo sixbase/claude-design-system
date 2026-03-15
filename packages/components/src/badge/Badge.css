@@ -49,23 +49,23 @@
 
 /* ─── Variant: success ───────────────────────────────────── */
 .ds-badge--success {
-  background-color: color-mix(in srgb, var(--color-success) 15%, transparent);
+  background-color: color-mix(in srgb, var(--color-success) 8%, transparent);
   color: var(--color-success);
-  border-color: color-mix(in srgb, var(--color-success) 30%, transparent);
+  border-color: color-mix(in srgb, var(--color-success) 18%, transparent);
 }
 
 /* ─── Variant: warning ───────────────────────────────────── */
 .ds-badge--warning {
-  background-color: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  background-color: color-mix(in srgb, var(--color-warning) 8%, transparent);
   color: var(--color-warning);
-  border-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
+  border-color: color-mix(in srgb, var(--color-warning) 18%, transparent);
 }
 
 /* ─── Variant: destructive ───────────────────────────────── */
 .ds-badge--destructive {
-  background-color: color-mix(in srgb, var(--color-destructive) 15%, transparent);
+  background-color: color-mix(in srgb, var(--color-destructive) 8%, transparent);
   color: var(--color-destructive);
-  border-color: color-mix(in srgb, var(--color-destructive) 30%, transparent);
+  border-color: color-mix(in srgb, var(--color-destructive) 18%, transparent);
 }
 
 /* ─── Variant: outline ───────────────────────────────────── */
