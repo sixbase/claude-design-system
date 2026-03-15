@@ -1,0 +1,83 @@
+/* ─── QuantitySelector ───────────────────────────────────── */
+.ds-quantity-selector {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-background-surface);
+}
+
+.ds-quantity-selector--disabled {
+  opacity: var(--opacity-medium);
+  pointer-events: none;
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.ds-quantity-selector__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-foreground);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.ds-quantity-selector__btn:hover:not(:disabled) {
+  background-color: var(--color-background-subtle);
+}
+
+.ds-quantity-selector__btn:disabled {
+  color: var(--color-foreground-muted);
+  cursor: not-allowed;
+}
+
+/* ─── Value display ──────────────────────────────────────── */
+.ds-quantity-selector__value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-foreground);
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  user-select: none;
+}
+
+/* ─── Size variants ──────────────────────────────────────── */
+.ds-quantity-selector--sm .ds-quantity-selector__btn {
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+}
+
+.ds-quantity-selector--sm .ds-quantity-selector__value {
+  min-width: var(--size-control-sm);
+  height: var(--size-control-sm);
+  font-size: var(--font-size-xs);
+}
+
+.ds-quantity-selector--md .ds-quantity-selector__btn {
+  width: var(--size-control-md);
+  height: var(--size-control-md);
+}
+
+.ds-quantity-selector--md .ds-quantity-selector__value {
+  min-width: var(--size-control-md);
+  height: var(--size-control-md);
+  font-size: var(--font-size-sm);
+}
+
+.ds-quantity-selector--lg .ds-quantity-selector__btn {
+  width: var(--size-control-lg);
+  height: var(--size-control-lg);
+}
+
+.ds-quantity-selector--lg .ds-quantity-selector__value {
+  min-width: var(--size-control-lg);
+  height: var(--size-control-lg);
+  font-size: var(--font-size-base);
+}

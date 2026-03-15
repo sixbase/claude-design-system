@@ -1,0 +1,117 @@
+/* ─── PDP Layout ─────────────────────────────────────────── */
+.ds-pdp {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+}
+
+.ds-pdp__breadcrumb {
+  grid-column: 1 / -1;
+}
+
+/* @breakpoint-lg = 1024px */
+@media (min-width: 1024px) {
+  .ds-pdp {
+    grid-template-columns: 1.618fr 1fr;
+    gap: var(--spacing-10);
+  }
+
+  .ds-pdp__breadcrumb {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── Details column ─────────────────────────────────────── */
+.ds-pdp__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.ds-pdp__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-pdp__title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-tight);
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+/* @breakpoint-lg = 1024px */
+@media (min-width: 1024px) {
+  .ds-pdp__title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.ds-pdp__price {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-foreground-subtle);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────── */
+.ds-pdp__description {
+  color: var(--color-foreground-subtle);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.ds-pdp__description p {
+  margin: 0;
+}
+
+/* ─── Options ────────────────────────────────────────────── */
+.ds-pdp__option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-pdp__option-label {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+/* ─── Color swatches ─────────────────────────────────────── */
+.ds-pdp__colors {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.ds-pdp__color-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color var(--transition-fast);
+}
+
+.ds-pdp__color-btn:hover {
+  border-color: var(--color-border-strong);
+}
+
+.ds-pdp__color-btn--active {
+  border-color: var(--color-foreground);
+}
+
+/* ─── Actions ────────────────────────────────────────────── */
+.ds-pdp__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}

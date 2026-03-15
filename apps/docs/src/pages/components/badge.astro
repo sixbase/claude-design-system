@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BadgeVariants, BadgeSizes, BadgeEcommerce } from '../../components/BadgeGallery';
+---
+
+<BaseLayout title="Badge">
+  <div class="prose">
+    <h1>Badge</h1>
+    <p>
+      A small label for status, category, or count. Pure styling — no interaction.
+      Common ecommerce uses: stock status, sale labels, order state, product categories.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Badge } from '@ds/components';`}</code></pre>
+
+    <h2>Variants</h2>
+    <p>Six semantic variants for different contexts.</p>
+    <BadgeVariants client:load />
+    <pre><code>{`<Badge variant="default">New</Badge>
+<Badge variant="secondary">Sale</Badge>
+<Badge variant="success">In stock</Badge>
+<Badge variant="warning">Low stock</Badge>
+<Badge variant="destructive">Out of stock</Badge>
+<Badge variant="outline">Archive</Badge>`}</code></pre>
+
+    <h2>Sizes</h2>
+    <BadgeSizes client:load />
+    <pre><code>{`<Badge size="sm">Small</Badge>
+<Badge size="md">Medium</Badge>   {/* default */}`}</code></pre>
+
+    <h2>Ecommerce context</h2>
+    <p>Small badges work well as overlays or inline labels on product cards.</p>
+    <BadgeEcommerce client:load />
+    <pre><code>{`<Badge variant="default" size="sm">New arrival</Badge>
+<Badge variant="secondary" size="sm">20% off</Badge>
+<Badge variant="success" size="sm">Free shipping</Badge>
+<Badge variant="destructive" size="sm">Final sale</Badge>
+<Badge variant="warning" size="sm">2 left</Badge>`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>variant</code></td><td><code>'default' | 'secondary' | 'success' | 'warning' | 'destructive' | 'outline'</code></td><td><code>'default'</code></td><td>Visual style</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td><td>Size</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Renders as <code>&lt;span&gt;</code> — not interactive, no keyboard behavior</li>
+      <li>Color is never the only indicator — also uses distinct background tints</li>
+      <li>For screen readers, consider pairing with visually hidden context: <code>&lt;Badge&gt;&lt;span aria-hidden="true"&gt;●&lt;/span&gt; In stock&lt;/Badge&gt;</code></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

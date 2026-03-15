@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SelectDefault, SelectStates, SelectSizes, SelectGroups } from '../../components/SelectGallery';
+---
+
+<BaseLayout title="Select">
+  <div class="prose">
+    <h1>Select</h1>
+    <p>
+      An accessible dropdown for choosing a single value. Built on Radix UI Select for
+      correct keyboard navigation, ARIA roles, and screen reader announcements.
+      Common ecommerce uses: size picker, quantity, sort order, country/state selector.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Select, SelectItem, SelectGroup, SelectSeparator } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <SelectDefault client:load />
+    <pre><code>{`<Select label="Size" placeholder="Choose a size">
+  <SelectItem value="xs">XS</SelectItem>
+  <SelectItem value="sm">SM</SelectItem>
+  <SelectItem value="md">MD</SelectItem>
+  <SelectItem value="lg">LG</SelectItem>
+</Select>`}</code></pre>
+
+    <h2>States</h2>
+    <SelectStates client:load />
+    <pre><code>{`{/* Hint */}
+<Select label="Size" hint="Choose your preferred size" placeholder="Select...">...</Select>
+
+{/* Error */}
+<Select label="Size" error="Please select a size" placeholder="Select...">...</Select>
+
+{/* Disabled */}
+<Select label="Size" disabled placeholder="Out of stock">...</Select>`}</code></pre>
+
+    <h2>Sizes</h2>
+    <SelectSizes client:load />
+    <pre><code>{`<Select size="sm" label="Small" placeholder="32px">...</Select>
+<Select size="md" label="Medium" placeholder="40px">...</Select>   {/* default */}
+<Select size="lg" label="Large" placeholder="48px">...</Select>`}</code></pre>
+
+    <h2>Groups and separators</h2>
+    <SelectGroups client:load />
+    <pre><code>{`<Select label="Category" placeholder="Browse categories">
+  <SelectGroup label="Clothing">
+    <SelectItem value="tops">Tops</SelectItem>
+    <SelectItem value="bottoms">Bottoms</SelectItem>
+  </SelectGroup>
+  <SelectSeparator />
+  <SelectGroup label="Accessories">
+    <SelectItem value="bags">Bags</SelectItem>
+  </SelectGroup>
+</Select>`}</code></pre>
+
+    <h2>Props — Select</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Label above trigger</td></tr>
+        <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'Select an option'</code></td><td>Placeholder text</td></tr>
+        <tr><td><code>hint</code></td><td><code>string</code></td><td>—</td><td>Helper text below</td></tr>
+        <tr><td><code>error</code></td><td><code>string</code></td><td>—</td><td>Error message (adds error styling)</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Trigger size</td></tr>
+        <tr><td><code>fullWidth</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Stretch to container width</td></tr>
+        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disable all interaction</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Keyboard: <kbd>↑</kbd> <kbd>↓</kbd> navigate options, <kbd>Enter</kbd>/<kbd>Space</kbd> select, <kbd>Escape</kbd> close</li>
+      <li>Label is linked to trigger via <code>aria-labelledby</code></li>
+      <li>Error message is announced via <code>role="alert"</code></li>
+      <li>Disabled items remain focusable but not selectable</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+  kbd {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.4em;
+  }
+</style>

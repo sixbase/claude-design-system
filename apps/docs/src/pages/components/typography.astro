@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { HeadingGallery, TextGallery, InlineGallery } from '../../components/TypographyGallery';
+---
+
+<BaseLayout title="Typography">
+  <div class="prose">
+    <h1>Typography</h1>
+    <p>
+      Four building blocks for all text: <code>Heading</code>, <code>Text</code>,
+      <code>Caption</code>, and <code>Code</code>. They all consume design tokens,
+      so swapping a token updates every piece of text at once.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Heading, Text, Caption, Code } from '@ds/components';`}</code></pre>
+
+    <h2>Heading</h2>
+    <p>Use for page titles, section headers, and card titles. Pick the level that matches the page structure — don't pick based on size alone.</p>
+    <HeadingGallery client:load />
+    <pre><code>{`<Heading as="h1">Page title</Heading>
+<Heading as="h2">Section title</Heading>
+<Heading as="h3">Subsection</Heading>
+<Heading as="h4">Card title</Heading>
+
+<Heading as="h2" muted>Muted heading</Heading>`}</code></pre>
+
+    <h2>Text</h2>
+    <p>General body copy. Use <code>size</code> to control how big it is, <code>weight</code> to control boldness.</p>
+    <TextGallery client:load />
+    <pre><code>{`<Text size="lg">Lead paragraph</Text>
+<Text size="base">Body copy</Text>        {/* default */}
+<Text size="sm">Secondary text</Text>
+
+<Text weight="semibold">Emphasized</Text>
+<Text muted>Subdued text</Text>
+<Text truncate>Long text that gets cut off...</Text>`}</code></pre>
+
+    <h2>Caption & Code</h2>
+    <p><code>Caption</code> is extra-small muted text for timestamps and metadata. <code>Code</code> is inline monospace for variable names or short snippets.</p>
+    <InlineGallery client:load />
+    <pre><code>{`<Caption>Last updated March 14, 2026</Caption>
+
+<Text>Use the <Code>variant</Code> prop to change the style.</Text>`}</code></pre>
+
+    <h2>Props — Heading</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>as</code></td><td><code>'h1' | 'h2' | 'h3' | 'h4'</code></td><td><code>'h2'</code></td><td>HTML element + visual size</td></tr>
+        <tr><td><code>muted</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Lighter color</td></tr>
+        <tr><td><code>truncate</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Cuts off with … if too long</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Props — Text</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>as</code></td><td><code>'p' | 'span' | 'div' | 'label' | 'strong' | 'em'</code></td><td><code>'p'</code></td><td>HTML element to render</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'base' | 'lg'</code></td><td><code>'base'</code></td><td>Font size</td></tr>
+        <tr><td><code>weight</code></td><td><code>'normal' | 'medium' | 'semibold' | 'bold'</code></td><td>—</td><td>Font weight</td></tr>
+        <tr><td><code>muted</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Lighter color</td></tr>
+        <tr><td><code>truncate</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Cuts off with … if too long</td></tr>
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0 var(--spacing-8);
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

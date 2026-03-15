@@ -1,0 +1,31 @@
+.ds-color-swatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 80px;
+}
+
+.ds-color-swatch__sample {
+  height: 48px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.ds-color-swatch__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-color-swatch__name {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground);
+}
+
+.ds-color-swatch__value {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-foreground-subtle);
+}

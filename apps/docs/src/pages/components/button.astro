@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ButtonVariants, ButtonSizes, ButtonStates, ButtonWithIcons } from '../../components/ButtonGallery';
+---
+
+<BaseLayout title="Button">
+  <div class="prose">
+    <h1>Button</h1>
+    <p>
+      The primary interactive element. Supports four variants (primary, secondary, ghost,
+      destructive), three sizes, loading state, icon-only layout, and polymorphic rendering
+      via <code>asChild</code>.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Button } from '@ds/components';`}</code></pre>
+
+    <h2>Variants</h2>
+    <p>Four variants to match the weight of the action.</p>
+    <ButtonVariants client:load />
+    <pre><code>{`<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>`}</code></pre>
+
+    <h2>Sizes</h2>
+    <ButtonSizes client:load />
+    <pre><code>{`<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>   {/* default */}
+<Button size="lg">Large</Button>`}</code></pre>
+
+    <h2>States</h2>
+    <ButtonStates client:load />
+    <pre><code>{`<Button loading>Saving…</Button>
+<Button disabled>Disabled</Button>
+<Button fullWidth>Full width</Button>`}</code></pre>
+
+    <h2>With icons</h2>
+    <ButtonWithIcons client:load />
+    <pre><code>{`<Button leadingIcon={<PlusIcon />}>New item</Button>
+<Button variant="secondary" trailingIcon={<ArrowRightIcon />}>Continue</Button>
+<Button variant="ghost" leadingIcon={<DownloadIcon />}>Export</Button>
+<Button variant="destructive" leadingIcon={<TrashIcon />}>Delete</Button>`}</code></pre>
+
+    <h2>Polymorphic (asChild)</h2>
+    <p>
+      Use <code>asChild</code> to render as a different element while keeping all button styles.
+      Uses Radix UI's Slot primitive under the hood.
+    </p>
+    <pre><code>{`<Button asChild variant="secondary">
+  <a href="/dashboard">Go to dashboard</a>
+</Button>`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>variant</code></td><td><code>'primary' | 'secondary' | 'ghost' | 'destructive'</code></td><td><code>'primary'</code></td><td>Visual style</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size</td></tr>
+        <tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show spinner, disable</td></tr>
+        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disable interaction</td></tr>
+        <tr><td><code>asChild</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Render as child element</td></tr>
+        <tr><td><code>fullWidth</code></td><td><code>boolean</code></td><td><code>false</code></td><td>100% width</td></tr>
+        <tr><td><code>leadingIcon</code></td><td><code>ReactNode</code></td><td>—</td><td>Icon before label</td></tr>
+        <tr><td><code>trailingIcon</code></td><td><code>ReactNode</code></td><td>—</td><td>Icon after label</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Keyboard: <kbd>Enter</kbd> and <kbd>Space</kbd> activate</li>
+      <li>Loading state sets <code>aria-busy="true"</code></li>
+      <li>Disabled state sets <code>aria-disabled="true"</code></li>
+      <li>Focus ring is visible for keyboard navigation, hidden for mouse</li>
+      <li>Icon-only buttons require <code>aria-label</code></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+  kbd {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.4em;
+  }
+</style>

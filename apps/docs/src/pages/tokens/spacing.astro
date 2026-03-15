@@ -1,0 +1,241 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import tokens from '../../../../../packages/tokens/src/tokens.json';
+
+const { spacing, radius } = tokens.primitive;
+
+// Split spacing into standard (numbered) and phi scales
+const standardSpacing = Object.entries(spacing).filter(([name]) => !name.startsWith('phi-'));
+const phiSpacing = Object.entries(spacing).filter(([name]) => name.startsWith('phi-'));
+
+// Usage annotations for standard spacing tokens
+const spacingUsage: Record<string, string> = {
+  '0': 'Reset — remove inherited spacing, collapse gaps',
+  '1': 'Tight inline gap between icon and label, gap between stacked metadata lines',
+  '2': 'Default inline gap in buttons, checkbox-to-label gap, compact card padding',
+  '3': 'Input inner padding, cell padding in dense tables, small card padding',
+  '4': 'Default card padding, section gap between form fields, standard row padding',
+  '5': 'Medium component gap — between card sections, form group spacing',
+  '6': 'Gap between related groups — filter bar to results, form to actions',
+  '8': 'Section padding, gap between major layout blocks, modal body padding',
+  '10': 'Large section gap — between page hero and content, major layout divisions',
+  '12': 'Page section vertical rhythm, spacing between full-width content blocks',
+  '16': 'Major page divisions, above/below full-width banners',
+  '20': 'Extra-large section breaks, top-level page padding on large viewports',
+  '24': 'Maximum spacing — page top/bottom margins, layout gutters at widest breakpoint',
+};
+
+// Usage annotations for phi spacing tokens
+const phiUsage: Record<string, string> = {
+  'phi-1': 'Micro adjustment — optical alignment tweaks, sub-pixel spacing corrections',
+  'phi-2': 'Equivalent to spacing-1 — available for Fibonacci-aligned calculations',
+  'phi-3': 'Tight padding for pills, compact badge padding',
+  'phi-5': 'Icon-to-text gap in dense layouts, tight list indent',
+  'phi-8': 'Equivalent to spacing-4 — default component padding in φ contexts',
+  'phi-13': 'Section spacing in editorial layouts, marketing page content gaps',
+  'phi-21': 'Large section spacing, editorial column gaps',
+  'phi-34': 'Hero section padding, major editorial divisions',
+  'phi-55': 'Full-screen hero vertical padding, splash page spacing',
+  'phi-89': 'Maximum editorial spacing — full-viewport hero margins',
+};
+
+// Usage annotations for radius tokens
+const radiusUsage: Record<string, string> = {
+  'none': 'Square corners — table cells, flush-mounted elements, dividers',
+  'sm': 'Inline code snippets, small badges, tight corner details',
+  'md': 'Buttons, inputs, cards, dropdowns — the default for interactive elements',
+  'lg': 'Token tables, larger cards, dialog containers, section wrappers',
+  'xl': 'Large panels, featured cards, image containers, modal overlays',
+  '2xl': 'Hero sections, large promotional cards, splash containers',
+  'full': 'Circular avatars, pill badges, round icon buttons, toggle tracks',
+};
+---
+
+<BaseLayout title="Spacing">
+  <div class="prose">
+    <h1>Spacing</h1>
+    <p>
+      Every padding, margin, and gap in this system uses a spacing token — never a magic number.
+      Two scales are available: the <strong>standard scale</strong> (4px base, multiples of 4)
+      and the <strong>φ scale</strong> (Fibonacci × 2px) for editorial and section-level spacing.
+    </p>
+
+    <h2>Standard scale <span class="scale-badge scale-badge--primary">Use this</span></h2>
+    <p class="section-desc">
+      Base unit: 4px. Steps at multiples of 4. Use for all component internals — padding, gaps, margins.
+      Most components stay within <code>spacing-1</code> through <code>spacing-8</code>.
+    </p>
+    <div class="token-table">
+      {standardSpacing.map(([name, value]) => (
+        <div class="token-row">
+          <span class="token-name">
+            <code>--spacing-{name}</code>
+            <span class="token-size-info">{value}</span>
+            <span class="token-bar" style={`width: ${value}; max-width: 100%;`} />
+            <span class="token-usage">{spacingUsage[name]}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <h2>φ scale <span class="scale-badge scale-badge--muted">Editorial / optional</span></h2>
+    <p class="section-desc">
+      Fibonacci sequence × 2px: 2, 4, 6, 10, 16, 26, 42, 68, 110, 178.
+      Each step is approximately φ× the previous. Use for section-level spacing on marketing pages,
+      editorial layouts, and anywhere standard 4px increments feel too rigid.
+      <strong>Do not mix φ spacing with standard spacing within the same component.</strong>
+    </p>
+    <div class="token-table token-table--muted">
+      {phiSpacing.map(([name, value]) => (
+        <div class="token-row">
+          <span class="token-name">
+            <code>--spacing-{name}</code>
+            <span class="token-size-info">{value}</span>
+            <span class="token-bar" style={`width: ${value}; max-width: 100%;`} />
+            <span class="token-usage">{phiUsage[name]}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <h2>Border radius</h2>
+    <p class="section-desc">
+      Fibonacci-derived: 0, 2, 5, 8, 13, 21, 9999. Each step is a Fibonacci number (except <code>full</code>).
+      Default for interactive elements is <code>radius-md</code> (5px).
+    </p>
+    <div class="radius-grid">
+      {Object.entries(radius).map(([name, value]) => (
+        <div class="radius-swatch">
+          <div class="radius-sample" style={`border-radius: ${value};`} />
+          <code class="radius-name">--radius-{name}</code>
+          <span class="radius-value">{value}</span>
+          <span class="radius-usage">{radiusUsage[name]}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .section-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground-subtle);
+    margin-top: calc(var(--spacing-1) * -1);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .scale-badge {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    vertical-align: middle;
+    margin-left: var(--spacing-2);
+    font-family: var(--font-family-mono);
+  }
+  .scale-badge--primary {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  .scale-badge--muted {
+    background: transparent;
+    color: var(--color-foreground-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  /* ─── Token table ────────────────────────────────── */
+  .token-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: var(--spacing-3) 0 var(--spacing-8);
+    background-color: var(--color-background-surface);
+  }
+  .token-table--muted {
+    opacity: var(--opacity-high);
+  }
+
+  .token-row {
+    padding: var(--spacing-3) var(--spacing-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .token-row:last-child { border-bottom: none; }
+
+  .token-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .token-name code {
+    font-size: var(--font-size-xs);
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-foreground);
+  }
+  .token-size-info {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-muted);
+  }
+  .token-usage {
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-subtle);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .token-bar {
+    display: block;
+    height: 6px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    min-width: 4px;
+    margin-top: 2px;
+  }
+
+  /* ─── Radius grid ────────────────────────────────── */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-6);
+    margin: var(--spacing-3) 0 var(--spacing-8);
+  }
+
+  .radius-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+    text-align: center;
+  }
+
+  .radius-sample {
+    width: 64px;
+    height: 64px;
+    background-color: var(--color-primary);
+    opacity: 0.8;
+  }
+
+  .radius-name {
+    font-size: var(--font-size-xs);
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-foreground);
+  }
+
+  .radius-value {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-subtle);
+  }
+
+  .radius-usage {
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-subtle);
+    line-height: var(--line-height-relaxed);
+  }
+</style>

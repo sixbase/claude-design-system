@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CheckboxStates, CheckboxWithText, CheckboxFilter } from '../../components/CheckboxGallery';
+---
+
+<BaseLayout title="Checkbox">
+  <div class="prose">
+    <h1>Checkbox</h1>
+    <p>
+      An accessible checkbox built on Radix UI. Supports checked, unchecked, and
+      indeterminate states. Label, hint, and error all built in.
+      Common ecommerce uses: filter panels, newsletter opt-in, terms acceptance, cart item selection.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Checkbox } from '@ds/components';`}</code></pre>
+
+    <h2>States</h2>
+    <CheckboxStates client:load />
+    <pre><code>{`<Checkbox label="Unchecked" />
+<Checkbox label="Checked" defaultChecked />
+<Checkbox label="Indeterminate" checked="indeterminate" />
+<Checkbox label="Disabled" disabled />
+<Checkbox label="Disabled checked" disabled defaultChecked />`}</code></pre>
+
+    <h2>With hint and error</h2>
+    <CheckboxWithText client:load />
+    <pre><code>{`<Checkbox
+  label="Subscribe to newsletter"
+  hint="We send at most one email per week"
+/>
+<Checkbox
+  label="I agree to the terms and conditions"
+  error="You must accept the terms to continue"
+/>`}</code></pre>
+
+    <h2>Filter panel (size="sm")</h2>
+    <p>Small checkboxes are ideal for dense filter UIs in product listings.</p>
+    <CheckboxFilter client:load />
+    <pre><code>{`<Checkbox size="sm" label="XS" defaultChecked />
+<Checkbox size="sm" label="S" defaultChecked />
+<Checkbox size="sm" label="M" />
+<Checkbox size="sm" label="XL" disabled />`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Visible label</td></tr>
+        <tr><td><code>hint</code></td><td><code>string</code></td><td>—</td><td>Helper text below</td></tr>
+        <tr><td><code>error</code></td><td><code>string</code></td><td>—</td><td>Error message</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td><td>Checkbox size</td></tr>
+        <tr><td><code>checked</code></td><td><code>boolean | 'indeterminate'</code></td><td>—</td><td>Controlled checked state</td></tr>
+        <tr><td><code>defaultChecked</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Uncontrolled initial state</td></tr>
+        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disable interaction</td></tr>
+        <tr><td><code>onCheckedChange</code></td><td><code>(checked: boolean | 'indeterminate') => void</code></td><td>—</td><td>Change handler</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Label is associated via <code>htmlFor</code>/<code>id</code> — clicking the label toggles the checkbox</li>
+      <li>Keyboard: <kbd>Space</kbd> toggles</li>
+      <li>Error message is announced via <code>role="alert"</code></li>
+      <li>Indeterminate state is communicated via <code>aria-checked="mixed"</code> (Radix handles this)</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+  kbd {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.4em;
+  }
+</style>

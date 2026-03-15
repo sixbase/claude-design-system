@@ -1,0 +1,157 @@
+/* ─── Root wrapper ───────────────────────────────────────── */
+.ds-checkbox-root {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.ds-checkbox-root--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Field row (box + label side-by-side) ───────────────── */
+.ds-checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+}
+
+/* ─── Checkbox box ───────────────────────────────────────── */
+.ds-checkbox-box {
+  --checkbox-border-color: var(--color-border);
+  --checkbox-bg:           var(--color-background-surface);
+  --checkbox-radius:       var(--radius-sm);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--checkbox-bg);
+  border: 1.5px solid var(--checkbox-border-color);
+  border-radius: var(--checkbox-radius);
+  outline: none;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* Sizes */
+.ds-checkbox-box--sm {
+  width: var(--size-checkbox-sm);
+  height: var(--size-checkbox-sm);
+  margin-top: 2px; /* visual alignment with text cap-height */
+}
+
+.ds-checkbox-box--md {
+  width: var(--size-checkbox-md);
+  height: var(--size-checkbox-md);
+  margin-top: 1px; /* visual alignment with text cap-height */
+}
+
+/* Hover */
+.ds-checkbox-box:hover:not([data-disabled]) {
+  border-color: var(--color-border-strong);
+}
+
+/* Active (pressed) */
+.ds-checkbox-box:active:not([data-disabled]) {
+  border-color: var(--color-primary);
+  transform: scale(0.92);
+}
+
+.ds-checkbox-box[data-state="checked"]:active:not([data-disabled]),
+.ds-checkbox-box[data-state="indeterminate"]:active:not([data-disabled]) {
+  background-color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+  transform: scale(0.92);
+}
+
+/* Focus */
+.ds-checkbox-box:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+}
+
+/* Checked / indeterminate */
+.ds-checkbox-box[data-state="checked"],
+.ds-checkbox-box[data-state="indeterminate"] {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.ds-checkbox-box[data-state="checked"]:hover:not([data-disabled]),
+.ds-checkbox-box[data-state="indeterminate"]:hover:not([data-disabled]) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+/* Error state */
+.ds-checkbox-box--error {
+  border-color: var(--color-destructive);
+}
+
+.ds-checkbox-box--error:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-destructive) 20%, transparent);
+}
+
+/* Disabled */
+.ds-checkbox-box[data-disabled] {
+  cursor: not-allowed;
+}
+
+/* ─── Checkmark indicator ────────────────────────────────── */
+.ds-checkbox-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-foreground);
+}
+
+/* Indeterminate — replace checkmark with a dash */
+.ds-checkbox-indicator[data-state="indeterminate"] svg {
+  display: none;
+}
+
+.ds-checkbox-indicator[data-state="indeterminate"]::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 1.75px;
+  background-color: var(--color-primary-foreground);
+  border-radius: 1px;
+}
+
+/* ─── Label ──────────────────────────────────────────────── */
+.ds-checkbox-label {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-foreground);
+  line-height: var(--line-height-snug);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ds-checkbox-root--disabled .ds-checkbox-label {
+  cursor: not-allowed;
+}
+
+/* ─── Hint / error ───────────────────────────────────────── */
+.ds-checkbox-hint {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-foreground-subtle);
+  line-height: var(--line-height-normal);
+  padding-left: calc(var(--size-checkbox-md) + var(--spacing-2));
+}
+
+.ds-checkbox-error {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-destructive);
+  line-height: var(--line-height-normal);
+  padding-left: calc(var(--size-checkbox-md) + var(--spacing-2));
+}

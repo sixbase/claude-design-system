@@ -1,0 +1,75 @@
+/* ─── ProductCard ────────────────────────────────────────── */
+.ds-product-card {
+  --card-radius: var(--radius-md);
+  --card-padding: var(--spacing-3);
+  --product-card-width: 220px;
+
+  width: var(--product-card-width);
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+/* Image gets uniform radius since ghost card has no clipping background */
+.ds-product-card .ds-card-image {
+  border-radius: var(--card-radius);
+}
+
+/* Override Card interactive hover — image zoom only, no lift/shadow */
+.ds-product-card.ds-card--interactive:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ds-product-card.ds-card--interactive:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.ds-product-card .ds-card-body {
+  gap: var(--spacing-phi-2);
+  padding: var(--spacing-phi-5) var(--spacing-phi-13) 0 0;
+}
+
+/* ─── Product name ──────────────────────────────────────── */
+.ds-product-card .ds-product-card__name {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-foreground);
+  line-height: var(--line-height-snug);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Large variant ────────────────────────────────────── */
+.ds-product-card--lg {
+  --product-card-width: 300px;
+  --card-radius: var(--radius-lg);
+}
+
+.ds-product-card--lg .ds-card-body {
+  gap: var(--spacing-phi-2);
+  padding: var(--spacing-phi-8) var(--spacing-phi-21) 0 0;
+}
+
+.ds-product-card--lg .ds-product-card__name {
+  font-size: var(--font-size-base);
+}
+
+.ds-product-card--lg .ds-product-card__price {
+  font-size: var(--font-size-base);
+}
+
+/* ─── Price ─────────────────────────────────────────────── */
+.ds-product-card .ds-product-card__price {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-foreground-subtle);
+  line-height: var(--line-height-snug);
+  margin: 0;
+}

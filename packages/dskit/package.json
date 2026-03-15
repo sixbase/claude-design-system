@@ -1,0 +1,22 @@
+{
+  "name": "@ds/dskit",
+  "version": "0.1.0",
+  "description": "Design system audit CLI — extract tokens, identify inconsistencies, generate client reports",
+  "type": "module",
+  "bin": {
+    "dskit": "./dist/dskit"
+  },
+  "scripts": {
+    "build": "node -e \"require('fs').writeFileSync('dist/dskit', '#!/bin/bash\\nexport PATH=\\\"$HOME/.bun/bin:$PATH\\\"\\nexec bun run \\\"$(dirname \\\"$0\\\")/../src/index.ts\\\" \\\"$@\\\"\\n')\" && chmod +x dist/dskit",
+    "dev": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
