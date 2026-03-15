@@ -33,11 +33,11 @@ const LEGAL_LINKS = [
   { label: 'Terms of Service', href: '#' },
 ];
 
-export function FooterDefault() {
+export function FooterDefault({ basePath = '' }: { basePath?: string }) {
   return (
     <Preview stack>
       <Footer
-        logoSrc="/mason-supply-co-logo.svg"
+        logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
         tagline="Thoughtfully designed accessories for everyday carry."
         columns={COLUMNS}
@@ -48,11 +48,11 @@ export function FooterDefault() {
   );
 }
 
-export function FooterMinimal() {
+export function FooterMinimal({ basePath = '' }: { basePath?: string }) {
   return (
     <Preview stack>
       <Footer
-        logoSrc="/mason-supply-co-logo.svg"
+        logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
         copyright="© 2026 Mason Supply Co. All rights reserved."
       />

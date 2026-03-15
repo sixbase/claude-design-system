@@ -7,11 +7,11 @@ const NAV_ITEMS = [
   { label: 'About', href: '#' },
 ];
 
-export function HeaderDefault() {
+export function HeaderDefault({ basePath = '' }: { basePath?: string }) {
   return (
     <Preview stack>
       <Header
-        logoSrc="/mason-supply-co-logo.svg"
+        logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
         navItems={NAV_ITEMS}
         cartHref="#"
@@ -21,11 +21,11 @@ export function HeaderDefault() {
   );
 }
 
-export function HeaderMinimal() {
+export function HeaderMinimal({ basePath = '' }: { basePath?: string }) {
   return (
     <Preview stack>
       <Header
-        logoSrc="/mason-supply-co-logo.svg"
+        logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
         showThemeToggle={false}
       />

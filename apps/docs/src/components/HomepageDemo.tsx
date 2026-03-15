@@ -43,7 +43,7 @@ const FEATURES = [
 
 // ─── Component ────────────────────────────────────────────
 
-export function HomepageDemo() {
+export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
   const [email, setEmail] = useState('');
 
   return (
@@ -58,7 +58,7 @@ export function HomepageDemo() {
             Sustainably crafted goods designed to stand the test of time. From canvas totes to ceramic mugs — fewer things, made better.
           </Text>
           <Button variant="primary" size="lg" asChild>
-            <a href="/examples/collection">Shop the Collection</a>
+            <a href={`${basePath}/examples/collection`}>Shop the Collection</a>
           </Button>
         </div>
       </section>
@@ -78,7 +78,7 @@ export function HomepageDemo() {
           {FEATURED.map((product) => (
             <CarouselSlide key={product.id} size="sm">
               <a
-                href="/examples/product-detail"
+                href={`${basePath}/examples/product-detail`}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <ProductCard

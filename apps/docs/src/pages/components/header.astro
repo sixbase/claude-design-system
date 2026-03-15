@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { HeaderDefault, HeaderMinimal } from '../../components/HeaderGallery';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title="Header">
@@ -15,7 +16,7 @@ import { HeaderDefault, HeaderMinimal } from '../../components/HeaderGallery';
     <pre><code>{`import { Header } from '@ds/components';`}</code></pre>
 
     <h2>Default</h2>
-    <HeaderDefault client:load />
+    <HeaderDefault client:load basePath={base} />
     <pre><code>{`<Header
   logoSrc="/logo.svg"
   logoAlt="Brand Name"
@@ -30,7 +31,7 @@ import { HeaderDefault, HeaderMinimal } from '../../components/HeaderGallery';
 
     <h2>Minimal</h2>
     <p>Logo and cart only, no nav links or theme toggle.</p>
-    <HeaderMinimal client:load />
+    <HeaderMinimal client:load basePath={base} />
     <pre><code>{`<Header
   logoSrc="/logo.svg"
   logoAlt="Brand Name"

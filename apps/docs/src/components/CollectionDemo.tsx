@@ -36,7 +36,7 @@ function sortProducts(products: Product[], key: SortKey): Product[] {
 
 // ─── Component ────────────────────────────────────────────
 
-export function CollectionDemo() {
+export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
   const [sortValue, setSortValue] = useState<SortKey>('newest');
 
   const sorted = useMemo(() => sortProducts(PRODUCTS, sortValue), [sortValue]);
@@ -45,8 +45,8 @@ export function CollectionDemo() {
     <div>
       <Breadcrumb
         items={[
-          { label: 'Home', href: '/examples/homepage' },
-          { label: 'Collections', href: '/examples/collection' },
+          { label: 'Home', href: `${basePath}/examples/homepage` },
+          { label: 'Collections', href: `${basePath}/examples/collection` },
           { label: 'All Products' },
         ]}
       />
@@ -82,7 +82,7 @@ export function CollectionDemo() {
         {sorted.map((product) => (
           <a
             key={product.id}
-            href="/examples/product-detail"
+            href={`${basePath}/examples/product-detail`}
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <ProductCard

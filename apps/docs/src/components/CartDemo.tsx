@@ -26,7 +26,7 @@ const SHIPPING_COST = 800; // $8.00
 
 // ─── Component ────────────────────────────────────────────
 
-export function CartDemo() {
+export function CartDemo({ basePath = '' }: { basePath?: string }) {
   const [items, setItems] = useState<CartItem[]>(INITIAL_CART);
 
   const updateQuantity = useCallback((productId: string, quantity: number) => {
@@ -63,7 +63,7 @@ export function CartDemo() {
             Looks like you haven't added anything yet.
           </Text>
           <Button variant="secondary" size="md" asChild>
-            <a href="/examples/collection">Continue Shopping</a>
+            <a href={`${basePath}/examples/collection`}>Continue Shopping</a>
           </Button>
         </div>
       </div>
@@ -169,7 +169,7 @@ export function CartDemo() {
         </Button>
 
         <Button variant="secondary" size="md" fullWidth asChild>
-          <a href="/examples/collection">Continue Shopping</a>
+          <a href={`${basePath}/examples/collection`}>Continue Shopping</a>
         </Button>
       </div>
     </div>

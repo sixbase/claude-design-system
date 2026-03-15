@@ -43,16 +43,16 @@ const colorOptions: ColorOption[] = [
   { value: 'dark-olive', color: '#4E473F', label: 'Dark Olive' },
 ];
 
-const breadcrumbItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Accessories', href: '#' },
-  { label: 'Phone Cases', href: '#' },
-  { label: 'Aramid Fiber iPhone 17 Pro Max Case' },
-];
-
-export function PDPDemo() {
+export function PDPDemo({ basePath = '' }: { basePath?: string }) {
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState('carbon-black');
+
+  const breadcrumbItems = [
+    { label: 'Home', href: `${basePath}/` },
+    { label: 'Accessories', href: '#' },
+    { label: 'Phone Cases', href: '#' },
+    { label: 'Aramid Fiber iPhone 17 Pro Max Case' },
+  ];
 
   return (
     <>

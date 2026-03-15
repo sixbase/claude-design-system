@@ -11,10 +11,11 @@ interface Props {
 }
 
 const { title, description = 'Design system documentation' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const NAV_ITEMS = [
-  { label: 'Shop', href: '/examples/homepage' },
-  { label: 'Collections', href: '/examples/collection' },
+  { label: 'Shop', href: `${base}/examples/homepage` },
+  { label: 'Collections', href: `${base}/examples/collection` },
   { label: 'About', href: '#' },
 ];
 
@@ -78,10 +79,11 @@ const LEGAL_LINKS = [
   <body>
     <Header
       client:load
-      logoSrc="/mason-supply-co-logo.svg"
+      logoSrc={`${base}/mason-supply-co-logo.svg`}
       logoAlt="Mason Supply Co."
+      logoHref={`${base}/`}
       navItems={NAV_ITEMS}
-      cartHref="/examples/cart"
+      cartHref={`${base}/examples/cart`}
       cartCount={0}
     />
     <main>
@@ -89,8 +91,9 @@ const LEGAL_LINKS = [
     </main>
     <Footer
       client:load
-      logoSrc="/mason-supply-co-logo.svg"
+      logoSrc={`${base}/mason-supply-co-logo.svg`}
       logoAlt="Mason Supply Co."
+      logoHref={`${base}/`}
       tagline="Thoughtfully designed accessories for everyday carry."
       columns={FOOTER_COLUMNS}
       copyright="&copy; 2026 Mason Supply Co. All rights reserved."

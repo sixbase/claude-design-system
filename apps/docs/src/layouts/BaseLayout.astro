@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { title, description = 'Design system documentation' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -29,55 +30,55 @@ const { title, description = 'Design system documentation' } = Astro.props;
     <div class="layout">
       <aside class="sidebar">
         <nav>
-          <a href="/" class="sidebar__logo">
-            <img src="/mason-supply-co-logo.svg" alt="Mason Supply Co." class="sidebar__logo-img" />
+          <a href={`${base}/`} class="sidebar__logo">
+            <img src={`${base}/mason-supply-co-logo.svg`} alt="Mason Supply Co." class="sidebar__logo-img" />
           </a>
 
           <div class="sidebar__section">
             <p class="sidebar__section-label">Getting Started</p>
-            <a href="/" class="sidebar__link">Introduction</a>
-            <a href="/getting-started" class="sidebar__link">Installation</a>
+            <a href={`${base}/`} class="sidebar__link">Introduction</a>
+            <a href={`${base}/getting-started`} class="sidebar__link">Installation</a>
           </div>
 
           <div class="sidebar__section">
             <p class="sidebar__section-label">Foundation</p>
-            <a href="/tokens/colors" class="sidebar__link">Colors</a>
-            <a href="/tokens/typography" class="sidebar__link">Typography</a>
-            <a href="/tokens/spacing" class="sidebar__link">Spacing</a>
+            <a href={`${base}/tokens/colors`} class="sidebar__link">Colors</a>
+            <a href={`${base}/tokens/typography`} class="sidebar__link">Typography</a>
+            <a href={`${base}/tokens/spacing`} class="sidebar__link">Spacing</a>
           </div>
 
           <div class="sidebar__section">
             <p class="sidebar__section-label">Components</p>
-            <a href="/components/accordion" class="sidebar__link">Accordion</a>
-            <a href="/components/badge" class="sidebar__link">Badge</a>
-            <a href="/components/breadcrumb" class="sidebar__link">Breadcrumb</a>
-            <a href="/components/button" class="sidebar__link">Button</a>
-            <a href="/components/card" class="sidebar__link">Card</a>
-            <a href="/components/carousel" class="sidebar__link">Carousel</a>
-            <a href="/components/checkbox" class="sidebar__link">Checkbox</a>
-            <a href="/components/color-picker" class="sidebar__link">Color Picker</a>
-            <a href="/components/cookie-consent" class="sidebar__link">Cookie Consent</a>
-            <a href="/components/feature-block" class="sidebar__link">Feature Block</a>
-            <a href="/components/footer" class="sidebar__link">Footer</a>
-            <a href="/components/header" class="sidebar__link">Header</a>
-            <a href="/components/image-gallery" class="sidebar__link">Image Gallery</a>
-            <a href="/components/input" class="sidebar__link">Input</a>
-            <a href="/components/modal" class="sidebar__link">Modal</a>
-            <a href="/components/price-display" class="sidebar__link">Price Display</a>
-            <a href="/components/product-card" class="sidebar__link">Product Card</a>
-            <a href="/components/quantity-selector" class="sidebar__link">Quantity Selector</a>
-            <a href="/components/select" class="sidebar__link">Select</a>
-            <a href="/components/star-rating" class="sidebar__link">Star Rating</a>
-            <a href="/components/stock-indicator" class="sidebar__link">Stock Indicator</a>
-            <a href="/components/typography" class="sidebar__link">Typography</a>
+            <a href={`${base}/components/accordion`} class="sidebar__link">Accordion</a>
+            <a href={`${base}/components/badge`} class="sidebar__link">Badge</a>
+            <a href={`${base}/components/breadcrumb`} class="sidebar__link">Breadcrumb</a>
+            <a href={`${base}/components/button`} class="sidebar__link">Button</a>
+            <a href={`${base}/components/card`} class="sidebar__link">Card</a>
+            <a href={`${base}/components/carousel`} class="sidebar__link">Carousel</a>
+            <a href={`${base}/components/checkbox`} class="sidebar__link">Checkbox</a>
+            <a href={`${base}/components/color-picker`} class="sidebar__link">Color Picker</a>
+            <a href={`${base}/components/cookie-consent`} class="sidebar__link">Cookie Consent</a>
+            <a href={`${base}/components/feature-block`} class="sidebar__link">Feature Block</a>
+            <a href={`${base}/components/footer`} class="sidebar__link">Footer</a>
+            <a href={`${base}/components/header`} class="sidebar__link">Header</a>
+            <a href={`${base}/components/image-gallery`} class="sidebar__link">Image Gallery</a>
+            <a href={`${base}/components/input`} class="sidebar__link">Input</a>
+            <a href={`${base}/components/modal`} class="sidebar__link">Modal</a>
+            <a href={`${base}/components/price-display`} class="sidebar__link">Price Display</a>
+            <a href={`${base}/components/product-card`} class="sidebar__link">Product Card</a>
+            <a href={`${base}/components/quantity-selector`} class="sidebar__link">Quantity Selector</a>
+            <a href={`${base}/components/select`} class="sidebar__link">Select</a>
+            <a href={`${base}/components/star-rating`} class="sidebar__link">Star Rating</a>
+            <a href={`${base}/components/stock-indicator`} class="sidebar__link">Stock Indicator</a>
+            <a href={`${base}/components/typography`} class="sidebar__link">Typography</a>
           </div>
 
           <div class="sidebar__section">
             <p class="sidebar__section-label">Examples</p>
-            <a href="/examples/homepage" class="sidebar__link">Homepage</a>
-            <a href="/examples/collection" class="sidebar__link">Collection</a>
-            <a href="/examples/product-detail" class="sidebar__link">Product Detail Page</a>
-            <a href="/examples/cart" class="sidebar__link">Cart</a>
+            <a href={`${base}/examples/homepage`} class="sidebar__link">Homepage</a>
+            <a href={`${base}/examples/collection`} class="sidebar__link">Collection</a>
+            <a href={`${base}/examples/product-detail`} class="sidebar__link">Product Detail Page</a>
+            <a href={`${base}/examples/cart`} class="sidebar__link">Cart</a>
           </div>
         </nav>
       </aside>

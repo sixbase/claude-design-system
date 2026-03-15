@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { FooterDefault, FooterMinimal } from '../../components/FooterGallery';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title="Footer">
@@ -15,7 +16,7 @@ import { FooterDefault, FooterMinimal } from '../../components/FooterGallery';
     <pre><code>{`import { Footer } from '@ds/components';`}</code></pre>
 
     <h2>Default</h2>
-    <FooterDefault client:load />
+    <FooterDefault client:load basePath={base} />
     <pre><code>{`<Footer
   logoSrc="/logo.svg"
   logoAlt="Brand Name"
@@ -45,7 +46,7 @@ import { FooterDefault, FooterMinimal } from '../../components/FooterGallery';
 
     <h2>Minimal</h2>
     <p>Logo and copyright only — no columns or legal links.</p>
-    <FooterMinimal client:load />
+    <FooterMinimal client:load basePath={base} />
     <pre><code>{`<Footer
   logoSrc="/logo.svg"
   logoAlt="Brand Name"

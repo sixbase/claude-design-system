@@ -3,6 +3,8 @@ import react from '@astrojs/react';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
+  site: 'https://sixbase.github.io',
+  base: '/claude-design-system',
   integrations: [react(), mdx()],
   output: 'static',
   server: { host: true },
