@@ -108,6 +108,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
             <div className="ds-pdp__option">
               <Text as="label" size="sm" weight="medium">Size</Text>
               <Select
+                size="lg"
                 value={size}
                 onValueChange={setSize}
                 placeholder="Select device"

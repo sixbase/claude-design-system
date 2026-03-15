@@ -59,7 +59,7 @@
   line-height: var(--line-height-relaxed);
 }
 
-.ds-footer__heading {
+.ds-footer .ds-footer__heading {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
