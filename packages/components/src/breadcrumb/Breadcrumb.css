@@ -1,4 +1,9 @@
 /* ─── Breadcrumb ─────────────────────────────────────────── */
+.ds-breadcrumb {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .ds-breadcrumb__list {
   display: flex;
   align-items: center;
@@ -67,8 +72,13 @@ a.ds-breadcrumb__link:hover {
   }
 }
 
-/* Mobile: hide collapsible middle items, show ellipsis */
+/* Mobile: hide collapsible middle items, show ellipsis, single-line truncation */
 @media (max-width: 767px) {
+  .ds-breadcrumb__list {
+    flex-wrap: nowrap;
+    max-width: 100%;
+  }
+
   .ds-breadcrumb__item--collapsible {
     display: none;
   }
@@ -76,5 +86,11 @@ a.ds-breadcrumb__link:hover {
   .ds-breadcrumb__ellipsis,
   .ds-breadcrumb__separator--after-ellipsis {
     display: inline;
+  }
+
+  .ds-breadcrumb__item:last-child {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 }
