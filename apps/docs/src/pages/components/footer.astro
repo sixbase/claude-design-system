@@ -65,7 +65,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <tr><td><code>tagline</code></td><td><code>string</code></td><td>—</td><td>Brand tagline below the logo</td></tr>
         <tr><td><code>columns</code></td><td><code>FooterColumn[]</code></td><td><code>[]</code></td><td>Link columns</td></tr>
         <tr><td><code>copyright</code></td><td><code>string</code></td><td>—</td><td>Copyright text</td></tr>
-        <tr><td><code>legalLinks</code></td><td><code>{'{ label, href }[]'}</code></td><td><code>[]</code></td><td>Legal links at the bottom</td></tr>
+        <tr><td><code>legalLinks</code></td><td><code>&#123; label, href &#125;[]</code></td><td><code>[]</code></td><td>Legal links at the bottom</td></tr>
       </tbody>
     </table>
 
@@ -76,7 +76,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </thead>
       <tbody>
         <tr><td><code>heading</code></td><td><code>string</code></td><td>Column heading text</td></tr>
-        <tr><td><code>links</code></td><td><code>{'{ label: string; href: string }[]'}</code></td><td>Links in the column</td></tr>
+        <tr><td><code>links</code></td><td><code>&#123; label: string; href: string &#125;[]</code></td><td>Links in the column</td></tr>
       </tbody>
     </table>
 
