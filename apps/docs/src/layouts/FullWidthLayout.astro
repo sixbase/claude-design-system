@@ -46,6 +46,50 @@ const { title, description = 'Design system documentation' } = Astro.props;
     <main>
       <slot />
     </main>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="/" class="site-footer__logo">Mason Supply Co.</a>
+            <p class="site-footer__tagline">Thoughtfully designed accessories for everyday carry.</p>
+          </div>
+          <div class="site-footer__column">
+            <h3 class="site-footer__heading">Shop</h3>
+            <ul class="site-footer__links">
+              <li><a href="#">Phone Cases</a></li>
+              <li><a href="#">Wallets</a></li>
+              <li><a href="#">Bags</a></li>
+              <li><a href="#">Accessories</a></li>
+            </ul>
+          </div>
+          <div class="site-footer__column">
+            <h3 class="site-footer__heading">Company</h3>
+            <ul class="site-footer__links">
+              <li><a href="#">About</a></li>
+              <li><a href="#">Journal</a></li>
+              <li><a href="#">Sustainability</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+          <div class="site-footer__column">
+            <h3 class="site-footer__heading">Support</h3>
+            <ul class="site-footer__links">
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Shipping & Returns</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Warranty</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="site-footer__bottom">
+          <p class="site-footer__copyright">&copy; 2026 Mason Supply Co. All rights reserved.</p>
+          <div class="site-footer__legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
 
@@ -130,6 +174,131 @@ const { title, description = 'Design system documentation' } = Astro.props;
   .site-header__cart:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-focus-ring);
+  }
+
+  /* ─── Footer ─────────────────────────────────────────── */
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--spacing-16);
+  }
+
+  .site-footer__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--spacing-12) var(--spacing-4) var(--spacing-8);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__inner {
+      padding: var(--spacing-12) var(--spacing-8) var(--spacing-8);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__inner {
+      padding: var(--spacing-16) var(--spacing-16) var(--spacing-8);
+    }
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-8);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--spacing-8);
+    }
+  }
+
+  .site-footer__logo {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .site-footer__tagline {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground-subtle);
+    margin-top: var(--spacing-2);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .site-footer__heading {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .site-footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .site-footer__links a {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground-subtle);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .site-footer__links a:hover {
+    color: var(--color-foreground);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-12);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .site-footer__copyright {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-subtle);
+    margin: 0;
+  }
+
+  .site-footer__legal {
+    display: flex;
+    gap: var(--spacing-4);
+  }
+
+  .site-footer__legal a {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-subtle);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .site-footer__legal a:hover {
+    color: var(--color-foreground);
   }
 
   /* ─── Main ────────────────────────────────────────────── */
