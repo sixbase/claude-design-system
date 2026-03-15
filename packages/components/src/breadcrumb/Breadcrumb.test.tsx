@@ -72,13 +72,17 @@ describe('Breadcrumb', () => {
       { label: 'Aramid Fiber Case' },
     ];
 
-    it('collapses middle items when maxItems is set', () => {
+    it('marks middle items as collapsible when maxItems is set', () => {
       render(<Breadcrumb items={longItems} maxItems={3} />);
       expect(screen.getByText('Home')).toBeInTheDocument();
       expect(screen.getByText('Accessories')).toBeInTheDocument();
       expect(screen.getByText('Aramid Fiber Case')).toBeInTheDocument();
-      expect(screen.queryByText('Electronics')).not.toBeInTheDocument();
-      expect(screen.queryByText('Phones')).not.toBeInTheDocument();
+      // Middle items are in DOM but marked collapsible
+      expect(screen.getByText('Electronics').closest('li')).toHaveClass('ds-breadcrumb__item--collapsible');
+      expect(screen.getByText('Phones').closest('li')).toHaveClass('ds-breadcrumb__item--collapsible');
+      // First and last items are NOT collapsible
+      expect(screen.getByText('Home').closest('li')).not.toHaveClass('ds-breadcrumb__item--collapsible');
+      expect(screen.getByText('Aramid Fiber Case').closest('li')).not.toHaveClass('ds-breadcrumb__item--collapsible');
     });
 
     it('renders ellipsis when truncated', () => {
@@ -92,11 +96,13 @@ describe('Breadcrumb', () => {
       expect(container.querySelector('.ds-breadcrumb__ellipsis')).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('shows all items when count is within maxItems', () => {
-      render(<Breadcrumb items={longItems} maxItems={10} />);
+    it('shows all items without collapsible class when count is within maxItems', () => {
+      const { container } = render(<Breadcrumb items={longItems} maxItems={10} />);
       longItems.forEach((item) => {
         expect(screen.getByText(item.label)).toBeInTheDocument();
       });
+      expect(container.querySelectorAll('.ds-breadcrumb__item--collapsible')).toHaveLength(0);
+      expect(container.querySelector('.ds-breadcrumb__ellipsis')).not.toBeInTheDocument();
     });
   });
 

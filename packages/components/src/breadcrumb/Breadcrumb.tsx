@@ -20,13 +20,15 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Brea
   { items, separator = '\u203A', maxItems, className, ...props },
   ref,
 ) {
-  let visibleItems = items;
-  let collapsed = false;
+  const shouldCollapse = !!(maxItems && maxItems > 1 && items.length > maxItems);
 
-  if (maxItems && maxItems > 1 && items.length > maxItems) {
-    const first = items[0] as BreadcrumbItem;
-    visibleItems = [first, ...items.slice(-(maxItems - 1))];
-    collapsed = true;
+  // Indices of middle items that get hidden on mobile when maxItems is set
+  const collapsibleSet = new Set<number>();
+  if (shouldCollapse) {
+    const keepFromEnd = maxItems - 1;
+    for (let i = 1; i < items.length - keepFromEnd; i++) {
+      collapsibleSet.add(i);
+    }
   }
 
   return (
@@ -37,11 +39,20 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Brea
       {...props}
     >
       <ol className="ds-breadcrumb__list">
-        {visibleItems.map((item, i) => {
-          const isLast = i === visibleItems.length - 1;
+        {items.map((item, i) => {
+          const isLast = i === items.length - 1;
           const isFirst = i === 0;
+          const isCollapsible = collapsibleSet.has(i);
           return (
-            <li key={item.label} className="ds-breadcrumb__item">
+            <li
+              key={item.label}
+              className={[
+                'ds-breadcrumb__item',
+                isCollapsible && 'ds-breadcrumb__item--collapsible',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
               {isLast ? (
                 <span className="ds-breadcrumb__current" aria-current="page">
                   {item.label}
@@ -58,12 +69,15 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Brea
                   <span className="ds-breadcrumb__separator" aria-hidden="true">
                     {separator}
                   </span>
-                  {collapsed && isFirst && (
+                  {shouldCollapse && isFirst && (
                     <>
                       <span className="ds-breadcrumb__ellipsis" aria-hidden="true">
                         …
                       </span>
-                      <span className="ds-breadcrumb__separator" aria-hidden="true">
+                      <span
+                        className="ds-breadcrumb__separator ds-breadcrumb__separator--after-ellipsis"
+                        aria-hidden="true"
+                      >
                         {separator}
                       </span>
                     </>

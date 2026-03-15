@@ -52,3 +52,29 @@ a.ds-breadcrumb__link:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ─── Responsive collapse: hide ellipsis on tablet+, hide middle items on mobile ── */
+
+/* Tablet and up: show all items, hide ellipsis */
+@media (min-width: 768px) {
+  .ds-breadcrumb__item--collapsible {
+    display: flex;
+  }
+
+  .ds-breadcrumb__ellipsis,
+  .ds-breadcrumb__separator--after-ellipsis {
+    display: none;
+  }
+}
+
+/* Mobile: hide collapsible middle items, show ellipsis */
+@media (max-width: 767px) {
+  .ds-breadcrumb__item--collapsible {
+    display: none;
+  }
+
+  .ds-breadcrumb__ellipsis,
+  .ds-breadcrumb__separator--after-ellipsis {
+    display: inline;
+  }
+}
