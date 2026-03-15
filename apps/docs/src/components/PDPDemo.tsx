@@ -67,7 +67,7 @@ export function PDPDemo() {
           <ImageGallery
             images={galleryImages}
             aspectRatio="4/5"
-            thumbnailPosition="bottom"
+            thumbnailPosition="left"
           />
         </div>
 
