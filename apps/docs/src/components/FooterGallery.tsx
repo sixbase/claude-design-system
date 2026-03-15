@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Footer } from '@ds/components';
+import './Preview.css';
 
 const COLUMNS = [
   {
