@@ -239,18 +239,20 @@ Update every reference. CSS variables fail silently — no build error when a va
 5. `pnpm turbo test` — Vitest (unit + a11y)
 6. Upload coverage artifact
 
-`.github/workflows/chromatic.yml` runs in parallel:
-1. Build packages
-2. Build Storybook
-3. Upload to Chromatic for visual diffing
+### Branch Protection (enforced on `main`)
+
+Direct pushes to `main` are blocked. Every change must go through a pull request that:
+1. **Passes CI** — the "Lint · Typecheck · Test" status check must be green
+2. **Gets 1 approving review** — another human must approve the PR
+3. **Stale reviews dismissed** — if you push new commits after approval, the approval is invalidated and a re-review is required
+
+This means no code reaches `main` without passing lint, typecheck, all tests (including axe a11y scans), AND being reviewed.
 
 ### On merge to `main`
 
-`.github/workflows/release.yml` runs:
-1. All CI checks must have passed (branch protection required)
-2. Changesets Action checks for `.changeset/*.md` files
-3. **If changesets exist:** Creates a "Version Packages" PR
-4. **If the version PR is merged:** Publishes to npm with `pnpm release`
+Changesets Action checks for `.changeset/*.md` files:
+1. **If changesets exist:** Creates a "Version Packages" PR that bumps version numbers
+2. **If the version PR is merged:** Publishes to npm with `pnpm release`
 
 ---
 

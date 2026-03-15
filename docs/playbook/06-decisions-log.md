@@ -552,3 +552,30 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 **Rationale:** `tight` is used exclusively for headings (Typography component, Modal title, PDP title). 1.15 is standard for heading line-heights across design systems (Apple HIG uses 1.1–1.2 for display text). The global change improves all heading contexts simultaneously.
 **Impact:** 42px font → 48.3px line-height (was 52.5px). 6.3px total leading instead of 10.5px.
 **Status:** Active
+
+---
+
+### CI/CD & Code Quality: Full Pipeline + Branch Protection
+
+**Date/Phase:** Post-PDP, workflow maturity
+**Context:** Moving from local-only development to a collaborative workflow with automated quality gates. Needed to ensure accessibility standards are enforced automatically and code changes are reviewed before merging.
+**Options considered:**
+1. Full CI pipeline (lint, typecheck, test, build) + branch protection with required reviews
+2. Tests + a11y only in CI, no review gate
+3. Manual checks only, formalize later
+
+**Decision:** Full CI pipeline + branch protection with required PR reviews.
+
+**What's in place:**
+- **GitHub Actions CI** (`.github/workflows/ci.yml`): Runs on every PR and push to `main`. Steps: `pnpm install --frozen-lockfile` → `turbo build` (packages only) → `turbo lint` → `turbo typecheck` → `turbo test` (includes axe a11y scans). Turbo cache enabled for faster reruns.
+- **Branch protection on `main`**: Direct pushes blocked. Requires the "Lint · Typecheck · Test" status check to pass. Requires 1 approving review. Stale reviews dismissed on new pushes.
+- **Storybook addon-a11y** (`@storybook/addon-a11y`): Already installed and configured with color-contrast enforcement. Provides real-time a11y panel during development.
+- **Repo made public**: Required for branch protection on GitHub Free tier.
+
+**Accessibility enforcement layers (3 total):**
+1. **Dev time** — Storybook a11y panel (visual, interactive)
+2. **Test time** — `jest-axe` / axe-core in every component's `.test.tsx` (programmatic)
+3. **CI time** — `pnpm turbo test` runs all axe tests as a required status check (automated gate)
+
+**Rationale:** Three layers of a11y enforcement means a violation has to slip past development, testing, AND CI to ship. The branch protection + required review ensures no code reaches `main` without passing all checks and being reviewed by another human.
+**Status:** Active
