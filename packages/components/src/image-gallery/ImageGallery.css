@@ -16,6 +16,12 @@
     flex-direction: row-reverse;
     gap: var(--spacing-3);
   }
+
+  .ds-image-gallery--thumbs-left .ds-image-gallery__main {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 /* ─── Main image ─────────────────────────────────────────── */

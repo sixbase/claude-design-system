@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { QuantitySelectorDefault, QuantitySelectorSizes, QuantitySelectorStates } from '../../components/QuantitySelectorGallery';
+---
+
+<BaseLayout title="Quantity Selector">
+  <div class="prose">
+    <h1>Quantity Selector</h1>
+    <p>
+      A controlled stepper for numeric values. Common in ecommerce for cart item quantities.
+      Supports min/max bounds, step increments, and three sizes.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { QuantitySelector } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <QuantitySelectorDefault client:load />
+    <pre><code>{`const [qty, setQty] = useState(1);
+
+<QuantitySelector value={qty} onChange={setQty} />`}</code></pre>
+
+    <h2>Sizes</h2>
+    <QuantitySelectorSizes client:load />
+    <pre><code>{`<QuantitySelector size="sm" value={qty} onChange={setQty} />
+<QuantitySelector size="md" value={qty} onChange={setQty} />  {/* default */}
+<QuantitySelector size="lg" value={qty} onChange={setQty} />`}</code></pre>
+
+    <h2>States</h2>
+    <p>Disabled state and constrained range (min 1, max 5).</p>
+    <QuantitySelectorStates client:load />
+    <pre><code>{`<QuantitySelector disabled value={1} onChange={setQty} />
+<QuantitySelector value={qty} onChange={setQty} min={1} max={5} />`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>value</code></td><td><code>number</code></td><td>—</td><td>Current value (controlled)</td></tr>
+        <tr><td><code>onChange</code></td><td><code>(value: number) =&gt; void</code></td><td>—</td><td>Called when value changes</td></tr>
+        <tr><td><code>min</code></td><td><code>number</code></td><td><code>1</code></td><td>Minimum value</td></tr>
+        <tr><td><code>max</code></td><td><code>number</code></td><td><code>99</code></td><td>Maximum value</td></tr>
+        <tr><td><code>step</code></td><td><code>number</code></td><td><code>1</code></td><td>Step increment</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size variant</td></tr>
+        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disable interaction</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Wraps in <code>role="group"</code> with <code>aria-label="Quantity"</code></li>
+      <li>Decrement/increment buttons have descriptive <code>aria-label</code></li>
+      <li>Buttons are automatically disabled at min/max bounds</li>
+      <li>Value is rendered as <code>&lt;output&gt;</code> for live region semantics</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

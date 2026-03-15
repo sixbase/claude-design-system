@@ -109,6 +109,10 @@
   border-color: var(--color-foreground);
 }
 
+.ds-pdp__option .ds-quantity-selector {
+  align-self: flex-start;
+}
+
 /* ─── Actions ────────────────────────────────────────────── */
 .ds-pdp__actions {
   display: flex;

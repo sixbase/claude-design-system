@@ -1,0 +1,124 @@
+/* ─── Accordion ─────────────────────────────────────────── */
+.ds-accordion {
+  width: 100%;
+}
+
+/* ─── Item ──────────────────────────────────────────────── */
+.ds-accordion__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ds-accordion__item:first-child {
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.ds-accordion__header {
+  margin: 0;
+}
+
+/* ─── Trigger ───────────────────────────────────────────── */
+.ds-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground);
+  transition: color var(--transition-fast);
+}
+
+.ds-accordion__trigger:hover {
+  color: var(--color-foreground-subtle);
+}
+
+.ds-accordion__trigger:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+.ds-accordion__trigger[data-disabled] {
+  color: var(--color-foreground-muted);
+  cursor: not-allowed;
+}
+
+.ds-accordion__trigger-text {
+  flex: 1;
+}
+
+/* ─── Chevron ───────────────────────────────────────────── */
+.ds-accordion__chevron {
+  flex-shrink: 0;
+  color: var(--color-foreground-muted);
+  transition: transform var(--transition-duration-normal) var(--transition-timing-ease-out);
+}
+
+[data-state="open"] > .ds-accordion__trigger-text + .ds-accordion__chevron,
+.ds-accordion__trigger[data-state="open"] .ds-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+/* ─── Content ───────────────────────────────────────────── */
+.ds-accordion__content {
+  overflow: hidden;
+  color: var(--color-foreground-subtle);
+  font-family: var(--font-family-sans);
+  line-height: var(--line-height-relaxed);
+}
+
+.ds-accordion__content[data-state="open"] {
+  animation: ds-accordion-expand var(--transition-duration-normal) var(--transition-timing-ease-out);
+}
+
+.ds-accordion__content[data-state="closed"] {
+  animation: ds-accordion-collapse var(--transition-duration-normal) var(--transition-timing-ease-out);
+}
+
+@keyframes ds-accordion-expand {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes ds-accordion-collapse {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+/* ─── Size: sm ──────────────────────────────────────────── */
+.ds-accordion--sm .ds-accordion__trigger {
+  padding: var(--spacing-2) 0;
+  font-size: var(--font-size-sm);
+}
+
+.ds-accordion--sm .ds-accordion__content-inner {
+  padding: 0 0 var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+/* ─── Size: md ──────────────────────────────────────────── */
+.ds-accordion--md .ds-accordion__trigger {
+  padding: var(--spacing-4) 0;
+  font-size: var(--font-size-base);
+}
+
+.ds-accordion--md .ds-accordion__content-inner {
+  padding: 0 0 var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
+
+/* ─── Size: lg ──────────────────────────────────────────── */
+.ds-accordion--lg .ds-accordion__trigger {
+  padding: var(--spacing-5) 0;
+  font-size: var(--font-size-lg);
+}
+
+.ds-accordion--lg .ds-accordion__content-inner {
+  padding: 0 0 var(--spacing-5);
+  font-size: var(--font-size-base);
+}

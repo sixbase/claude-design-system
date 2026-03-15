@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { AccordionDefault, AccordionMultiple, AccordionSizes } from '../../components/AccordionGallery';
+---
+
+<BaseLayout title="Accordion">
+  <div class="prose">
+    <h1>Accordion</h1>
+    <p>
+      A vertically stacked set of collapsible sections. Common for FAQs, product details,
+      and filtering. Built on Radix UI for full keyboard and screen reader support.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@ds/components';`}</code></pre>
+
+    <h2>Single (collapsible)</h2>
+    <p>Only one item open at a time. Set <code>collapsible</code> to allow closing all items.</p>
+    <AccordionDefault client:load />
+    <pre><code>{`<Accordion type="single" collapsible>
+  <AccordionItem value="shipping">
+    <AccordionTrigger>Shipping & Delivery</AccordionTrigger>
+    <AccordionContent>Free standard shipping…</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="returns">
+    <AccordionTrigger>Returns & Exchanges</AccordionTrigger>
+    <AccordionContent>We accept returns…</AccordionContent>
+  </AccordionItem>
+</Accordion>`}</code></pre>
+
+    <h2>Multiple</h2>
+    <p>Multiple items can be open simultaneously. Use <code>defaultValue</code> to pre-expand items.</p>
+    <AccordionMultiple client:load />
+    <pre><code>{`<Accordion type="multiple" defaultValue={['features', 'specs']}>
+  <AccordionItem value="features">…</AccordionItem>
+  <AccordionItem value="specs">…</AccordionItem>
+</Accordion>`}</code></pre>
+
+    <h2>Sizes</h2>
+    <AccordionSizes client:load />
+    <pre><code>{`<Accordion size="sm">…</Accordion>
+<Accordion size="md">…</Accordion>  {/* default */}
+<Accordion size="lg">…</Accordion>`}</code></pre>
+
+    <h2>Props</h2>
+    <h3>Accordion (root)</h3>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>type</code></td><td><code>'single' | 'multiple'</code></td><td>—</td><td>Whether one or many items can be open</td></tr>
+        <tr><td><code>collapsible</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Allow closing all items (single mode only)</td></tr>
+        <tr><td><code>defaultValue</code></td><td><code>string | string[]</code></td><td>—</td><td>Initially open item(s)</td></tr>
+        <tr><td><code>value</code></td><td><code>string | string[]</code></td><td>—</td><td>Controlled open item(s)</td></tr>
+        <tr><td><code>onValueChange</code></td><td><code>(value) =&gt; void</code></td><td>—</td><td>Called when open items change</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size variant</td></tr>
+      </tbody>
+    </table>
+
+    <h3>AccordionItem</h3>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>value</code></td><td><code>string</code></td><td>—</td><td>Unique identifier for this item</td></tr>
+        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevent opening this item</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Keyboard: <kbd>Enter</kbd> / <kbd>Space</kbd> toggle the focused item</li>
+      <li><kbd>Arrow Down</kbd> / <kbd>Arrow Up</kbd> move between triggers</li>
+      <li><kbd>Home</kbd> / <kbd>End</kbd> jump to first / last trigger</li>
+      <li>Each trigger has <code>aria-expanded</code> and <code>aria-controls</code></li>
+      <li>Content regions have <code>role="region"</code> with <code>aria-labelledby</code></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+  kbd {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.4em;
+  }
+</style>
