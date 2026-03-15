@@ -38,8 +38,7 @@
   outline: none;
   transition:
     border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast);
+    box-shadow var(--transition-fast);
   white-space: nowrap;
 
   /* Optical centering: trim em-box to cap height + baseline */
@@ -78,7 +77,6 @@
 /* Active (pressed) */
 .ds-select-trigger:active:not([data-disabled]) {
   border-color: var(--color-primary);
-  transform: scale(0.98);
 }
 
 /* Focus */
@@ -234,8 +232,5 @@
 @supports not (text-box-trim: both) {
   .ds-select-trigger {
     transform: translateY(0.05em);
-  }
-  .ds-select-trigger:active:not([data-disabled]) {
-    transform: translateY(0.05em) scale(0.98);
   }
 }
