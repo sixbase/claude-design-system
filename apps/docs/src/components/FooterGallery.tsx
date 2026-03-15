@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { Footer } from '@ds/components';
-import { Preview } from './Preview';
 
 const COLUMNS = [
   {
@@ -33,9 +33,34 @@ const LEGAL_LINKS = [
   { label: 'Terms of Service', href: '#' },
 ];
 
+function FooterPreview({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [dark, setDark] = useState(false);
+
+  return (
+    <div className={`ds-preview${dark ? ' dark' : ''}`}>
+      <div className="ds-preview__toolbar">
+        <button
+          className="ds-preview__toggle"
+          onClick={() => setDark((d) => !d)}
+          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {dark ? '☀ Light' : '☾ Dark'}
+        </button>
+      </div>
+      <div className="ds-preview__canvas ds-preview__canvas--stack" style={{ padding: 0 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function FooterDefault({ basePath = '' }: { basePath?: string }) {
   return (
-    <Preview stack>
+    <FooterPreview>
       <Footer
         logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
@@ -43,19 +68,21 @@ export function FooterDefault({ basePath = '' }: { basePath?: string }) {
         columns={COLUMNS}
         copyright="© 2026 Mason Supply Co. All rights reserved."
         legalLinks={LEGAL_LINKS}
+        style={{ marginTop: 0 }}
       />
-    </Preview>
+    </FooterPreview>
   );
 }
 
 export function FooterMinimal({ basePath = '' }: { basePath?: string }) {
   return (
-    <Preview stack>
+    <FooterPreview>
       <Footer
         logoSrc={`${basePath}/mason-supply-co-logo.svg`}
         logoAlt="Mason Supply Co."
         copyright="© 2026 Mason Supply Co. All rights reserved."
+        style={{ marginTop: 0 }}
       />
-    </Preview>
+    </FooterPreview>
   );
 }

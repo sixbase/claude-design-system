@@ -4,7 +4,8 @@ import {
   Badge, Breadcrumb, Button, Caption,
   Carousel, CarouselSlide, ColorPicker, CookieConsent,
   FeatureBlock, Heading, ImageGallery,
-  PriceDisplay, QuantitySelector, StarRating, StockIndicator, Text,
+  PriceDisplay, QuantitySelector, Select, SelectItem,
+  StarRating, StockIndicator, Text,
 } from '@ds/components';
 import type { ColorOption } from '@ds/components';
 import { ViewportIndicator } from './ViewportIndicator';
@@ -43,15 +44,26 @@ const colorOptions: ColorOption[] = [
   { value: 'dark-olive', color: '#4E473F', label: 'Dark Olive' },
 ];
 
+const SIZE_OPTIONS = [
+  { value: 'iphone-17-pro-max', label: 'iPhone 17 Pro Max' },
+  { value: 'iphone-17-pro', label: 'iPhone 17 Pro' },
+  { value: 'iphone-17', label: 'iPhone 17' },
+  { value: 'iphone-air', label: 'iPhone Air' },
+  { value: 'iphone-16-pro-max', label: 'iPhone 16 Pro Max' },
+  { value: 'iphone-16-pro', label: 'iPhone 16 Pro' },
+  { value: 'iphone-16', label: 'iPhone 16' },
+];
+
 export function PDPDemo({ basePath = '' }: { basePath?: string }) {
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState('carbon-black');
+  const [size, setSize] = useState('iphone-17-pro-max');
 
   const breadcrumbItems = [
     { label: 'Home', href: `${basePath}/` },
     { label: 'Accessories', href: '#' },
     { label: 'Phone Cases', href: '#' },
-    { label: 'Aramid Fiber iPhone 17 Pro Max Case' },
+    { label: 'Carbon Fiber iPhone Case' },
   ];
 
   return (
@@ -75,7 +87,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
           {/* ── Header: title, price, rating ── */}
           <div className="ds-pdp__header">
             <Heading as="h1" size="2xl" weight="normal" className="ds-pdp__title">
-              Aramid Fiber iPhone 17 Pro Max Case
+              Carbon Fiber iPhone Case
             </Heading>
             <div className="ds-pdp__price-row">
               <PriceDisplay price="$68.00" comparePrice="$85.00" />
@@ -93,6 +105,21 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
 
           {/* ── Options ── */}
           <div className="ds-pdp__options-group">
+            <div className="ds-pdp__option">
+              <Text as="label" size="sm" weight="medium">Size</Text>
+              <Select
+                value={size}
+                onValueChange={setSize}
+                placeholder="Select device"
+              >
+                {SIZE_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+
             <div className="ds-pdp__option">
               <Text as="label" size="sm" weight="medium">Color</Text>
               <ColorPicker options={colorOptions} value={color} onChange={setColor} aria-label="Case color" />
