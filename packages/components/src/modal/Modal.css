@@ -94,6 +94,10 @@
   color: var(--color-foreground-subtle);
   cursor: pointer;
   transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+
+  /* Optical centering: trim em-box to cap height + baseline */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 .ds-modal__close:hover {
@@ -144,4 +148,14 @@
   line-height: var(--line-height-normal);
   color: var(--color-foreground-subtle);
   margin: var(--spacing-1) 0 0;
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-modal__close {
+    transform: translateY(0.05em);
+  }
+  .ds-modal__close:active {
+    transform: translateY(0.05em) scale(0.92);
+  }
 }

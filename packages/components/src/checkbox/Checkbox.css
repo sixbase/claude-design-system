@@ -17,11 +17,6 @@
   gap: var(--spacing-2);
 }
 
-/* When a label is present, align to top for multi-line text */
-.ds-checkbox-field:has(.ds-checkbox-label) {
-  align-items: flex-start;
-}
-
 /* ─── Checkbox box ───────────────────────────────────────── */
 .ds-checkbox-box {
   --checkbox-border-color: var(--color-border);
@@ -53,15 +48,6 @@
 .ds-checkbox-box--md {
   width: var(--size-checkbox-md);
   height: var(--size-checkbox-md);
-}
-
-/* Cap-height alignment only when a label is present */
-.ds-checkbox-field:has(.ds-checkbox-label) .ds-checkbox-box--sm {
-  margin-top: var(--spacing-phi-1);
-}
-
-.ds-checkbox-field:has(.ds-checkbox-label) .ds-checkbox-box--md {
-  margin-top: 1px;
 }
 
 /* Hover */
@@ -145,6 +131,8 @@
   line-height: var(--line-height-snug);
   cursor: pointer;
   user-select: none;
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 .ds-checkbox-root--disabled .ds-checkbox-label {

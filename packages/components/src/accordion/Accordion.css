@@ -39,6 +39,10 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-foreground);
   transition: color var(--transition-fast);
+
+  /* Optical centering: trim em-box to cap height + baseline */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 .ds-accordion__trigger:hover {
@@ -159,4 +163,11 @@
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-accordion__trigger {
+    transform: translateY(0.05em);
+  }
 }
