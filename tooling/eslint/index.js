@@ -15,7 +15,7 @@ export const base = [
       parserOptions: { project: true },
     },
     rules: {
-      ...tsPlugin.configs['strict-type-checked'].rules,
+      ...tsPlugin.configs['recommended-type-checked'].rules,
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },

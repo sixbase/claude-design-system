@@ -40,6 +40,7 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
+    "@ds/eslint-config": "workspace:*",
     "@ds/tsconfig": "workspace:*",
     "@ds/vitest-config": "workspace:*",
     "@testing-library/jest-dom": "^6.4.2",

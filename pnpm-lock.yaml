@@ -143,6 +143,9 @@ importers:
         specifier: '>=18.0.0'
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@ds/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
       '@ds/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
@@ -214,6 +217,9 @@ importers:
         specifier: '>=18.0.0'
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@ds/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
       '@ds/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
@@ -232,6 +238,9 @@ importers:
 
   packages/tokens:
     devDependencies:
+      '@ds/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
       '@ds/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript

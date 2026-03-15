@@ -22,6 +22,7 @@
     "lint": "eslint src"
   },
   "devDependencies": {
+    "@ds/eslint-config": "workspace:*",
     "@ds/tsconfig": "workspace:*",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"

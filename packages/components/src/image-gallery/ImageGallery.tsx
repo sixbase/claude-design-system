@@ -119,6 +119,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(functi
           ref={thumbsRef}
           className="ds-image-gallery__thumbs"
           role="tablist"
+          tabIndex={-1}
           aria-label="Product images"
           onKeyDown={handleThumbKeyDown}
         >
