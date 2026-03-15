@@ -3,6 +3,11 @@
   font-family: var(--font-family-sans);
   color: var(--color-foreground);
   margin: 0;
+
+  /* Optimal reading width: 65ch ≈ 65 characters per line.
+     Only applies to block-level renderings (p, div) — inline
+     elements (span, label) ignore max-width automatically. */
+  max-width: 65ch;
 }
 
 /* ─── Heading levels ───────────────────────────────────────── */
@@ -15,23 +20,27 @@
   margin: 0;
 }
 
-.ds-heading--h1 {
+.ds-heading--4xl {
   font-size: var(--font-size-4xl);
   letter-spacing: var(--letter-spacing-tighter);
 }
 
-.ds-heading--h2 {
+.ds-heading--3xl {
   font-size: var(--font-size-3xl);
 }
 
-.ds-heading--h3 {
+.ds-heading--2xl {
   font-size: var(--font-size-2xl);
 }
 
-.ds-heading--h4 {
+.ds-heading--xl {
   font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
 }
+
+/* ─── Weight modifiers (heading) ──────────────────────────── */
+.ds-heading--normal   { font-weight: var(--font-weight-normal); }
+.ds-heading--medium   { font-weight: var(--font-weight-medium); }
+.ds-heading--bold     { font-weight: var(--font-weight-bold); }
 
 /* ─── Body sizes ───────────────────────────────────────────── */
 .ds-text--lg {
@@ -86,4 +95,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ─── Reading width utility ───────────────────────────────── */
+/* Apply to any body/paragraph text outside the Text component.
+   65ch ≈ 65 characters — the typographic sweet spot for
+   comfortable reading (Bringhurst, 45–75ch range). */
+.ds-readable-width {
+  max-width: 65ch;
 }

@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@ds/components';
+import { useState } from 'react';
 import { Preview } from './Preview';
 
 export function AccordionDefault() {
@@ -91,6 +92,101 @@ export function AccordionSizes() {
           <AccordionItem value="item-1">
             <AccordionTrigger>Large accordion item</AccordionTrigger>
             <AccordionContent>Spacious layout for prominent sections.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </Preview>
+  );
+}
+
+export function AccordionWithCheckbox() {
+  const [checked, setChecked] = useState<Record<string, boolean>>({
+    essential: true,
+    functional: false,
+    performance: false,
+    targeting: false,
+  });
+
+  return (
+    <Preview stack>
+      <div style={{ width: '100%' }}>
+        <Accordion type="multiple" size="sm" bordered>
+          <AccordionItem value="essential">
+            <AccordionTrigger
+              checked={checked.essential}
+              checkboxDisabled
+              checkboxLabel="Strictly Necessary Cookies"
+            >
+              Strictly Necessary Cookies
+            </AccordionTrigger>
+            <AccordionContent>
+              These cookies are essential for the website to function and cannot be switched off.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="functional">
+            <AccordionTrigger
+              checked={checked.functional}
+              onCheckedChange={(c) => setChecked((s) => ({ ...s, functional: c === true }))}
+              checkboxLabel="Functional Cookies"
+            >
+              Functional Cookies
+            </AccordionTrigger>
+            <AccordionContent>
+              These cookies enable enhanced functionality and personalization.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="performance">
+            <AccordionTrigger
+              checked={checked.performance}
+              onCheckedChange={(c) => setChecked((s) => ({ ...s, performance: c === true }))}
+              checkboxLabel="Performance Cookies"
+            >
+              Performance Cookies
+            </AccordionTrigger>
+            <AccordionContent>
+              These cookies help us understand how visitors interact with the website.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="targeting">
+            <AccordionTrigger
+              checked={checked.targeting}
+              onCheckedChange={(c) => setChecked((s) => ({ ...s, targeting: c === true }))}
+              checkboxLabel="Targeting Cookies"
+            >
+              Targeting Cookies
+            </AccordionTrigger>
+            <AccordionContent>
+              These cookies are used to deliver personalized advertisements.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </Preview>
+  );
+}
+
+export function AccordionBordered() {
+  return (
+    <Preview stack>
+      <div style={{ width: '100%' }}>
+        <Accordion type="single" collapsible bordered>
+          <AccordionItem value="faq-1">
+            <AccordionTrigger>What payment methods do you accept?</AccordionTrigger>
+            <AccordionContent>
+              We accept Visa, Mastercard, American Express, and PayPal.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="faq-2">
+            <AccordionTrigger>How long does shipping take?</AccordionTrigger>
+            <AccordionContent>
+              Standard shipping takes 3–5 business days. Express shipping is available at checkout.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="faq-3">
+            <AccordionTrigger>Can I track my order?</AccordionTrigger>
+            <AccordionContent>
+              Yes, you'll receive a tracking number via email once your order ships.
+            </AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>

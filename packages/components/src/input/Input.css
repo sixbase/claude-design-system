@@ -39,6 +39,10 @@
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
+
+  /* Optical centering: trim em-box to cap height + baseline */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 /* ─── Sizes ─────────────────────────────────────────────────── */
@@ -138,4 +142,11 @@
   font-size: var(--font-size-xs);
   color: var(--color-destructive);
   line-height: var(--line-height-normal);
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-input-field {
+    transform: translateY(0.05em);
+  }
 }

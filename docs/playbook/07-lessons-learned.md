@@ -415,3 +415,26 @@ For pricing with original/sale display, use two separate `<p>` elements with dis
 </div>
 ```
 The compare price gets `text-decoration: line-through` and muted color. This is cleaner than conditional classes on a single price element and easier to animate/transition.
+
+### Global heading styles leak into compound components with semantic heading elements
+
+Global typography styles (`h1`–`h6` with `margin` and `font-size` rules) can leak into compound components that use semantic heading elements internally. Radix Accordion's `AccordionPrimitive.Header` renders an `<h3>` by default, and any site-level `h3 { margin: 24px 0 12px; }` rule will inflate the accordion row height and break alignment of sibling elements (like checkboxes). Always add defensive resets (`margin: 0; font-size: inherit;`) when embedding Accordion or similar primitives inside other components, especially when the consuming site has its own typography system. The reset should be scoped to the parent component's CSS (e.g., `.ds-cookie-consent__category-row .ds-accordion__header`) rather than modifying the primitive itself, so the fix is self-contained and doesn't risk side effects.
+
+### SVG logos loaded as `<img>` can't use `currentColor` — use `filter: invert(1)` for dark mode
+
+When an SVG is loaded via `<img src="logo.svg">`, CSS has no access to the SVG internals — `currentColor`, `fill`, and `stroke` are all sealed off by the `<img>` element boundary. The SVG renders with its baked-in colors (typically black fills for a logo).
+
+For dark mode, the fix is `filter: invert(1)` on the `<img>` element:
+
+```css
+:global(.dark) .site-header__logo-img { filter: invert(1); }
+:global(.dark) .site-footer__logo-img { filter: invert(1); }
+```
+
+This flips black → white and works perfectly for monochrome logos. For multi-color logos, `invert(1)` would distort the colors — in that case, you'd need two separate SVG files (light/dark) and swap them, or inline the SVG so `currentColor` works.
+
+**Rule of thumb:** If the logo is monochrome (black on transparent), `<img>` + `filter: invert(1)` is the simplest approach. If it's multi-color, inline the SVG instead.
+
+### Keep header and footer logos in sync
+
+The header and footer should use the same logo asset and the same rendering approach. We initially had the header using `<img src="logo.svg">` and the footer using plain text styled to look like a logo. This created a visual inconsistency — different font rendering, different weight, different alignment. Both now use the same SVG `<img>` at the same height (20px), with identical dark mode handling. If you change one, change the other.

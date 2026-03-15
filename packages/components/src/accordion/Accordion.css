@@ -4,17 +4,25 @@
 }
 
 /* ─── Item ──────────────────────────────────────────────── */
+/*
+ * Inner-only dividers: borders appear between items but not at the
+ * top of the first item or the bottom of the last item.  This avoids
+ * doubled borders / visual weight when the accordion sits inside a
+ * larger layout.
+ */
 .ds-accordion__item {
   border-bottom: 1px solid var(--color-border);
 }
 
-.ds-accordion__item:first-child {
-  border-top: 1px solid var(--color-border);
+.ds-accordion__item:last-child {
+  border-bottom: none;
 }
 
 /* ─── Header ────────────────────────────────────────────── */
-.ds-accordion__header {
+/* Double class specificity to beat common content wrappers (e.g. .prose h3) */
+.ds-accordion .ds-accordion__header {
   margin: 0;
+  font-size: inherit;
 }
 
 /* ─── Trigger ───────────────────────────────────────────── */
@@ -34,7 +42,9 @@
 }
 
 .ds-accordion__trigger:hover {
-  color: var(--color-foreground-subtle);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .ds-accordion__trigger:focus-visible {
@@ -121,4 +131,32 @@
 .ds-accordion--lg .ds-accordion__content-inner {
   padding: 0 0 var(--spacing-5);
   font-size: var(--font-size-base);
+}
+
+/* ─── Trigger row (checkbox variant) ──────────────────── */
+.ds-accordion__trigger-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.ds-accordion__trigger-row .ds-accordion__trigger {
+  flex: 1;
+}
+
+/* Indent expanded content to align with the trigger text (past checkbox + gap) */
+.ds-accordion__item:has(.ds-accordion__trigger-row) > .ds-accordion__content .ds-accordion__content-inner {
+  padding-left: calc(var(--size-checkbox-sm) + var(--spacing-2));
+}
+
+/* ─── Flush variant (legacy — now default behavior) ────── */
+/* Kept for API compatibility. The default accordion now uses inner-only
+   dividers, so flush is effectively a no-op. */
+
+/* ─── Bordered variant (panel container) ─────────────── */
+.ds-accordion--bordered {
+  padding: 0 var(--spacing-3);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }

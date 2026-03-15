@@ -26,6 +26,14 @@
   user-select: none;
   outline: none;
   position: relative;
+
+  /*
+   * Trim extra leading above cap-height and below baseline so
+   * flex centering aligns the visible ink, not the em box.
+   * Supported: Chrome 133+, Safari 18.2+. Degrades gracefully.
+   */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 /* Focus ring — visible for keyboard, hidden for mouse */
@@ -165,4 +173,14 @@
 /* ─── Full-width ────────────────────────────────────────── */
 .ds-button--full-width {
   width: 100%;
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-button {
+    transform: translateY(0.05em);
+  }
+  .ds-button:active:not(:disabled) {
+    transform: translateY(0.05em) scale(0.98);
+  }
 }

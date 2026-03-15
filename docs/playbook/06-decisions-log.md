@@ -579,3 +579,156 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 
 **Rationale:** Three layers of a11y enforcement means a violation has to slip past development, testing, AND CI to ship. The branch protection + required review ensures no code reaches `main` without passing all checks and being reviewed by another human.
 **Status:** Active
+
+---
+
+### New Component: CookieConsent (No Radix)
+
+**Date/Phase:** Post-PDP, ecommerce compliance
+**Context:** Ecommerce sites require cookie consent banners for GDPR/CCPA compliance. No existing component in the library and no Radix primitive maps to this pattern.
+**Options considered:**
+1. Build on Radix Dialog — provides focus trapping and portal, but cookie banners should NOT trap focus (background remains interactive, `aria-modal="false"`)
+2. Plain React with forwardRef — full control over behavior, no unnecessary Radix overhead
+3. Page-level composition only — not reusable across projects
+
+**Decision:** Option 2 — standalone React component with forwardRef, no Radix dependency. Composes existing `Button` (primary/secondary) and `Checkbox` (sm, with label/hint) components.
+
+**Key design decisions:**
+- **Fixed bottom bar** with slide-in/out animation (`translateY(100%)`)
+- **Two-phase UX**: Accept All + Preferences → clicking Preferences reveals category toggles with Save Preferences + Reject All
+- **Controlled + uncontrolled**: `open`/`onOpenChange` for controlled, `defaultOpen` for uncontrolled (mirrors Modal pattern)
+- **All labels customizable** for i18n: `heading`, `description`, `acceptLabel`, `preferencesLabel`, `saveLabel`
+- **`categories` optional**: Without it, banner shows simple Accept All / Reject All
+- **Essential category**: `required: true` → checkbox checked + disabled
+- **`role="dialog"` + `aria-modal="false"`**: Banner doesn't block page interaction
+- **`z-index: var(--z-index-toast)`**: Sits above modals (300) but below tooltips (400)
+- **Two-phase close**: `closing` state triggers exit animation → `onAnimationEnd` removes from DOM
+- **`transform: translateZ(0)` trick** for Storybook/docs: Contains `position: fixed` children within preview containers without polluting the component API
+
+**Status:** Active — updated with accordion-based preferences (see below)
+
+---
+
+### CookieConsent: Accordion-Based Preferences Panel
+
+**Date/Phase:** Component iteration
+**Context:** The initial CookieConsent preferences panel used a flat checkbox list. The user wanted a more structured UI with expandable category descriptions, matching common GDPR cookie banner patterns.
+**Options considered:**
+1. Keep flat checkbox list (simpler, less visual hierarchy)
+2. Accordion sections with inline checkboxes (structured, expandable descriptions)
+**Decision:** Accordion sections — each of the 4 cookie categories (Strictly Necessary, Functional, Performance, Targeting) gets its own expandable section with a checkbox in the trigger row.
+**Rationale:** Accordion provides better information hierarchy — users can scan category names + toggle checkboxes without reading descriptions, but can expand to learn more. Standard pattern for GDPR compliance UIs.
+**Implementation details:**
+- Uses existing `Accordion` component (`type="multiple"`, `size="sm"`) inside the preferences panel
+- **Checkbox placed as sibling of AccordionTrigger**, not inside it — avoids nested interactive elements (button-in-button), which violates WCAG
+- Checkbox uses `aria-label={category.label}` since it has no visible label (the label is the AccordionTrigger text)
+- 4 action buttons in preferences view: Accept All (primary), Reject All (secondary), Save Preferences (secondary), Close (ghost)
+- New props: `rejectLabel`, `closeLabel` for i18n
+- Default categories updated to: Strictly Necessary Cookies, Functional Cookies, Performance Cookies, Targeting Cookies
+**Gotcha:** Radix Checkbox renders as `<button role="checkbox">` and AccordionTrigger renders as `<button>`. Nesting one inside the other causes `validateDOMNesting` warnings and axe `nested-interactive` + `button-name` violations. Solution: place the Checkbox as a sibling in a flex row wrapper (`ds-cookie-consent__category-row`), not inside the trigger.
+**Status:** Active
+
+---
+
+### CookieConsent: Global Heading Style Leak Fix
+**Date/Phase:** Component Polish
+**Context:** The CookieConsent preferences panel uses Accordion internally, which renders `AccordionPrimitive.Header` as an `<h3>`. On the docs site, global typography styles (`h3 { margin: 24px 0 12px; font-size: 20px; }`) leaked into the accordion header, inflating the category row from 25px to 61px and breaking checkbox vertical alignment.
+**Options considered:** (1) Change Accordion to render a `<div>` instead of `<h3>`, (2) Add `!important` to Accordion's header reset, (3) Add scoped overrides in CookieConsent CSS
+**Decision:** Initially added scoped override in CookieConsent CSS. Subsequently moved the fix into the Accordion primitive itself (`font-size: inherit` on `.ds-accordion__header`) as part of the No Overrides Rule (see below).
+**Rationale:** Primitives must be self-sufficient. The fix belongs in the Accordion, not patched from the outside.
+**Status:** Revised — superseded by No Overrides Rule
+
+---
+
+### No Overrides Rule — Block Components Must Never Override Primitive CSS
+**Date/Phase:** Component Polish
+**Context:** During CookieConsent development, the preferences panel accumulated 8 CSS overrides targeting Accordion and Checkbox internal classes (`.ds-accordion__header`, `.ds-accordion__item`, `.ds-accordion__trigger`, `.ds-checkbox-field`, `.ds-checkbox-box`). These overrides were fixing gaps in the primitives — missing `flush` variant, hover style, label-less checkbox alignment, heading style leak defense.
+**Options considered:** (1) Keep overrides scoped to CookieConsent, (2) Move fixes into primitives and use them cleanly
+**Decision:** Established a hard rule: block/composed components must NEVER override a primitive's internal CSS classes. If a primitive doesn't support what you need, fix the primitive first. Applied this by:
+- **Accordion:** Added `flush` prop (removes outer borders), `font-size: inherit` on header, changed hover from muted color to underline
+- **Checkbox:** Default `align-items: center` on field (was `flex-start`), cap-height `margin-top` only applies when `:has(.ds-checkbox-label)`
+- **CookieConsent:** Removed all 8 primitive overrides, now uses `<Accordion flush>` and label-less `<Checkbox>` cleanly
+**Rationale:** Overrides are invisible contracts that break when primitives refactor. They don't scale — the next composed component would duplicate the same patches. Primitives should handle all common composition cases natively.
+**Status:** Active — permanent rule documented in `04-components.md`
+
+---
+
+### Accordion Checkbox Variant — Native Primitive Support
+**Date/Phase:** Component Polish
+**Context:** CookieConsent composed Accordion + Checkbox by wrapping them in a `.ds-cookie-consent__category-row` flex div. This external composition felt off — the checkbox and trigger were siblings in a block-component wrapper, not part of the accordion's own structure. The layout, spacing, and indentation all depended on the consuming component's CSS.
+**Options considered:** (1) Keep external composition in CookieConsent, (2) Build a native checkbox variant into AccordionTrigger
+**Decision:** Added optional checkbox props to `AccordionTrigger`: `checked`, `onCheckedChange`, `checkboxDisabled`, `checkboxLabel`. When `checked` is defined, the trigger renders a Checkbox primitive (label-less, `size="sm"`) as a sibling before the Radix trigger button inside a `.ds-accordion__trigger-row` wrapper. Also added:
+- **`bordered` prop** on Accordion root — wraps in a bordered/rounded panel container (implies flush)
+- **Content indentation** — when checkbox variant is active, content-inner gets `padding-left` matching checkbox width + gap, so expanded text aligns with the trigger text
+- **1px underline on hover** — `text-decoration-thickness: 1px` ensures consistent underline weight across all sizes
+**Rationale:** Primitives should be self-sufficient. The checkbox-in-accordion pattern is reusable (cookie preferences, notification settings, feature toggles). Moving it into the primitive eliminates external composition complexity and ensures consistent layout.
+**Status:** Active
+
+---
+
+### Optical Text Centering: `text-box-trim` as Default Convention
+**Date/Phase:** Component Polish
+**Context:** Text in fixed-height control components (buttons, badges, inputs, selects) appears vertically off-center because browsers center the full em box, not the visible ink (cap height to baseline). This is especially noticeable with Ancizar Serif at small sizes.
+**Options considered:**
+1. Manual `padding-top`/`padding-bottom` adjustments per component — fragile, breaks on font change
+2. `translateY` nudge on all controls — works but adds transform to elements that may need transforms for other states
+3. `text-box-trim: both` + `text-box-edge: cap alphabetic` with `@supports not` fallback — spec-correct, progressive enhancement
+**Decision:** Option 3. Apply `text-box-trim: both; text-box-edge: cap alphabetic;` to all fixed-height control components (Button, Badge, Input, Select, QuantitySelector). Add `@supports not (text-box-trim: both)` fallback with `transform: translateY(0.05em)` for unsupported browsers. Fallback combines with existing transforms where needed (Button `:active`, Select `:active`).
+**Rationale:** `text-box-trim` is the correct CSS solution to the em-box centering problem. It trims the extra leading so flex centering operates on visible ink bounds. The `@supports not` fallback ensures acceptable rendering in Firefox (which doesn't support the property yet). The `0.05em` offset is font-specific to Ancizar Serif.
+**Components affected:** Button (`.ds-button`), Badge (`.ds-badge`), Input (`.ds-input-field`), Select (`.ds-select-trigger`), QuantitySelector (`.ds-quantity-selector__value`)
+**Status:** Active
+
+---
+
+### Accordion Bordered Variant
+**Date/Phase:** Component Polish
+**Context:** The CookieConsent preferences panel needed a bordered container around the accordion (background, border, rounded corners). Previously this was handled by `.ds-cookie-consent__preferences` CSS.
+**Options considered:** (1) Keep container styles in CookieConsent, (2) Add a `bordered` prop to Accordion
+**Decision:** Added `bordered` prop to Accordion. Applies `padding`, `background-color`, `border`, and `border-radius` directly on the accordion root. Also removes first/last item borders (implies flush behavior).
+**Rationale:** Bordered/panel accordion is a reusable pattern for settings panels, preference groups, and embedded FAQ sections. Making it a primitive prop eliminates per-consumer container CSS.
+**Status:** Active
+
+---
+
+### Dark Mode Toggle on PDP
+**Date/Phase:** Post-component polish, docs site UX
+**Context:** Dark mode CSS was fully generated in `tokens.css` (`.dark` and `[data-theme="dark"]` selectors flip all semantic tokens), but no UI existed to activate it. Needed a toggle on the PDP page next to the cart icon.
+**Options considered:**
+1. React state-driven toggle inside PDPDemo component — only affects PDP content, not header/footer
+2. Vanilla JS toggle in FullWidthLayout.astro — affects entire page including Astro-rendered chrome
+3. Astro island component for the toggle — more complex, requires hydration
+**Decision:** Option 2 — vanilla JS in FullWidthLayout.astro. Inline `<script is:inline>` in `<head>` for flash prevention (reads localStorage before first paint). Click handler toggles `.dark` class on `<html>` and persists to localStorage. Respects `prefers-color-scheme: dark` as default when no stored preference exists.
+**Implementation details:**
+- Sun/moon SVG icons in a ghost-style button (same dimensions as cart icon)
+- CSS `:global(.dark)` scoped selectors toggle icon visibility
+- Logo SVG loaded as `<img>` can't use `currentColor`, so `filter: invert(1)` applied in dark mode
+- All components use `var(--color-*)` tokens — zero component changes needed
+**Status:** Active
+
+---
+
+### Heading: Decoupled `size` and `weight` Props
+
+**Date/Phase:** PDP primitive audit
+**Context:** The Heading component coupled semantic level (`as="h1"`) with visual size (h1 → 4xl, h2 → 3xl, etc.). The PDP needed an h1 rendered at 2xl with normal weight — a product title that's semantically the page heading but visually smaller than a marketing hero. PDPDemo.css was forced to override the Heading primitive's font-size and font-weight via `.ds-pdp__title`, violating the "never override primitives" rule.
+**Options considered:**
+1. Keep the CSS override — pragmatic, but sets a bad precedent
+2. Add `size` prop to Heading — decouples visual size from semantic level
+3. Add both `size` and `weight` props — full control without overrides
+**Decision:** Option 3. Added `size` (xl | 2xl | 3xl | 4xl) and `weight` (normal | medium | semibold | bold) props. Both are optional — `size` defaults to the mapped size for the given `as` level, `weight` defaults to semibold (the base Heading weight). CSS classes changed from `ds-heading--h1` to `ds-heading--4xl` etc.
+**Rationale:** Decoupling semantic level from visual size is a common need (product titles, card headings, sidebar headings). The Text component already had `size` and `weight` — Heading should match. The responsive font-size bump (2xl → 3xl at desktop) remains in layout CSS as legitimate layout composition.
+**Status:** Active
+
+---
+
+### Optimal Reading Width Convention
+
+**Date/Phase:** 2026-03-15, post-component polish
+**Context:** Body text in wider layouts was rendering at uncomfortable line lengths (80+ characters per line), reducing readability.
+**Options considered:**
+1. Fixed px max-width — breaks when font size or family changes
+2. Percentage-based width — depends on container, not content
+3. `ch`-based max-width — adapts to font automatically
+**Decision:** Constrain all body/paragraph text to `max-width: 65ch` using `ch` units. Applied at three levels: (1) `.ds-text` base class in Typography.css — covers all Text component body copy automatically, only affects block-level renderings since inline elements ignore max-width; (2) raw `<p>` elements in components that don't use Text (FeatureBlock description, CookieConsent description); (3) `.ds-readable-width` utility class for non-component usage.
+**Rationale:** 65 characters is the typographic sweet spot for reading comfort (Bringhurst, 45–75ch range). Using `ch` units keeps the constraint relative to the font, so it adapts automatically if type sizes or fonts change. Headings are exempt to maintain visual hierarchy — they can run wider than body text.
+**Status:** Active

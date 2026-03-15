@@ -45,14 +45,7 @@
   gap: var(--spacing-3);
 }
 
-/* Override Heading h1 size for PDP context —
-   4xl is too editorial for a product title */
-.ds-pdp__title {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-normal);
-}
-
-/* @breakpoint-lg = 1024px */
+/* Responsive bump: 2xl → 3xl at desktop */
 @media (min-width: 1024px) {
   .ds-pdp__title {
     font-size: var(--font-size-3xl);

@@ -46,6 +46,10 @@
   border-left: 1px solid var(--color-border);
   border-right: 1px solid var(--color-border);
   user-select: none;
+
+  /* Optical centering: trim em-box to cap height + baseline */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
 }
 
 /* ─── Size variants ──────────────────────────────────────── */
@@ -80,4 +84,11 @@
   min-width: var(--size-control-lg);
   height: var(--size-control-lg);
   font-size: var(--font-size-base);
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-quantity-selector__value {
+    transform: translateY(0.05em);
+  }
 }

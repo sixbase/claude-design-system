@@ -20,7 +20,7 @@
    * flex centering aligns the visible ink, not the em box.
    * Supported: Chrome 133+, Safari 18.2+. Degrades gracefully.
    */
-  text-box-trim: trim-both;
+  text-box-trim: both;
   text-box-edge: cap alphabetic;
 }
 
@@ -73,4 +73,11 @@
   background-color: transparent;
   color: var(--color-foreground-subtle);
   border-color: var(--color-border-strong);
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-badge {
+    transform: translateY(0.05em);
+  }
 }

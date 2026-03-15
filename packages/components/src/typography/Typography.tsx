@@ -5,10 +5,16 @@ import './Typography.css';
 // ─── Heading ──────────────────────────────────────────────────
 
 export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4';
+export type HeadingSize = 'xl' | '2xl' | '3xl' | '4xl';
+export type HeadingWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
-  /** HTML heading level and visual size */
+  /** HTML heading level (semantic) */
   as?: HeadingLevel;
+  /** Visual size — decouples from semantic level. Defaults to the size mapped to `as`. */
+  size?: HeadingSize;
+  /** Font weight override. Defaults to semibold. */
+  weight?: HeadingWeight;
   muted?: boolean;
   truncate?: boolean;
 }
@@ -22,13 +28,23 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
  * <Heading as="h1">Page title</Heading>
  * <Heading as="h3" muted>Section subtitle</Heading>
  */
+/** Default visual size for each heading level */
+const defaultSizeMap: Record<HeadingLevel, HeadingSize> = {
+  h1: '4xl',
+  h2: '3xl',
+  h3: '2xl',
+  h4: 'xl',
+};
+
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(function Heading(
-  { as: Tag = 'h2', muted = false, truncate = false, className, children, ...props },
+  { as: Tag = 'h2', size, weight, muted = false, truncate = false, className, children, ...props },
   ref,
 ) {
+  const resolvedSize = size ?? defaultSizeMap[Tag];
   const classes = [
     'ds-heading',
-    `ds-heading--${Tag}`,
+    `ds-heading--${resolvedSize}`,
+    weight && `ds-heading--${weight}`,
     muted && 'ds-heading--muted',
     truncate && 'ds-heading--truncate',
     className,

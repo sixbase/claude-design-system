@@ -18,3 +18,4 @@ export * from './feature-block';
 export * from './stock-indicator';
 export * from './color-picker';
 export * from './price-display';
+export * from './cookie-consent';

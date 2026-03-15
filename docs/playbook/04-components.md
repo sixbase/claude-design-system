@@ -144,6 +144,130 @@ const classes = [
 
 ---
 
+## No Overrides Rule
+
+**Block components (composed components) must never override a primitive's internal CSS classes.** If a primitive doesn't support the layout or behavior you need, go back and update the primitive first, then use it cleanly.
+
+### What counts as an override
+
+Any CSS rule in a composed component that targets a primitive's internal class name:
+
+```css
+/* ✗ NEVER do this — reaching into Accordion internals from CookieConsent */
+.ds-cookie-consent__preferences .ds-accordion__trigger {
+  padding: var(--spacing-1) 0;
+}
+
+.ds-cookie-consent__preferences .ds-accordion__item:first-child {
+  border-top: none;
+}
+
+.ds-cookie-consent__category-row .ds-checkbox-field {
+  align-items: center;
+}
+```
+
+### What to do instead
+
+1. **Identify the gap** — what does the primitive not support that the block component needs?
+2. **Update the primitive** — add a prop, variant, or smarter default that handles the use case generically
+3. **Use the primitive's new API** in the block component with zero overrides
+
+### Examples of correct primitive fixes
+
+| Need | Wrong (override) | Right (fix primitive) |
+|------|-----------------|----------------------|
+| Accordion without outer borders | `.parent .ds-accordion__item:first-child { border-top: none }` | Add `flush` prop to Accordion: `<Accordion flush>` |
+| Checkbox centered in flex row (no label) | `.parent .ds-checkbox-field { align-items: center }` | Make Checkbox default to `center` when no label, `flex-start` when label present (`:has(.ds-checkbox-label)`) |
+| Accordion header leaks global h3 styles | `.parent .ds-accordion__header { margin: 0; font-size: inherit }` | Add `font-size: inherit` to `.ds-accordion__header` in the primitive CSS |
+| Different hover style | `.parent .ds-accordion__trigger:hover { text-decoration: underline }` | Change the primitive's default hover to the better pattern |
+
+### Why this matters
+
+- **Overrides are invisible contracts.** If someone refactors the Accordion's internal class names, every override silently breaks.
+- **Overrides don't scale.** The next block component that needs flush borders would duplicate the same override.
+- **Primitives should be self-sufficient.** If a primitive can't handle a common composition case, that's a gap in the primitive, not a reason to patch it from the outside.
+
+### What IS allowed in block component CSS
+
+- **Layout rules for the block's own elements** — flex, grid, gap, positioning on `.ds-cookie-consent__*` classes
+- **Block-specific styles** — `.ds-cookie-consent__category-description` typography, `.ds-cookie-consent__actions` layout
+- **Generic child selectors for layout** — `.ds-cookie-consent__actions > * { width: 100% }` (targets children by position, not by primitive class name)
+- **Responsive rules for the block's own elements**
+
+---
+
+## Optical Text Centering (`text-box-trim`)
+
+Fixed-height control components (buttons, badges, inputs, selects, quantity selectors) appear to have vertically off-center text because browsers center the full em box, not the visible ink (cap height → baseline). The fix is CSS `text-box-trim`.
+
+### The rule
+
+Every component that renders text inside a fixed-height, flex-centered container gets:
+
+```css
+text-box-trim: both;
+text-box-edge: cap alphabetic;
+```
+
+This trims extra leading above the cap height and below the baseline so `align-items: center` aligns the visible glyphs, not the invisible em box.
+
+### Which components get it
+
+| Component | Selector | Why |
+|-----------|----------|-----|
+| Button | `.ds-button` | Fixed-height, flex-centered label |
+| Badge | `.ds-badge` | Fixed-height pill with centered text |
+| Input | `.ds-input-field` | Fixed-height field with centered text |
+| Select | `.ds-select-trigger` | Fixed-height trigger with centered text |
+| QuantitySelector | `.ds-quantity-selector__value` | Fixed-height centered number display |
+
+### Which components do NOT get it
+
+- **Accordion** — multi-line content, no fixed-height container
+- **Card** — body/description is flowing text
+- **Checkbox label** — multi-line capable, no fixed height
+- **Typography** — body/paragraph text
+- **Modal** — body content
+- **Breadcrumb** — no fixed-height containers
+
+### `@supports not` fallback
+
+Browsers without `text-box-trim` support (Firefox as of early 2026) get a `translateY` nudge to approximate optical centering:
+
+```css
+@supports not (text-box-trim: both) {
+  .ds-button {
+    transform: translateY(0.05em);
+  }
+}
+```
+
+**Important:** If the component already uses `transform` (e.g. Button's `:active` state uses `scale(0.98)`), the fallback must combine both transforms:
+
+```css
+@supports not (text-box-trim: both) {
+  .ds-button {
+    transform: translateY(0.05em);
+  }
+  .ds-button:active:not(:disabled) {
+    transform: translateY(0.05em) scale(0.98);
+  }
+}
+```
+
+The `0.05em` offset is tuned for Ancizar Serif. If the font changes, re-inspect in a browser without `text-box-trim` support and adjust.
+
+### Browser support
+
+- Chrome 133+ (Jan 2025)
+- Safari 18.2+ (Dec 2024)
+- Firefox: not yet supported — uses `@supports not` fallback
+
+The property degrades gracefully — unsupported browsers simply ignore it and fall through to the `@supports not` block.
+
+---
+
 ## Component Token Scoping
 
 Each component opens its CSS file by declaring component-level tokens on its root class. These are the "knobs" consumers can turn to customize the component without overriding individual properties:
@@ -244,6 +368,7 @@ const id = useId()
 
 ### Typography
 - `Heading` renders the correct semantic element (`h1`–`h4`) — not a styled `<div>`
+- `Heading` supports decoupled `size` (xl | 2xl | 3xl | 4xl) and `weight` (normal | medium | semibold | bold) props — semantic level (`as`) and visual size are independent. Default size maps to the level (h1 → 4xl, h2 → 3xl, h3 → 2xl, h4 → xl). Use `size` to render a visually smaller heading without changing the HTML element: `<Heading as="h1" size="2xl" weight="normal">`.
 - Icon-only content needs `aria-label` or `aria-hidden` + accompanying visible text
 
 ### Dialog / Modal *(implemented — `@radix-ui/react-dialog`)*
@@ -396,7 +521,7 @@ All 18 components shipped, organized by complexity tier.
 ### Tier 3 — Compound (multiple parts, complex state)
 | Component | Parts | Key Pattern |
 |-----------|-------|-------------|
-| Accordion | Item, Trigger, Content | Radix primitive, `type="single"|"multiple"`, `size` prop |
+| Accordion | Item, Trigger, Content | Radix primitive, `type="single"|"multiple"`, `size` prop, inner-only dividers by default, `bordered` variant, checkbox trigger variant |
 | Modal | Trigger, Content, Header, Body, Footer, Close | Radix Dialog, focus trap, portal |
 | ImageGallery | Main image + thumbnails | `thumbnailPosition`, `aspectRatio`, keyboard nav |
 | Breadcrumb | Nav > List > Items | CSS-based responsive collapse (not JS filtering) |
@@ -408,6 +533,7 @@ All 18 components shipped, organized by complexity tier.
 | ProductCard | Card + Badge + image | Composed from primitives, aspect ratio control |
 | Carousel + CarouselSlide | Scroll container + children | `scroll-snap-type`, responsive `flex-basis` sizes |
 | FeatureBlock | Image + text grid | `reverse` prop uses CSS `order` swap at tablet+ |
+| CookieConsent | Accordion + Button | `position: fixed` banner, controlled/uncontrolled, i18n labels, uses `bordered` accordion with native checkbox variant |
 
 ---
 
@@ -482,6 +608,70 @@ const defaultLabels: Record<StockStatus, string> = {
 ```
 
 This pattern works for any status indicator (order status, shipping, verification badges).
+
+---
+
+## Accordion Divider Convention
+
+Accordion groups use **inner-only dividers** — no border above the first item, no border below the last item. Only the borders between items are visible.
+
+This is the default behavior, not an opt-in variant. The CSS uses `:last-child` to remove the bottom border:
+
+```css
+.ds-accordion__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ds-accordion__item:last-child {
+  border-bottom: none;
+}
+```
+
+No `border-top` is added to the first item — dividers are purely `border-bottom` between siblings.
+
+**Why:** Inner-only dividers create a cleaner edge when the accordion sits within a larger layout. Outer borders cause doubled lines when the accordion abuts other bordered elements (cards, panels, page sections) and add unnecessary visual weight at the boundaries.
+
+The `bordered` variant wraps the accordion in a panel container with its own border + radius — the inner-only dividers nest cleanly inside without doubled borders.
+
+The legacy `flush` prop is retained for API compatibility but is now a no-op since the default behavior matches.
+
+---
+
+## Optimal Reading Width (65ch)
+
+All body and paragraph text is constrained to `max-width: 65ch` — approximately 65 characters per line. This is the typographic sweet spot for comfortable reading (Bringhurst recommends the 45–75 character range; 65 is the center of that range).
+
+### Why `ch` units, not `px`
+
+The `ch` unit is based on the width of the "0" character in the current font. If the font or font size changes, the reading width adapts automatically. A fixed `px` value would break when type sizes change — `65ch` stays correct regardless of context.
+
+### Where it's applied
+
+| Location | How | Notes |
+|----------|-----|-------|
+| **`.ds-text`** (Typography.css) | `max-width: 65ch` on base class | Covers all `<Text>` component body copy. Only affects block-level elements (p, div) — inline elements (span, label) ignore max-width automatically. |
+| **`.ds-feature-block__desc`** | `max-width: 65ch` | FeatureBlock description paragraphs |
+| **`.ds-cookie-consent__description`** | `max-width: 65ch` | Cookie consent body text |
+| **`.ds-readable-width`** (utility) | `max-width: 65ch` | Apply to any non-component paragraph that needs the constraint |
+
+### Where it does NOT apply
+
+- **Headings** — exempt. Headings can run wider than body text, creating a natural visual hierarchy where headings span the available space and body text tucks underneath at a comfortable reading width.
+- **Captions, labels, metadata** — UI text, not reading text
+- **Text inside compact components** — buttons, badges, tags, table cells
+- **Single-line text that doesn't wrap** — truncated text, breadcrumbs
+
+### Using the utility class
+
+For raw HTML or Astro templates outside the `<Text>` component:
+
+```html
+<p class="ds-readable-width">
+  This paragraph will be constrained to 65 characters per line.
+</p>
+```
+
+**If body text renders wider than 65ch anywhere, it's a bug.**
 
 ---
 

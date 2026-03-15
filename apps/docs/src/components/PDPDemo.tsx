@@ -74,7 +74,7 @@ export function PDPDemo() {
         <div className="ds-pdp__details">
           {/* ── Header: title, price, rating ── */}
           <div className="ds-pdp__header">
-            <Heading as="h1" className="ds-pdp__title">
+            <Heading as="h1" size="2xl" weight="normal" className="ds-pdp__title">
               Aramid Fiber iPhone 17 Pro Max Case
             </Heading>
             <div className="ds-pdp__price-row">

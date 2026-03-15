@@ -32,15 +32,16 @@ body {
 }
 
 .sidebar__logo {
+  display: block;
   margin-bottom: var(--spacing-8);
+  text-decoration: none;
 }
 
-.sidebar__logo-text {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  color: var(--color-foreground-subtle);
+.sidebar__logo-img {
+  display: block;
+  width: 160px;
+  height: auto;
+  color: var(--color-foreground);
 }
 
 .sidebar__section {

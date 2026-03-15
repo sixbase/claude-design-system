@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CookieConsentDefault, CookieConsentWithCategories, CookieConsentControlled } from '../../components/CookieConsentGallery';
+---
+
+<BaseLayout title="Cookie Consent">
+  <div class="prose">
+    <h1>Cookie Consent</h1>
+    <p>
+      A fixed bottom-bar banner for cookie consent. Supports Accept All / Reject All
+      with an optional Preferences panel that reveals accordion sections for granular
+      category toggles. Designed for GDPR and CCPA compliance.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { CookieConsent } from '@ds/components';
+import type { CookieCategory } from '@ds/components';`}</code></pre>
+
+    <h2>Basic usage</h2>
+    <p>Without categories, the banner shows Accept All and Reject All buttons.</p>
+    <CookieConsentDefault client:load />
+    <pre><code>{`<CookieConsent
+  onAccept={(ids) => saveCookiePreferences(ids)}
+  onReject={() => rejectAllCookies()}
+/>`}</code></pre>
+
+    <h2>With categories</h2>
+    <p>
+      Pass <code>categories</code> to show a Preferences button. Clicking it reveals
+      accordion sections for each cookie category with inline checkboxes. Categories
+      with <code>required: true</code> are always checked and disabled.
+    </p>
+    <CookieConsentWithCategories client:load />
+    <pre><code>{`const categories: CookieCategory[] = [
+  { id: 'essential', label: 'Strictly Necessary Cookies', description: 'Essential for the site to function.', required: true },
+  { id: 'functional', label: 'Functional Cookies', description: 'Enhanced functionality and personalization.' },
+  { id: 'performance', label: 'Performance Cookies', description: 'Help us understand usage.' },
+  { id: 'targeting', label: 'Targeting Cookies', description: 'Personalized advertisements.' },
+];
+
+<CookieConsent
+  categories={categories}
+  onAccept={(ids) => saveCookiePreferences(ids)}
+  onReject={() => rejectAllCookies()}
+/>`}</code></pre>
+
+    <h2>Controlled</h2>
+    <p>
+      Use <code>open</code> and <code>onOpenChange</code> for external state management.
+      Useful when you need to re-show the banner from a settings page.
+    </p>
+    <CookieConsentControlled client:load />
+    <pre><code>{`const [open, setOpen] = useState(false);
+
+<CookieConsent
+  open={open}
+  onOpenChange={setOpen}
+  categories={categories}
+  onAccept={(ids) => { saveCookiePreferences(ids); setOpen(false); }}
+  onReject={() => { rejectAllCookies(); setOpen(false); }}
+/>`}</code></pre>
+
+    <h2>Props — CookieConsent</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>open</code></td><td><code>boolean</code></td><td>—</td><td>Controlled visibility</td></tr>
+        <tr><td><code>onOpenChange</code></td><td><code>(open: boolean) =&gt; void</code></td><td>—</td><td>Callback when visibility changes</td></tr>
+        <tr><td><code>defaultOpen</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Initial visibility (uncontrolled)</td></tr>
+        <tr><td><code>categories</code></td><td><code>CookieCategory[]</code></td><td>—</td><td>Cookie categories for preferences panel</td></tr>
+        <tr><td><code>onAccept</code></td><td><code>(ids: string[]) =&gt; void</code></td><td>—</td><td>Called with accepted category IDs</td></tr>
+        <tr><td><code>onReject</code></td><td><code>() =&gt; void</code></td><td>—</td><td>Called when all non-essential rejected</td></tr>
+        <tr><td><code>heading</code></td><td><code>string</code></td><td><code>'We value your privacy'</code></td><td>Banner heading text</td></tr>
+        <tr><td><code>description</code></td><td><code>string</code></td><td><code>'We use cookies…'</code></td><td>Banner description</td></tr>
+        <tr><td><code>acceptLabel</code></td><td><code>string</code></td><td><code>'Accept All'</code></td><td>Accept button label</td></tr>
+        <tr><td><code>rejectLabel</code></td><td><code>string</code></td><td><code>'Reject All'</code></td><td>Reject button label</td></tr>
+        <tr><td><code>preferencesLabel</code></td><td><code>string</code></td><td><code>'Preferences'</code></td><td>Preferences button label</td></tr>
+        <tr><td><code>saveLabel</code></td><td><code>string</code></td><td><code>'Save Preferences'</code></td><td>Save button label</td></tr>
+        <tr><td><code>closeLabel</code></td><td><code>string</code></td><td><code>'Close'</code></td><td>Close button label</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Props — CookieCategory</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>id</code></td><td><code>string</code></td><td>—</td><td>Unique identifier</td></tr>
+        <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Display name</td></tr>
+        <tr><td><code>description</code></td><td><code>string</code></td><td>—</td><td>Text shown when accordion section is expanded</td></tr>
+        <tr><td><code>required</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Always on, checkbox disabled</td></tr>
+        <tr><td><code>defaultChecked</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Initial checked state</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Banner has <code>role="dialog"</code> with <code>aria-labelledby</code> pointing to the heading</li>
+      <li><code>aria-modal="false"</code> — background content remains interactive</li>
+      <li><kbd>Escape</kbd> closes the banner</li>
+      <li>Preferences panel uses Accordion with full keyboard navigation</li>
+      <li>Checkboxes are independently clickable without toggling accordion sections</li>
+      <li>Required categories have disabled checkboxes with clear labeling</li>
+      <li>All labels customizable for i18n / localization</li>
+      <li>Respects <code>prefers-reduced-motion</code> — animations disabled</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+  kbd {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.4em;
+  }
+</style>

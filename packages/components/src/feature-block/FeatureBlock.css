@@ -54,4 +54,5 @@
   line-height: var(--line-height-relaxed);
   color: var(--color-foreground-subtle);
   margin: 0;
+  max-width: 65ch;
 }
