@@ -57,19 +57,35 @@ The build strategy was **primitives-first**: establish the token system and foun
 | `@ds/primitives` | Radix UI wrappers, shared TypeScript types |
 | `@ds/components` | Styled, accessible components |
 
-### Components built in v1
+### Components built (18 total)
+
+#### Foundation (v1)
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Button | ✅ Complete | 4 variants, 3 sizes, loading, icon-only, asChild, leading/trailing icons |
 | Input | ✅ Complete | Label, hint, error, leading/trailing adornments, sm/md/lg sizes |
 | Typography | ✅ Complete | Heading (h1–h4), Text, Caption, Code |
 | ColorSwatch | ✅ Complete | Docs utility — not a user-facing component |
-| Badge | ✅ Complete | 6 variants, 2 sizes — P0 ecommerce |
-| Card | ✅ Complete | 3 variants, interactive mode (hover lift + image zoom) — P0 ecommerce |
-| Select | ✅ Complete | 3 sizes, groups, separators, hint/error, built on Radix UI — P0 ecommerce |
-| Checkbox | ✅ Complete | Indeterminate state, 2 sizes, hint/error, built on Radix UI — P1 ecommerce |
+| Badge | ✅ Complete | 6 variants, 2 sizes |
+| Card | ✅ Complete | 3 variants, interactive mode (hover lift + image zoom) |
+| Select | ✅ Complete | 3 sizes, groups, separators, hint/error, Radix UI |
+| Checkbox | ✅ Complete | Indeterminate state, 2 sizes, hint/error, Radix UI |
 
-### Documentation built in v1
+#### Ecommerce components (v1.x)
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Modal | ✅ Complete | Compound API (Trigger, Content, Header, Body, Footer, Close), Radix Dialog |
+| Accordion | ✅ Complete | Radix primitive, single/multiple mode, 3 sizes |
+| Breadcrumb | ✅ Complete | CSS-based responsive collapse, maxItems truncation |
+| QuantitySelector | ✅ Complete | Controlled stepper, min/max bounds, 3 sizes |
+| ImageGallery | ✅ Complete | Main + thumbnails, keyboard nav, aspect ratio control |
+| ProductCard | ✅ Complete | Composed from Card + Badge + image, price formatting |
+| StarRating | ✅ Complete | SVG stars (full/half/empty), review count, 3 sizes |
+| StockIndicator | ✅ Complete | 3 statuses (in-stock/low-stock/out-of-stock), pulse animation |
+| Carousel | ✅ Complete | Scroll-snap, responsive slide sizes (sm/md/lg), gap variants |
+| FeatureBlock | ✅ Complete | Image + text grid, `reverse` prop for alternating layouts |
+
+### Documentation pages (18 components + 4 foundation + 1 example)
 | Page | URL |
 |------|-----|
 | Introduction | `/` |
@@ -77,36 +93,38 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Colors | `/tokens/colors` |
 | Typography | `/tokens/typography` |
 | Spacing | `/tokens/spacing` |
-| Button | `/components/button` |
-| Input | `/components/input` |
-| Typography | `/components/typography` |
+| Accordion | `/components/accordion` |
 | Badge | `/components/badge` |
+| Breadcrumb | `/components/breadcrumb` |
+| Button | `/components/button` |
 | Card | `/components/card` |
-| Select | `/components/select` |
+| Carousel | `/components/carousel` |
 | Checkbox | `/components/checkbox` |
+| Color Swatch | `/components/color-swatch` |
+| Feature Block | `/components/feature-block` |
+| Image Gallery | `/components/image-gallery` |
+| Input | `/components/input` |
+| Modal | `/components/modal` |
+| Product Card | `/components/product-card` |
+| Quantity Selector | `/components/quantity-selector` |
+| Select | `/components/select` |
+| Star Rating | `/components/star-rating` |
+| Stock Indicator | `/components/stock-indicator` |
+| Typography | `/components/typography` |
+| Product Detail Page | `/examples/product-detail` |
 
 ---
 
-## Scope: What's Deferred to v2+
+## Scope: What's Deferred
 
-These were consciously excluded from v1 to keep scope manageable. They are the next build phase.
-
-### Ecommerce component priority order
+### Remaining ecommerce component priority
 
 | Priority | Component | Why ecommerce needs it |
 |----------|-----------|------------------------|
-| P0 | ~~Badge / Tag~~ | ✅ Built — product labels: "New", "Sale", "Out of stock" |
-| P0 | ~~Card~~ | ✅ Built — the core ecommerce unit, product cards everywhere |
-| P0 | ~~Select~~ | ✅ Built — size picker, quantity selector |
-| P1 | ~~Checkbox~~ | ✅ Built — filter sidebar, cart item selection |
-| P1 | Modal / Dialog | Quick view, confirm delete, address entry |
 | P1 | Toast | Add-to-cart confirmation, error notifications |
-| P2 | Breadcrumb | Category navigation path |
 | P2 | Pagination | Product listing navigation |
 | P2 | Skeleton | Loading state for product grids |
 | P3 | Tabs | Product detail: description / reviews / specs |
-| P3 | Accordion | FAQ, filter groups |
-| P3 | Rating / Stars | Product review scores |
 
 ---
 

@@ -13,3 +13,8 @@ export * from './breadcrumb';
 export * from './quantity-selector';
 export * from './image-gallery';
 export * from './star-rating';
+export * from './carousel';
+export * from './feature-block';
+export * from './stock-indicator';
+export * from './color-picker';
+export * from './price-display';

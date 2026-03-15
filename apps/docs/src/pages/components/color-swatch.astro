@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ColorSwatchDefault, ColorSwatchPalette, ColorSwatchWithoutValue } from '../../components/ColorSwatchGallery';
+---
+
+<BaseLayout title="Color Swatch">
+  <div class="prose">
+    <h1>Color Swatch</h1>
+    <p>
+      Displays a color token visually with its name and optional value.
+      Used in documentation to showcase design token palettes.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { ColorSwatch } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <ColorSwatchDefault client:load />
+    <pre><code>{`<ColorSwatch
+  color="var(--color-foreground)"
+  name="foreground"
+  value="#1a1a1a"
+/>`}</code></pre>
+
+    <h2>Palette</h2>
+    <p>Multiple swatches together to display a color palette.</p>
+    <ColorSwatchPalette client:load />
+    <pre><code>{`<ColorSwatch color="var(--color-foreground)" name="foreground" value="#1a1a1a" />
+<ColorSwatch color="var(--color-foreground-subtle)" name="foreground-subtle" value="#6b6b6b" />
+<ColorSwatch color="var(--color-border)" name="border" value="#e5e5e5" />
+<ColorSwatch color="var(--color-background-surface)" name="background-surface" value="#fafafa" />`}</code></pre>
+
+    <h2>Without value</h2>
+    <p>The <code>value</code> prop is optional. When omitted, only the name is shown.</p>
+    <ColorSwatchWithoutValue client:load />
+    <pre><code>{`<ColorSwatch color="#22c55e" name="success" />
+<ColorSwatch color="#ef4444" name="destructive" />
+<ColorSwatch color="#f59e0b" name="warning" />`}</code></pre>
+
+    <h2>Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>color</code></td><td><code>string</code></td><td>—</td><td>CSS color value or variable reference</td></tr>
+        <tr><td><code>name</code></td><td><code>string</code></td><td>—</td><td>Token name label displayed below the swatch</td></tr>
+        <tr><td><code>value</code></td><td><code>string</code></td><td>—</td><td>Optional hex or raw value to display</td></tr>
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

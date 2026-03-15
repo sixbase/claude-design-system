@@ -14,7 +14,7 @@
 @media (min-width: 1024px) {
   .ds-pdp {
     grid-template-columns: 1.618fr 1fr;
-    gap: var(--spacing-10);
+    gap: var(--spacing-6);
   }
 
   .ds-pdp__breadcrumb {
@@ -26,22 +26,30 @@
 .ds-pdp__details {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
+  gap: var(--spacing-phi-8); /* 16px — tighter base rhythm */
 }
 
+/* @breakpoint-lg = 1024px */
+@media (min-width: 1024px) {
+  .ds-pdp__details {
+    position: sticky;
+    top: var(--spacing-6);
+    align-self: start;
+  }
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
 .ds-pdp__header {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
 }
 
+/* Override Heading h1 size for PDP context —
+   4xl is too editorial for a product title */
 .ds-pdp__title {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-tight);
-  color: var(--color-foreground);
-  margin: 0;
 }
 
 /* @breakpoint-lg = 1024px */
@@ -51,63 +59,25 @@
   }
 }
 
-.ds-pdp__price {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-foreground-subtle);
-  margin: 0;
+.ds-pdp__price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
-/* ─── Description ────────────────────────────────────────── */
-.ds-pdp__description {
-  color: var(--color-foreground-subtle);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
+/* ─── Options group ──────────────────────────────────────── */
+.ds-pdp__options-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding-top: var(--spacing-phi-8);
+  border-top: 1px solid var(--color-border);
 }
 
-.ds-pdp__description p {
-  margin: 0;
-}
-
-/* ─── Options ────────────────────────────────────────────── */
 .ds-pdp__option {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
-}
-
-.ds-pdp__option-label {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-foreground);
-  margin: 0;
-}
-
-/* ─── Color swatches ─────────────────────────────────────── */
-.ds-pdp__colors {
-  display: flex;
-  gap: var(--spacing-2);
-}
-
-.ds-pdp__color-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  border: 2px solid transparent;
-  cursor: pointer;
-  padding: 0;
-  transition: border-color var(--transition-fast);
-}
-
-.ds-pdp__color-btn:hover {
-  border-color: var(--color-border-strong);
-}
-
-.ds-pdp__color-btn--active {
-  border-color: var(--color-foreground);
 }
 
 .ds-pdp__option .ds-quantity-selector {
@@ -119,78 +89,43 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3);
+  padding-top: var(--spacing-phi-8);
+  border-top: 1px solid var(--color-border);
 }
 
-/* ─── Stock indicator ───────────────────────────────────── */
-.ds-pdp__stock {
+.ds-pdp__trust-signals {
   display: flex;
-  align-items: center;
+  justify-content: center;
   gap: var(--spacing-2);
-  margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  color: var(--color-foreground-subtle);
+  padding-top: var(--spacing-1);
 }
 
-.ds-pdp__stock-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background-color: #22c55e;
-  animation: ds-pdp-pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
+/* ─── Accordion section ──────────────────────────────────── */
+.ds-pdp__accordion-section {
+  padding-top: var(--spacing-phi-5);
 }
 
-@keyframes ds-pdp-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-/* ─── Accordion lists ───────────────────────────────────── */
 .ds-pdp__accordion-list {
   margin: 0;
   padding-left: var(--spacing-4);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-foreground-subtle);
 }
 
-/* ─── Lifestyle carousel ────────────────────────────────── */
+.ds-pdp__accordion-list li {
+  padding-block: var(--spacing-phi-1); /* 2px breathing room */
+}
+
+/* ─── Lifestyle carousel ─────────────────────────────────── */
 .ds-pdp__lifestyle {
-  margin-top: var(--spacing-10);
-  overflow: hidden;
+  margin-top: var(--spacing-phi-34); /* 68px — major chapter break */
 }
 
-.ds-pdp__lifestyle-track {
-  display: flex;
-  gap: var(--spacing-3);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: var(--spacing-2);
+.ds-pdp__section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-phi-13); /* 26px */
 }
 
-.ds-pdp__lifestyle-track::-webkit-scrollbar {
-  display: none;
-}
-
-.ds-pdp__lifestyle-slide {
-  flex: 0 0 85%;
-  scroll-snap-align: start;
-}
-
-@media (min-width: 768px) {
-  .ds-pdp__lifestyle-slide {
-    flex: 0 0 65%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .ds-pdp__lifestyle-slide {
-    flex: 0 0 50%;
-  }
+.ds-pdp__section-header .ds-heading {
+  margin-bottom: var(--spacing-2);
 }
 
 .ds-pdp__lifestyle-img {
@@ -201,63 +136,18 @@
   border-radius: var(--radius-lg);
 }
 
-/* ─── Feature block (image + marketing text) ────────────── */
-.ds-pdp__feature {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-6);
-  margin-top: var(--spacing-10);
+/* ─── Feature block spacing ──────────────────────────────── */
+.ds-pdp__feature-section {
+  margin-top: var(--spacing-phi-21); /* 42px — paragraph break */
 }
 
-@media (min-width: 768px) {
-  .ds-pdp__feature {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-10);
-    align-items: center;
+/* @breakpoint-max-lg */
+@media (max-width: 1023px) {
+  .ds-pdp__lifestyle {
+    margin-top: var(--spacing-phi-21); /* 42px compressed */
   }
 
-  .ds-pdp__feature--reverse .ds-pdp__feature-image {
-    order: 2;
+  .ds-pdp__feature-section {
+    margin-top: var(--spacing-phi-13); /* 26px compressed */
   }
-
-  .ds-pdp__feature--reverse .ds-pdp__feature-text {
-    order: 1;
-  }
-}
-
-.ds-pdp__feature-img {
-  width: 100%;
-  aspect-ratio: 5 / 4;
-  object-fit: cover;
-  display: block;
-  border-radius: var(--radius-lg);
-}
-
-.ds-pdp__feature-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-}
-
-.ds-pdp__feature-title {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-tight);
-  color: var(--color-foreground);
-  margin: 0;
-}
-
-@media (min-width: 1024px) {
-  .ds-pdp__feature-title {
-    font-size: var(--font-size-2xl);
-  }
-}
-
-.ds-pdp__feature-desc {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-foreground-subtle);
-  margin: 0;
 }

@@ -9,7 +9,7 @@
 .ds-star-rating__stars {
   display: inline-flex;
   align-items: center;
-  gap: 1px;
+  gap: 0;
 }
 
 .ds-star-rating__star {

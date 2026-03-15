@@ -1,0 +1,26 @@
+/* ─── Stock Indicator ───────────────────────────────────── */
+.ds-stock-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-foreground-subtle);
+}
+
+.ds-stock-indicator__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.ds-stock-indicator__dot--pulse {
+  animation: ds-stock-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ds-stock-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, Breadcrumb, ImageGallery, QuantitySelector, Button, StarRating } from '@ds/components';
+import {
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
+  Badge, Breadcrumb, Button, Caption,
+  Carousel, CarouselSlide, ColorPicker,
+  FeatureBlock, Heading, ImageGallery,
+  PriceDisplay, QuantitySelector, StarRating, StockIndicator, Text,
+} from '@ds/components';
+import type { ColorOption } from '@ds/components';
 import { ViewportIndicator } from './ViewportIndicator';
 import './PDPDemo.css';
 
@@ -30,6 +37,12 @@ const lifestyleImages = [
   { src: makeLifestylePlaceholder('Lifestyle 5', '#A9A295', '#342F27'), alt: 'Lifestyle — travel' },
 ];
 
+const colorOptions: ColorOption[] = [
+  { value: 'carbon-black', color: '#342F2A', label: 'Carbon Black' },
+  { value: 'stone-gray', color: '#C8C2B8', label: 'Stone Gray' },
+  { value: 'dark-olive', color: '#4E473F', label: 'Dark Olive' },
+];
+
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
   { label: 'Accessories', href: '#' },
@@ -39,6 +52,7 @@ const breadcrumbItems = [
 
 export function PDPDemo() {
   const [qty, setQty] = useState(1);
+  const [color, setColor] = useState('carbon-black');
 
   return (
     <>
@@ -58,146 +72,126 @@ export function PDPDemo() {
         </div>
 
         <div className="ds-pdp__details">
+          {/* ── Header: title, price, rating ── */}
           <div className="ds-pdp__header">
-            <h1 className="ds-pdp__title">Aramid Fiber iPhone 17 Pro Max Case</h1>
-            <p className="ds-pdp__price">$85.00</p>
+            <Heading as="h1" className="ds-pdp__title">
+              Aramid Fiber iPhone 17 Pro Max Case
+            </Heading>
+            <div className="ds-pdp__price-row">
+              <PriceDisplay price="$68.00" comparePrice="$85.00" />
+              <Badge variant="destructive" size="sm">Save 20%</Badge>
+            </div>
             <StarRating rating={4.5} reviewCount={128} size="sm" />
           </div>
 
-          <div className="ds-pdp__description">
-            <p>
-              Ultra-thin aramid fiber case with a precision-cut design.
-              Weighs just 12g while providing military-grade protection.
-              Compatible with MagSafe wireless charging.
-            </p>
-          </div>
+          {/* ── Description ── */}
+          <Text size="sm" muted>
+            Ultra-thin aramid fiber case with a precision-cut design.
+            Weighs just 12g while providing military-grade protection.
+            Compatible with MagSafe wireless charging.
+          </Text>
 
-          <div className="ds-pdp__option">
-            <p className="ds-pdp__option-label">Color</p>
-            <div className="ds-pdp__colors">
-              <button className="ds-pdp__color-btn ds-pdp__color-btn--active" style={{ backgroundColor: '#342F2A' }} aria-label="Carbon Black" />
-              <button className="ds-pdp__color-btn" style={{ backgroundColor: '#C8C2B8' }} aria-label="Stone Gray" />
-              <button className="ds-pdp__color-btn" style={{ backgroundColor: '#4E473F' }} aria-label="Dark Olive" />
+          {/* ── Options ── */}
+          <div className="ds-pdp__options-group">
+            <div className="ds-pdp__option">
+              <Text as="label" size="sm" weight="medium">Color</Text>
+              <ColorPicker options={colorOptions} value={color} onChange={setColor} aria-label="Case color" />
+            </div>
+
+            <div className="ds-pdp__option">
+              <Text as="label" size="sm" weight="medium">Quantity</Text>
+              <QuantitySelector value={qty} onChange={setQty} min={1} max={10} />
             </div>
           </div>
 
-          <div className="ds-pdp__option">
-            <p className="ds-pdp__option-label">Quantity</p>
-            <QuantitySelector value={qty} onChange={setQty} min={1} max={10} />
-          </div>
-
+          {/* ── Actions ── */}
           <div className="ds-pdp__actions">
-            <Button style={{ width: '100%' }} size="lg">Add to Bag</Button>
-            <p className="ds-pdp__stock">
-              <span className="ds-pdp__stock-dot" />
-              In stock and ready to ship
-            </p>
+            <Button fullWidth size="lg">Add to Bag</Button>
+            <StockIndicator />
+            <div className="ds-pdp__trust-signals">
+              <Caption>Free shipping over $50</Caption>
+              <Caption aria-hidden="true">·</Caption>
+              <Caption>30-day returns</Caption>
+            </div>
           </div>
 
-          <Accordion type="multiple" size="sm">
-            <AccordionItem value="details">
-              <AccordionTrigger>Details</AccordionTrigger>
-              <AccordionContent>
-                <ul className="ds-pdp__accordion-list">
-                  <li>600D aramid fiber construction</li>
-                  <li>Weight: 12g</li>
-                  <li>Thickness: 0.65mm</li>
-                  <li>MagSafe compatible</li>
-                  <li>Raised camera lip for lens protection</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="shipping">
-              <AccordionTrigger>Shipping & Delivery</AccordionTrigger>
-              <AccordionContent>
-                <ul className="ds-pdp__accordion-list">
-                  <li>Free standard shipping on orders over $50</li>
-                  <li>Express delivery: 1–2 business days</li>
-                  <li>Standard delivery: 3–5 business days</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="returns">
-              <AccordionTrigger>Returns & Warranty</AccordionTrigger>
-              <AccordionContent>
-                <ul className="ds-pdp__accordion-list">
-                  <li>30-day free returns</li>
-                  <li>1-year manufacturer warranty</li>
-                  <li>Items must be unused and in original packaging</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          {/* ── Accordion ── */}
+          <div className="ds-pdp__accordion-section">
+            <Accordion type="multiple" size="sm">
+              <AccordionItem value="details">
+                <AccordionTrigger>Details</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="ds-pdp__accordion-list">
+                    <li><Text as="span" size="sm" muted>600D aramid fiber construction</Text></li>
+                    <li><Text as="span" size="sm" muted>Weight: 12g</Text></li>
+                    <li><Text as="span" size="sm" muted>Thickness: 0.65mm</Text></li>
+                    <li><Text as="span" size="sm" muted>MagSafe compatible</Text></li>
+                    <li><Text as="span" size="sm" muted>Raised camera lip for lens protection</Text></li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="shipping">
+                <AccordionTrigger>Shipping & Delivery</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="ds-pdp__accordion-list">
+                    <li><Text as="span" size="sm" muted>Free standard shipping on orders over $50</Text></li>
+                    <li><Text as="span" size="sm" muted>Express delivery: 1–2 business days</Text></li>
+                    <li><Text as="span" size="sm" muted>Standard delivery: 3–5 business days</Text></li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="returns">
+                <AccordionTrigger>Returns & Warranty</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="ds-pdp__accordion-list">
+                    <li><Text as="span" size="sm" muted>30-day free returns</Text></li>
+                    <li><Text as="span" size="sm" muted>1-year manufacturer warranty</Text></li>
+                    <li><Text as="span" size="sm" muted>Items must be unused and in original packaging</Text></li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </div>
       </div>
 
+      {/* ── Lifestyle ── */}
       <section className="ds-pdp__lifestyle">
-        <div className="ds-pdp__lifestyle-track">
+        <div className="ds-pdp__section-header">
+          <Heading as="h2">In the Wild</Heading>
+          <Text muted>See it in action</Text>
+        </div>
+        <Carousel>
           {lifestyleImages.map((img) => (
-            <div key={img.alt} className="ds-pdp__lifestyle-slide">
+            <CarouselSlide key={img.alt}>
               <img src={img.src} alt={img.alt} className="ds-pdp__lifestyle-img" />
-            </div>
+            </CarouselSlide>
           ))}
-        </div>
+        </Carousel>
       </section>
 
-      <section className="ds-pdp__feature">
-        <div className="ds-pdp__feature-image">
-          <img
-            src={makeLifestylePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')}
-            alt="Aramid fiber weave close-up"
-            className="ds-pdp__feature-img"
-          />
-        </div>
-        <div className="ds-pdp__feature-text">
-          <h2 className="ds-pdp__feature-title">Engineered for Everyday Protection</h2>
-          <p className="ds-pdp__feature-desc">
-            Woven from 600D aramid fiber — the same material used in aerospace
-            and body armor — this case delivers military-grade impact resistance
-            at just 0.65mm thin. The precision-cut design wraps your device
-            without adding bulk, while the raised camera lip keeps your lenses
-            safe on any surface.
-          </p>
-        </div>
-      </section>
+      {/* ── Feature blocks ── */}
+      <FeatureBlock
+        className="ds-pdp__feature-section"
+        title="Engineered for Everyday Protection"
+        description="Woven from 600D aramid fiber — the same material used in aerospace and body armor — this case delivers military-grade impact resistance at just 0.65mm thin. The precision-cut design wraps your device without adding bulk, while the raised camera lip keeps your lenses safe on any surface."
+        image={<img src={makeLifestylePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+      />
 
-      <section className="ds-pdp__feature ds-pdp__feature--reverse">
-        <div className="ds-pdp__feature-image">
-          <img
-            src={makeLifestylePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')}
-            alt="MagSafe alignment magnets"
-            className="ds-pdp__feature-img"
-          />
-        </div>
-        <div className="ds-pdp__feature-text">
-          <h2 className="ds-pdp__feature-title">Seamless MagSafe Integration</h2>
-          <p className="ds-pdp__feature-desc">
-            Precision-aligned magnets ensure a perfect snap every time. Charge
-            wirelessly, attach your favorite accessories, and never worry about
-            compatibility. The ultra-thin profile means zero interference with
-            MagSafe's full magnetic strength.
-          </p>
-        </div>
-      </section>
+      <FeatureBlock
+        className="ds-pdp__feature-section"
+        reverse
+        title="Seamless MagSafe Integration"
+        description="Precision-aligned magnets ensure a perfect snap every time. Charge wirelessly, attach your favorite accessories, and never worry about compatibility. The ultra-thin profile means zero interference with MagSafe's full magnetic strength."
+        image={<img src={makeLifestylePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+      />
 
-      <section className="ds-pdp__feature">
-        <div className="ds-pdp__feature-image">
-          <img
-            src={makeLifestylePlaceholder('Featherlight', '#A9A295', '#342F27')}
-            alt="Case on precision scale"
-            className="ds-pdp__feature-img"
-          />
-        </div>
-        <div className="ds-pdp__feature-text">
-          <h2 className="ds-pdp__feature-title">12 Grams of Confidence</h2>
-          <p className="ds-pdp__feature-desc">
-            At just 12 grams, you'll forget it's there — until you need it.
-            The minimal footprint preserves the feel of your device while adding
-            a layer of protection that stands up to everyday drops, scratches,
-            and pocket wear.
-          </p>
-        </div>
-      </section>
+      <FeatureBlock
+        className="ds-pdp__feature-section"
+        title="12 Grams of Confidence"
+        description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
+        image={<img src={makeLifestylePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+      />
     </>
   );
 }

@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CarouselDefault, CarouselSizes } from '../../components/CarouselGallery';
+---
+
+<BaseLayout title="Carousel">
+  <div class="prose">
+    <h1>Carousel</h1>
+    <p>
+      A horizontally scrollable container with scroll-snap alignment.
+      Compose with <code>CarouselSlide</code> to create image galleries, product rows, or any
+      horizontal scrolling content.
+    </p>
+
+    <h2>Installation</h2>
+    <pre><code>{`import { Carousel, CarouselSlide } from '@ds/components';`}</code></pre>
+
+    <h2>Default</h2>
+    <CarouselDefault client:load />
+    <pre><code>{`<Carousel>
+  <CarouselSlide>
+    <img src="..." alt="Slide 1" />
+  </CarouselSlide>
+  <CarouselSlide>
+    <img src="..." alt="Slide 2" />
+  </CarouselSlide>
+  <CarouselSlide>
+    <img src="..." alt="Slide 3" />
+  </CarouselSlide>
+</Carousel>`}</code></pre>
+
+    <h2>Slide sizes</h2>
+    <p>Control how many slides are visible at once with the <code>size</code> prop on each slide.</p>
+    <CarouselSizes client:load />
+    <pre><code>{`<CarouselSlide size="sm">...</CarouselSlide>  {/* 70% → 45% → 33% */}
+<CarouselSlide size="md">...</CarouselSlide>  {/* 85% → 65% → 50% (default) */}
+<CarouselSlide size="lg">...</CarouselSlide>  {/* 95% → 80% → 66% */}`}</code></pre>
+
+    <h2>Carousel Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>CarouselSlide elements</td></tr>
+        <tr><td><code>gap</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Gap between slides</td></tr>
+      </tbody>
+    </table>
+
+    <h2>CarouselSlide Props</h2>
+    <table class="props-table">
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>Slide content</td></tr>
+        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Responsive slide width preset</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Scrollable via touch, trackpad, or mouse drag</li>
+      <li>Scroll-snap ensures slides align cleanly on release</li>
+      <li>Content inside slides should include appropriate <code>alt</code> text for images</li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0;
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+  }
+  .props-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .props-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+    vertical-align: top;
+  }
+</style>

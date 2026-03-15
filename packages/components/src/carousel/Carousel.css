@@ -1,0 +1,87 @@
+/* ─── Carousel ──────────────────────────────────────────── */
+.ds-carousel {
+  overflow: hidden;
+}
+
+.ds-carousel__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: var(--spacing-2);
+}
+
+.ds-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Gap variants */
+.ds-carousel--gap-sm .ds-carousel__track {
+  gap: var(--spacing-2);
+}
+
+.ds-carousel--gap-md .ds-carousel__track {
+  gap: var(--spacing-3);
+}
+
+.ds-carousel--gap-lg .ds-carousel__track {
+  gap: var(--spacing-4);
+}
+
+/* ─── Slide ─────────────────────────────────────────────── */
+.ds-carousel__slide {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+/* sm: narrow slides */
+.ds-carousel__slide--sm {
+  flex-basis: 70%;
+}
+
+@media (min-width: 768px) {
+  .ds-carousel__slide--sm {
+    flex-basis: 45%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-carousel__slide--sm {
+    flex-basis: 33.333%;
+  }
+}
+
+/* md: default slides */
+.ds-carousel__slide--md {
+  flex-basis: 85%;
+}
+
+@media (min-width: 768px) {
+  .ds-carousel__slide--md {
+    flex-basis: 65%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-carousel__slide--md {
+    flex-basis: 50%;
+  }
+}
+
+/* lg: wide slides */
+.ds-carousel__slide--lg {
+  flex-basis: 95%;
+}
+
+@media (min-width: 768px) {
+  .ds-carousel__slide--lg {
+    flex-basis: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-carousel__slide--lg {
+    flex-basis: 66.666%;
+  }
+}

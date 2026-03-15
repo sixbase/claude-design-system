@@ -372,3 +372,46 @@ The `ViewportIndicator` initially used `window.innerWidth` in `useState` initial
 ### Golden ratio grid columns work perfectly with CSS Grid `fr` units
 
 `grid-template-columns: 1.618fr 1fr` produces exactly a φ ratio between columns. Verified: at 1216px content width, the columns rendered as 726.8px and 449.2px — ratio of 1.618. This is a clean, memorable pattern for any layout that wants golden ratio proportions.
+
+### Flex overflow chain: every ancestor needs `min-width: 0`
+
+**Problem:** Breadcrumb text-overflow ellipsis wasn't working on mobile. The `text-overflow: ellipsis` rule was correct, but the text still overflowed its container.
+
+**Root cause:** CSS grid and flex children default to `min-width: auto`, which prevents them from shrinking below their content size. If ANY ancestor in the chain lacks `min-width: 0`, the entire overflow chain breaks. We traced the issue from `<span>` → `<li>` → `<ol>` → `<nav>` → `.ds-pdp__breadcrumb` (grid child) and found the grid child was the one missing the constraint.
+
+**Fix:** Add `min-width: 0` to every flex/grid child in the overflow chain:
+```css
+.ds-pdp__breadcrumb { min-width: 0; }           /* grid child */
+.ds-breadcrumb { min-width: 0; overflow: hidden; } /* nav element */
+.ds-breadcrumb__list { flex-wrap: nowrap; }      /* ol */
+.ds-breadcrumb__item:last-child { flex: 1; min-width: 0; overflow: hidden; } /* li */
+```
+
+**Rule:** When `text-overflow: ellipsis` doesn't work, trace the width from the overflowing element up through every parent. The first ancestor that doesn't constrain its width is the bug.
+
+### CSS changes in component library don't hot-reload in the docs site
+
+**Problem:** Changed component CSS, but the docs dev server showed stale styles.
+
+**Cause:** The docs site imports pre-built CSS from `@ds/components/dist/index.css`. Changing source CSS doesn't update the built output until you rebuild.
+
+**Fix:** Run `pnpm turbo build --filter=@ds/components --force` after any CSS change, then reload the docs page. This is the most common "why isn't my change showing?" moment.
+
+**Rule:** Component CSS changes require a library rebuild. Token changes require a token rebuild. Only page-level CSS (like `PDPDemo.css`) hot-reloads immediately.
+
+### Prefer CSS-based responsive behavior over JS-based
+
+**Example:** Breadcrumb truncation. First implementation filtered items in JS (`items.slice()`), which meant the DOM on mobile had fewer items than desktop. When we wanted responsive behavior (truncate on mobile, show all on tablet+), we had to rewrite to render all items and use CSS `display: none` on collapsible items at mobile breakpoints.
+
+**Rule:** If a component might need different behavior at different breakpoints, render the full content and use CSS to control visibility. JS filtering locks you into a single breakpoint at render time.
+
+### Sale price pattern: separate elements, not conditional styling
+
+For pricing with original/sale display, use two separate `<p>` elements with distinct classes rather than toggling styles on a single element:
+```tsx
+<div className="ds-pdp__pricing">
+  <p className="ds-pdp__price">$68.00</p>
+  <p className="ds-pdp__price-compare">$85.00</p>
+</div>
+```
+The compare price gets `text-decoration: line-through` and muted color. This is cleaner than conditional classes on a single price element and easier to animate/transition.

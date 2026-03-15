@@ -368,3 +368,156 @@ Establish these conventions and hold to them across every component:
 | Loading disables interaction | `disabled={loading}` | Prevents double-submit |
 | Icons are `ReactNode`, not strings | `leadingIcon?: ReactNode` | Flexible, accepts any icon library |
 | Error strings, not booleans | `error?: string` | The error text is both the indicator and the message |
+
+---
+
+## Component Catalog
+
+All 18 components shipped, organized by complexity tier.
+
+### Tier 1 — Primitives (single element, no state)
+| Component | Element | Key Pattern |
+|-----------|---------|-------------|
+| Badge | `<span>` | `variant` + `size`, no interaction |
+| ColorSwatch | `<div>` | Display-only, used in docs token pages |
+| Typography (Heading/Text) | `<h1>`–`<h4>`, `<p>` | `asChild` for polymorphism, semantic level prop |
+| StockIndicator | `<p>` | Status-based color + pulse animation, `status` prop maps to defaults |
+
+### Tier 2 — Interactive (single element, has state or events)
+| Component | Element | Key Pattern |
+|-----------|---------|-------------|
+| Button | `<button>` | `asChild` + Slot, `variant`/`size`, loading state |
+| Input | `<input>` wrapper | Compound: label + field + error, `useId()` for a11y linking |
+| Checkbox | `<input type="checkbox">` | Radix primitive, `checked`/`onCheckedChange` |
+| Select | Radix Select | Compound API, portal rendering, keyboard nav |
+| QuantitySelector | `<div>` group | Controlled stepper, `role="group"`, min/max bounds |
+| StarRating | `<div role="img">` | SVG stars with clipPath half-fill, clamped 0–5 |
+
+### Tier 3 — Compound (multiple parts, complex state)
+| Component | Parts | Key Pattern |
+|-----------|-------|-------------|
+| Accordion | Item, Trigger, Content | Radix primitive, `type="single"|"multiple"`, `size` prop |
+| Modal | Trigger, Content, Header, Body, Footer, Close | Radix Dialog, focus trap, portal |
+| ImageGallery | Main image + thumbnails | `thumbnailPosition`, `aspectRatio`, keyboard nav |
+| Breadcrumb | Nav > List > Items | CSS-based responsive collapse (not JS filtering) |
+
+### Tier 4 — Composed (combine other components or complex layout)
+| Component | Composition | Key Pattern |
+|-----------|-------------|-------------|
+| Card | Layout wrapper | Semantic slots (image, header, body, footer) |
+| ProductCard | Card + Badge + image | Composed from primitives, aspect ratio control |
+| Carousel + CarouselSlide | Scroll container + children | `scroll-snap-type`, responsive `flex-basis` sizes |
+| FeatureBlock | Image + text grid | `reverse` prop uses CSS `order` swap at tablet+ |
+
+---
+
+## Responsive Component Patterns
+
+### CSS-based responsive collapse (Breadcrumb)
+Render all items in the DOM, use CSS classes to hide/show at breakpoints. This is better than JS filtering because:
+- No layout shift on hydration
+- Works without JS
+- Animatable with transitions
+
+```css
+/* Mobile: hide middle items */
+.ds-breadcrumb__item--collapsible { display: none; }
+.ds-breadcrumb__ellipsis { display: inline; }
+
+/* Tablet+: show everything */
+@media (min-width: 768px) {
+  .ds-breadcrumb__item--collapsible { display: flex; }
+  .ds-breadcrumb__ellipsis { display: none; }
+}
+```
+
+### Scroll-snap carousel
+The Carousel component uses native CSS scroll-snap instead of JavaScript-driven sliding. This gives:
+- 60fps scrolling on all devices
+- Native touch/trackpad physics
+- No JS bundle cost for scroll behavior
+
+```css
+.ds-carousel__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* hide scrollbar */
+}
+.ds-carousel__slide {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+```
+
+Responsive slide widths use `flex-basis` at breakpoints (not JS resize observers).
+
+### CSS order swap (FeatureBlock)
+Alternating image/text layouts use `order` instead of duplicating markup:
+
+```css
+@media (min-width: 768px) {
+  .ds-feature-block--reverse .ds-feature-block__image { order: 2; }
+  .ds-feature-block--reverse .ds-feature-block__text { order: 1; }
+}
+```
+
+DOM order stays image → text (correct reading order), only visual order changes.
+
+---
+
+## Status-based Component Pattern (StockIndicator)
+
+When a component has a finite set of states with default labels and colors, use a `status` prop with lookup maps:
+
+```tsx
+const defaultLabels: Record<StockStatus, string> = {
+  'in-stock': 'In stock and ready to ship',
+  'low-stock': 'Low stock — order soon',
+  'out-of-stock': 'Out of stock',
+};
+
+// Consumer uses: <StockIndicator status="low-stock" />
+// Or overrides:  <StockIndicator status="low-stock" label="Only 3 left" />
+```
+
+This pattern works for any status indicator (order status, shipping, verification badges).
+
+---
+
+## SVG Star Rating Pattern
+
+Half-star rendering uses SVG `clipPath` — draw the full star shape twice, clip one to 50% width:
+
+```tsx
+<defs>
+  <clipPath id="ds-star-half">
+    <rect x="0" y="0" width="10" height="20" />
+  </clipPath>
+</defs>
+<path d="..." className="star-bg" />      {/* empty star behind */}
+<path d="..." clipPath="url(#ds-star-half)" className="star-fill" /> {/* filled half on top */}
+```
+
+---
+
+## Doc Page Blueprint
+
+Every component doc page follows the same structure. Copy this when adding a new component:
+
+1. **Gallery file** (`apps/docs/src/components/{Name}Gallery.tsx`) — React components that render live examples wrapped in `<Preview>`
+2. **Astro page** (`apps/docs/src/pages/components/{name}.astro`) — imports gallery with `client:load`
+3. **Sidebar link** (`apps/docs/src/layouts/BaseLayout.astro`) — add alphabetically in Components section
+
+Page sections in order:
+```
+h1 → Component Name
+p  → One-line description
+h2 → Installation (import snippet)
+h2 → Default (live example + code)
+h2 → Variants/Sizes (live examples + code)
+h2 → Props (table: Prop, Type, Default, Description)
+h2 → Accessibility (ul of ARIA/keyboard details)
+```
+
+Props table CSS is duplicated per page (Astro scoped styles). This is intentional — no shared stylesheet needed.
