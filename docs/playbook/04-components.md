@@ -535,6 +535,36 @@ All 18 components shipped, organized by complexity tier.
 | FeatureBlock | Image + text grid | `reverse` prop uses CSS `order` swap at tablet+ |
 | CookieConsent | Accordion + Button | `position: fixed` banner, controlled/uncontrolled, i18n labels, uses `bordered` accordion with native checkbox variant |
 
+### Cookie Consent — Copy Conventions & Structure
+
+**Tone:** Conversational and clear — no legalese. Explain what each category does in plain language so users understand their choices without feeling pressured.
+
+**Main Dialog:**
+- Heading: "We use cookies"
+- Body: "We use cookies to improve your experience and understand how our site is used. You can manage your preferences anytime."
+- Buttons (left → right): `Manage Preferences` (secondary) · `Decline All` (secondary) · `Accept All` (primary)
+
+**Preferences Screen — Category Structure:**
+
+| Category | Default State | Toggle Behavior | Copy Tone |
+|----------|--------------|-----------------|-----------|
+| Strictly Necessary Cookies | Always on | Disabled (greyed out, no interaction) | "These keep the site running…" — frame as essential, not optional |
+| Functional Cookies | On | On/Off | "These remember your preferences…" — explain the trade-off of turning off |
+| Performance Cookies | On | On/Off | "These help us understand…" — emphasize anonymity ("None of it is tied to you personally") |
+| Targeting Cookies | Off | On/Off | "These may be placed by our advertising partners…" — honest about ads, explain what happens if turned off |
+
+Each category includes a per-category "Learn more" link (`learnMoreHref` on `CookieCategory`) pointing to the relevant privacy policy section. Links use a consistent underline style (`.ds-cookie-consent__link`).
+
+**Preferences Screen Buttons:**
+- `Back` (secondary) — returns to main dialog without saving
+- `Save Preferences` (primary) — confirms custom choices and closes banner
+
+**Key API Props:**
+- `learnMoreHref` on `CookieConsentProps` — global learn more link in the description
+- `learnMoreHref` on `CookieCategory` — per-category learn more link in accordion content
+- `rejectLabel` defaults to "Decline All" (not "Reject All" — softer tone)
+- `closeLabel` defaults to "Back" (used in preferences view)
+
 ---
 
 ## Responsive Component Patterns

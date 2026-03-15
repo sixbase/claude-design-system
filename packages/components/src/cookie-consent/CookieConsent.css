@@ -36,16 +36,16 @@
 /* ─── Content container ────────────────────────────────────── */
 
 .ds-cookie-consent__content {
-  max-width: 960px;
+  max-width: var(--size-content-sm);
   margin: 0 auto;
-  padding: var(--spacing-6);
+  padding: var(--spacing-4) var(--spacing-6);
   background-color: var(--color-background-surface);
   border-top: 1px solid var(--color-border);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: var(--shadow-xl);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-3);
 }
 
 /* ─── Header ───────────────────────────────────────────────── */
@@ -56,45 +56,43 @@
   gap: var(--spacing-1);
 }
 
-.ds-cookie-consent__heading {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
+/* Heading and description use <Text> primitives — no custom styles needed */
+
+.ds-cookie-consent__link {
   color: var(--color-foreground);
-  margin: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
 }
 
-.ds-cookie-consent__description {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
+.ds-cookie-consent__link:hover {
   color: var(--color-foreground-subtle);
-  margin: 0;
-  max-width: 65ch;
 }
 
 /* ─── Preferences panel ───────────────────────────────────── */
 
 .ds-cookie-consent__preferences {
-  max-height: 320px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
-/* Category description inside expanded accordion */
+/* Category description inside expanded accordion — inherits font/color from Accordion primitive */
 .ds-cookie-consent__category-description {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-foreground-subtle);
   margin: 0;
+}
+
+.ds-cookie-consent__category-link {
+  display: inline-block;
+  margin-top: var(--spacing-2);
+  font-size: var(--font-size-sm);
 }
 
 /* ─── Actions row ──────────────────────────────────────────── */
 
 .ds-cookie-consent__actions {
   display: flex;
-  gap: var(--spacing-3);
+  justify-content: flex-end;
+  gap: var(--spacing-2);
   align-items: center;
   flex-wrap: wrap;
 }
@@ -104,12 +102,12 @@
 /* @breakpoint-sm = 640px */
 @media (max-width: 639px) {
   .ds-cookie-consent__content {
-    padding: var(--spacing-4);
+    padding: var(--spacing-3) var(--spacing-4);
     border-radius: 0;
   }
 
   .ds-cookie-consent__preferences {
-    max-height: 240px;
+    max-height: 200px;
   }
 
   .ds-cookie-consent__actions {

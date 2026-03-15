@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
+import { Heading } from '../typography/Typography';
+import { Text } from '../typography/Typography';
 import './FeatureBlock.css';
 
 export interface FeatureBlockProps extends HTMLAttributes<HTMLDivElement> {
@@ -32,8 +34,8 @@ export const FeatureBlock = forwardRef<HTMLDivElement, FeatureBlockProps>(
       >
         <div className="ds-feature-block__image">{image}</div>
         <div className="ds-feature-block__text">
-          <h2 className="ds-feature-block__title">{title}</h2>
-          <p className="ds-feature-block__desc">{description}</p>
+          <Heading as="h2" size="xl" weight="normal" className="ds-feature-block__title">{title}</Heading>
+          <Text size="sm" muted>{description}</Text>
         </div>
       </div>
     );

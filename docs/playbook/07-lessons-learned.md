@@ -438,3 +438,7 @@ This flips black → white and works perfectly for monochrome logos. For multi-c
 ### Keep header and footer logos in sync
 
 The header and footer should use the same logo asset and the same rendering approach. We initially had the header using `<img src="logo.svg">` and the footer using plain text styled to look like a logo. This created a visual inconsistency — different font rendering, different weight, different alignment. Both now use the same SVG `<img>` at the same height (20px), with identical dark mode handling. If you change one, change the other.
+
+### Redundant declarations are overrides in disguise
+
+When auditing block components for primitive overrides, don't just look for **conflicting** values — also check for **redundant** ones. If a block component sets `font-size: var(--font-size-sm)` on a wrapper element inside an Accordion that already applies `font-size: var(--font-size-sm)` via its `sm` size variant, the output looks identical today. But it's a hidden coupling: if the primitive's `sm` size changes tomorrow, the block component won't follow because it has its own hardcoded copy. Treat redundant declarations the same as conflicting overrides — delete them and let the primitive own the value. Found this in `CookieConsent`, where `.ds-cookie-consent__category-description` duplicated `font-family`, `font-size`, `line-height`, and `color` that the Accordion primitive already provided.

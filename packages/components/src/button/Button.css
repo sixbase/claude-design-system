@@ -88,6 +88,7 @@
 
 .ds-button--secondary:hover:not(:disabled) {
   background-color: var(--color-secondary-hover);
+  border-color: transparent;
 }
 
 .ds-button--secondary:active:not(:disabled) {

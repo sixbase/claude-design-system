@@ -5,19 +5,10 @@
   gap: var(--spacing-2);
 }
 
-.ds-price-display__price {
-  font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-foreground);
-  margin: 0;
-}
+/* Price and compare use <Text> primitive — only layout-specific styles here */
 
 .ds-price-display__compare {
-  font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-foreground-subtle);
   text-decoration: line-through;
-  margin: 0;
 }
 
 /* ─── Sizes ──────────────────────────────────────────── */

@@ -1,12 +1,8 @@
-/* ─── Stock Indicator ───────────────────────────────────── */
+/* ─── Stock Indicator — uses <Text> primitive, layout only ── */
 .ds-stock-indicator {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  color: var(--color-foreground-subtle);
 }
 
 .ds-stock-indicator__dot {

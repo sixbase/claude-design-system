@@ -1,10 +1,11 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes } from 'react';
+import { Text } from '../typography/Typography';
 import './StockIndicator.css';
 
 export type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock';
 
-export interface StockIndicatorProps extends HTMLAttributes<HTMLParagraphElement> {
+export interface StockIndicatorProps extends HTMLAttributes<HTMLElement> {
   /** Stock status. */
   status?: StockStatus;
   /** Custom label. Defaults to a label based on status. */
@@ -17,7 +18,7 @@ const defaultLabels: Record<StockStatus, string> = {
   'out-of-stock': 'Out of stock',
 };
 
-export const StockIndicator = forwardRef<HTMLParagraphElement, StockIndicatorProps>(
+export const StockIndicator = forwardRef<HTMLElement, StockIndicatorProps>(
   function StockIndicator(
     { status = 'in-stock', label, className, ...props },
     ref,
@@ -26,8 +27,10 @@ export const StockIndicator = forwardRef<HTMLParagraphElement, StockIndicatorPro
     const animate = status !== 'out-of-stock';
 
     return (
-      <p
+      <Text
         ref={ref}
+        size="sm"
+        muted
         className={[
           'ds-stock-indicator',
           `ds-stock-indicator--${status}`,
@@ -46,7 +49,7 @@ export const StockIndicator = forwardRef<HTMLParagraphElement, StockIndicatorPro
             .join(' ')}
         />
         {text}
-      </p>
+      </Text>
     );
   },
 );

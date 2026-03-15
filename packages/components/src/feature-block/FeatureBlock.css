@@ -33,26 +33,11 @@
   gap: var(--spacing-3);
 }
 
-.ds-feature-block__title {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-tight);
-  color: var(--color-foreground);
-  margin: 0;
-}
+/* Title and description use <Heading> and <Text> primitives */
 
+/* Responsive bump: xl → 2xl at desktop */
 @media (min-width: 1024px) {
   .ds-feature-block__title {
     font-size: var(--font-size-2xl);
   }
-}
-
-.ds-feature-block__desc {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-foreground-subtle);
-  margin: 0;
-  max-width: 65ch;
 }

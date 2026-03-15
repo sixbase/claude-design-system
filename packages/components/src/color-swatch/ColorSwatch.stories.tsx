@@ -2,9 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ColorSwatch } from './ColorSwatch';
 
 const meta: Meta<typeof ColorSwatch> = {
-  title: 'Foundation/ColorSwatch',
+  title: 'Foundation/Colors',
   component: ColorSwatch,
-  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     docs: {

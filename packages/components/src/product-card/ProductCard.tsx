@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes } from 'react';
 import { Card, CardImage, CardBody } from '../card/Card';
+import { Text } from '../typography/Typography';
 import './ProductCard.css';
 
 export interface ProductCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -55,8 +56,8 @@ export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(function
     >
       <CardImage src={image} alt={name} aspectRatio="4/5" />
       <CardBody>
-        <p className="ds-product-card__name">{name}</p>
-        <p className="ds-product-card__price">{formatPrice(price, currency)}</p>
+        <Text size="sm" className="ds-product-card__name">{name}</Text>
+        <Text size="sm" muted className="ds-product-card__price">{formatPrice(price, currency)}</Text>
       </CardBody>
     </Card>
   );

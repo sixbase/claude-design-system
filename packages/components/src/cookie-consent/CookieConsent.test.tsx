@@ -8,10 +8,10 @@ import type { CookieCategory } from './CookieConsent';
 expect.extend(toHaveNoViolations);
 
 const defaultCategories: CookieCategory[] = [
-  { id: 'essential', label: 'Strictly Necessary Cookies', description: 'These cookies are essential for the website to function and cannot be switched off.', required: true },
-  { id: 'functional', label: 'Functional Cookies', description: 'These cookies enable enhanced functionality and personalization.' },
-  { id: 'performance', label: 'Performance Cookies', description: 'These cookies help us understand how visitors interact with the website.' },
-  { id: 'targeting', label: 'Targeting Cookies', description: 'These cookies are used to deliver personalized advertisements.' },
+  { id: 'essential', label: 'Strictly Necessary Cookies', description: 'These cookies are essential for the website to function and cannot be switched off.', required: true, learnMoreHref: '#essential' },
+  { id: 'functional', label: 'Functional Cookies', description: 'These cookies enable enhanced functionality and personalization.', defaultChecked: true, learnMoreHref: '#functional' },
+  { id: 'performance', label: 'Performance Cookies', description: 'These cookies help us understand how visitors interact with the website.', defaultChecked: true, learnMoreHref: '#performance' },
+  { id: 'targeting', label: 'Targeting Cookies', description: 'These cookies are used to deliver personalized advertisements.', learnMoreHref: '#targeting' },
 ];
 
 describe('CookieConsent', () => {
@@ -19,8 +19,8 @@ describe('CookieConsent', () => {
 
   it('renders banner with heading and description', () => {
     render(<CookieConsent />);
-    expect(screen.getByText('We value your privacy')).toBeInTheDocument();
-    expect(screen.getByText(/We use cookies/)).toBeInTheDocument();
+    expect(screen.getByText('We use cookies')).toBeInTheDocument();
+    expect(screen.getByText(/cookies to improve your experience/)).toBeInTheDocument();
   });
 
   it('does not render when open is false', () => {
@@ -41,7 +41,7 @@ describe('CookieConsent', () => {
     expect(screen.getByText('Custom message')).toBeInTheDocument();
   });
 
-  // ─── Button interactions ────────────────────────────────
+  // ─── Main dialog buttons ──────────────────────────────
 
   it('calls onAccept with all category IDs when Accept All is clicked', async () => {
     const onAccept = vi.fn();
@@ -52,57 +52,61 @@ describe('CookieConsent', () => {
     expect(onAccept).toHaveBeenCalledWith(['essential', 'functional', 'performance', 'targeting']);
   });
 
-  it('calls onReject when Reject All is clicked (no categories)', async () => {
+  it('calls onReject when Decline All is clicked (no categories)', async () => {
     const onReject = vi.fn();
     const user = userEvent.setup();
     render(<CookieConsent onReject={onReject} />);
 
-    await user.click(screen.getByText('Reject All'));
+    await user.click(screen.getByText('Decline All'));
     expect(onReject).toHaveBeenCalledTimes(1);
   });
 
-  it('shows Preferences button when categories are provided', () => {
+  it('shows Manage Preferences, Decline All, and Accept All when categories are provided', () => {
     render(<CookieConsent categories={defaultCategories} />);
-    expect(screen.getByText('Preferences')).toBeInTheDocument();
+    expect(screen.getByText('Manage Preferences')).toBeInTheDocument();
+    expect(screen.getByText('Decline All')).toBeInTheDocument();
+    expect(screen.getByText('Accept All')).toBeInTheDocument();
   });
 
-  it('shows Reject All button when no categories are provided', () => {
+  it('shows Decline All and Accept All when no categories are provided', () => {
     render(<CookieConsent />);
-    expect(screen.getByText('Reject All')).toBeInTheDocument();
-    expect(screen.queryByText('Preferences')).not.toBeInTheDocument();
+    expect(screen.getByText('Decline All')).toBeInTheDocument();
+    expect(screen.getByText('Accept All')).toBeInTheDocument();
+    expect(screen.queryByText('Manage Preferences')).not.toBeInTheDocument();
   });
 
   // ─── Preferences panel (accordion-based) ─────────────────
 
-  it('shows accordion sections when Preferences is clicked', async () => {
+  it('shows accordion sections when Manage Preferences is clicked', async () => {
     const user = userEvent.setup();
     render(<CookieConsent categories={defaultCategories} />);
 
     expect(screen.queryByText('Strictly Necessary Cookies')).not.toBeInTheDocument();
 
-    await user.click(screen.getByText('Preferences'));
+    await user.click(screen.getByText('Manage Preferences'));
     expect(screen.getByText('Strictly Necessary Cookies')).toBeInTheDocument();
     expect(screen.getByText('Functional Cookies')).toBeInTheDocument();
     expect(screen.getByText('Performance Cookies')).toBeInTheDocument();
     expect(screen.getByText('Targeting Cookies')).toBeInTheDocument();
   });
 
-  it('shows all 4 action buttons in preferences view', async () => {
+  it('shows Back and Save Preferences buttons in preferences view', async () => {
     const user = userEvent.setup();
     render(<CookieConsent categories={defaultCategories} />);
 
-    await user.click(screen.getByText('Preferences'));
-    expect(screen.getByText('Accept All')).toBeInTheDocument();
-    expect(screen.getByText('Reject All')).toBeInTheDocument();
+    await user.click(screen.getByText('Manage Preferences'));
+    expect(screen.getByText('Back')).toBeInTheDocument();
     expect(screen.getByText('Save Preferences')).toBeInTheDocument();
-    expect(screen.getByText('Close')).toBeInTheDocument();
+    // Main dialog buttons should not be visible in preferences view
+    expect(screen.queryByText('Accept All')).not.toBeInTheDocument();
+    expect(screen.queryByText('Decline All')).not.toBeInTheDocument();
   });
 
   it('essential category checkbox is disabled', async () => {
     const user = userEvent.setup();
     render(<CookieConsent categories={defaultCategories} />);
 
-    await user.click(screen.getByText('Preferences'));
+    await user.click(screen.getByText('Manage Preferences'));
     const essentialCheckbox = screen.getByRole('checkbox', { name: 'Strictly Necessary Cookies' });
     expect(essentialCheckbox).toBeDisabled();
   });
@@ -111,11 +115,12 @@ describe('CookieConsent', () => {
     const user = userEvent.setup();
     render(<CookieConsent categories={defaultCategories} />);
 
-    await user.click(screen.getByText('Preferences'));
+    await user.click(screen.getByText('Manage Preferences'));
     const functionalCheckbox = screen.getByRole('checkbox', { name: 'Functional Cookies' });
     expect(functionalCheckbox).not.toBeDisabled();
     await user.click(functionalCheckbox);
-    expect(functionalCheckbox).toHaveAttribute('data-state', 'checked');
+    // Was default on, now toggled off
+    expect(functionalCheckbox).toHaveAttribute('data-state', 'unchecked');
   });
 
   it('Save Preferences calls onAccept with only selected category IDs', async () => {
@@ -123,48 +128,47 @@ describe('CookieConsent', () => {
     const user = userEvent.setup();
     render(<CookieConsent categories={defaultCategories} onAccept={onAccept} />);
 
-    await user.click(screen.getByText('Preferences'));
-    // Toggle functional on
+    await user.click(screen.getByText('Manage Preferences'));
+    // Toggle functional off (default on)
     await user.click(screen.getByRole('checkbox', { name: 'Functional Cookies' }));
     await user.click(screen.getByText('Save Preferences'));
 
-    // Essential is always included (required), functional was toggled on
-    expect(onAccept).toHaveBeenCalledWith(
-      expect.arrayContaining(['essential', 'functional']),
-    );
+    // Essential (required) + performance (default on, untouched)
     const accepted = onAccept.mock.calls[0][0] as string[];
-    expect(accepted).not.toContain('performance');
+    expect(accepted).toContain('essential');
+    expect(accepted).toContain('performance');
+    expect(accepted).not.toContain('functional');
     expect(accepted).not.toContain('targeting');
   });
 
-  it('Accept All in preferences view calls onAccept with all IDs', async () => {
-    const onAccept = vi.fn();
+  it('Back button returns to main dialog without saving', async () => {
     const user = userEvent.setup();
-    render(<CookieConsent categories={defaultCategories} onAccept={onAccept} />);
+    render(<CookieConsent categories={defaultCategories} />);
 
-    await user.click(screen.getByText('Preferences'));
-    await user.click(screen.getByText('Accept All'));
-    expect(onAccept).toHaveBeenCalledWith(['essential', 'functional', 'performance', 'targeting']);
+    await user.click(screen.getByText('Manage Preferences'));
+    expect(screen.getByText('Save Preferences')).toBeInTheDocument();
+
+    await user.click(screen.getByText('Back'));
+    // Should be back to main dialog
+    expect(screen.getByText('Accept All')).toBeInTheDocument();
+    expect(screen.getByText('Manage Preferences')).toBeInTheDocument();
+    expect(screen.queryByText('Save Preferences')).not.toBeInTheDocument();
   });
 
-  it('Reject All in preferences view calls onReject', async () => {
-    const onReject = vi.fn();
+  // ─── Per-category learn more links ─────────────────────
+
+  it('renders learn more links for categories with learnMoreHref', async () => {
     const user = userEvent.setup();
-    render(<CookieConsent categories={defaultCategories} onReject={onReject} />);
+    render(<CookieConsent categories={defaultCategories} />);
 
-    await user.click(screen.getByText('Preferences'));
-    await user.click(screen.getByText('Reject All'));
-    expect(onReject).toHaveBeenCalledTimes(1);
-  });
+    await user.click(screen.getByText('Manage Preferences'));
+    // Expand a category to see its content
+    await user.click(screen.getByText('Functional Cookies'));
 
-  it('Close button starts closing animation', async () => {
-    const user = userEvent.setup();
-    const { container } = render(<CookieConsent categories={defaultCategories} />);
-
-    await user.click(screen.getByText('Preferences'));
-    await user.click(screen.getByText('Close'));
-    const banner = container.querySelector('.ds-cookie-consent');
-    expect(banner?.className).toContain('ds-cookie-consent--closing');
+    const links = screen.getAllByText('Learn more');
+    expect(links.length).toBeGreaterThanOrEqual(1);
+    const functionalLink = links.find((el) => el.closest('a')?.getAttribute('href') === '#functional');
+    expect(functionalLink).toBeInTheDocument();
   });
 
   // ─── Keyboard ───────────────────────────────────────────
@@ -188,7 +192,7 @@ describe('CookieConsent', () => {
   it('has aria-labelledby pointing to the heading', () => {
     render(<CookieConsent />);
     const dialog = screen.getByRole('dialog');
-    const heading = screen.getByText('We value your privacy');
+    const heading = screen.getByText('We use cookies');
     expect(dialog).toHaveAttribute('aria-labelledby', heading.id);
   });
 
@@ -223,7 +227,7 @@ describe('CookieConsent', () => {
   it('has no accessibility violations with preferences expanded', async () => {
     const user = userEvent.setup();
     const { container } = render(<CookieConsent categories={defaultCategories} />);
-    await user.click(screen.getByText('Preferences'));
+    await user.click(screen.getByText('Manage Preferences'));
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });

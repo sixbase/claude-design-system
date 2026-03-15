@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes } from 'react';
+import { Text } from '../typography/Typography';
 import './PriceDisplay.css';
 
 export interface PriceDisplayProps extends HTMLAttributes<HTMLDivElement> {
@@ -32,12 +33,12 @@ export const PriceDisplay = forwardRef<HTMLDivElement, PriceDisplayProps>(
 
     return (
       <div ref={ref} className={classes} {...props}>
-        <p className="ds-price-display__price">{price}</p>
+        <Text as="span" weight="medium" className="ds-price-display__price">{price}</Text>
         {comparePrice && (
-          <p className="ds-price-display__compare">
+          <Text as="span" muted className="ds-price-display__compare">
             <span className="ds-sr-only">Original price:</span>
             {comparePrice}
-          </p>
+          </Text>
         )}
       </div>
     );

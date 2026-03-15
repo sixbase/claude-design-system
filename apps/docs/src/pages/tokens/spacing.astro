@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import tokens from '../../../../../packages/tokens/src/tokens.json';
 
-const { spacing, radius } = tokens.primitive;
+const { spacing, radius, size } = tokens.primitive;
 
 // Split spacing into standard (numbered) and phi scales
 const standardSpacing = Object.entries(spacing).filter(([name]) => !name.startsWith('phi-'));
@@ -37,6 +37,15 @@ const phiUsage: Record<string, string> = {
   'phi-34': 'Hero section padding, major editorial divisions',
   'phi-55': 'Full-screen hero vertical padding, splash page spacing',
   'phi-89': 'Maximum editorial spacing — full-viewport hero margins',
+};
+
+// Content width tokens (filtered from size)
+const contentWidths = Object.entries(size).filter(([name]) => name.startsWith('content-'));
+
+const contentWidthUsage: Record<string, string> = {
+  'content-sm': 'Constrained dialogs, cookie consent banners, narrow overlays',
+  'content-md': 'Medium content areas, form containers, settings panels',
+  'content-lg': 'Wide content areas, page-level containers, feature sections',
 };
 
 // Usage annotations for radius tokens
@@ -110,6 +119,24 @@ const radiusUsage: Record<string, string> = {
           <code class="radius-name">--radius-{name}</code>
           <span class="radius-value">{value}</span>
           <span class="radius-usage">{radiusUsage[name]}</span>
+        </div>
+      ))}
+    </div>
+
+    <h2>Content widths</h2>
+    <p class="section-desc">
+      Constrained max-widths for content containers, dialogs, and overlays.
+      Use these instead of hardcoded pixel values for <code>max-width</code>.
+    </p>
+    <div class="token-table">
+      {contentWidths.map(([name, value]) => (
+        <div class="token-row">
+          <span class="token-name">
+            <code>--size-{name}</code>
+            <span class="token-size-info">{value}</span>
+            <span class="token-bar" style={`width: min(${value}, 100%);`} />
+            <span class="token-usage">{contentWidthUsage[name]}</span>
+          </span>
         </div>
       ))}
     </div>

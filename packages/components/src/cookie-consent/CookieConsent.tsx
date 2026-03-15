@@ -2,6 +2,7 @@ import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'rea
 import type { HTMLAttributes } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../accordion/Accordion';
 import { Button } from '../button/Button';
+import { Text } from '../typography/Typography';
 import './CookieConsent.css';
 
 // ─── Types ────────────────────────────────────────────────
@@ -17,6 +18,8 @@ export interface CookieCategory {
   required?: boolean;
   /** Default checked state (defaults to false for non-required) */
   defaultChecked?: boolean;
+  /** URL for a "Learn more" link shown below the description */
+  learnMoreHref?: string;
 }
 
 export interface CookieConsentProps extends HTMLAttributes<HTMLDivElement> {
@@ -36,6 +39,10 @@ export interface CookieConsentProps extends HTMLAttributes<HTMLDivElement> {
   heading?: string;
   /** Banner description / privacy message */
   description?: string;
+  /** URL for a "Learn more" link appended to the description */
+  learnMoreHref?: string;
+  /** Label for the learn more link */
+  learnMoreLabel?: string;
   /** Label for the Accept All button */
   acceptLabel?: string;
   /** Label for the Reject All button */
@@ -78,13 +85,15 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       categories,
       onAccept,
       onReject,
-      heading = 'We value your privacy',
-      description = 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.',
+      heading = 'We use cookies',
+      description = 'We use cookies to improve your experience and understand how our site is used. You can manage your preferences anytime.',
+      learnMoreHref,
+      learnMoreLabel = 'Learn more',
       acceptLabel = 'Accept All',
-      rejectLabel = 'Reject All',
-      preferencesLabel = 'Preferences',
+      rejectLabel = 'Decline All',
+      preferencesLabel = 'Manage Preferences',
       saveLabel = 'Save Preferences',
-      closeLabel = 'Close',
+      closeLabel = 'Back',
       className,
       ...props
     },
@@ -153,9 +162,9 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       setSelectedCategories((prev) => ({ ...prev, [categoryId]: checked }));
     }, []);
 
-    const handleClose = useCallback(() => {
-      close();
-    }, [close]);
+    const handleBack = useCallback(() => {
+      setShowPreferences(false);
+    }, []);
 
     // ─── Escape key ─────────────────────────────────────────
 
@@ -198,10 +207,18 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       >
         <div className="ds-cookie-consent__content" ref={bannerRef}>
           <div className="ds-cookie-consent__header">
-            <h2 id={headingId} className="ds-cookie-consent__heading">
+            <Text as="p" size="lg" weight="semibold" id={headingId}>
               {heading}
-            </h2>
-            <p className="ds-cookie-consent__description">{description}</p>
+            </Text>
+            <Text size="sm" muted>
+              {description}
+              {learnMoreHref && (
+                <>
+                  {' '}
+                  <a href={learnMoreHref} className="ds-cookie-consent__link">{learnMoreLabel}</a>
+                </>
+              )}
+            </Text>
           </div>
 
           {hasCategories && showPreferences && (
@@ -219,11 +236,18 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
                     >
                       {category.label}
                     </AccordionTrigger>
-                    {category.description && (
+                    {(category.description || category.learnMoreHref) && (
                       <AccordionContent>
-                        <p className="ds-cookie-consent__category-description">
-                          {category.description}
-                        </p>
+                        {category.description && (
+                          <Text size="sm" muted className="ds-cookie-consent__category-description">
+                            {category.description}
+                          </Text>
+                        )}
+                        {category.learnMoreHref && (
+                          <a href={category.learnMoreHref} className="ds-cookie-consent__link ds-cookie-consent__category-link">
+                            Learn more
+                          </a>
+                        )}
                       </AccordionContent>
                     )}
                   </AccordionItem>
@@ -235,25 +259,16 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
           <div className="ds-cookie-consent__actions">
             {hasCategories && showPreferences ? (
               <>
+                <Button variant="secondary" size="sm" onClick={handleBack}>
+                  {closeLabel}
+                </Button>
                 <Button variant="primary" size="sm" onClick={handleSavePreferences}>
                   {saveLabel}
-                </Button>
-                <Button variant="secondary" size="sm" onClick={handleAcceptAll}>
-                  {acceptLabel}
-                </Button>
-                <Button variant="secondary" size="sm" onClick={handleReject}>
-                  {rejectLabel}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={handleClose}>
-                  {closeLabel}
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="primary" size="sm" onClick={handleAcceptAll}>
-                  {acceptLabel}
-                </Button>
-                {hasCategories ? (
+                {hasCategories && (
                   <Button
                     variant="secondary"
                     size="sm"
@@ -261,11 +276,13 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
                   >
                     {preferencesLabel}
                   </Button>
-                ) : (
-                  <Button variant="secondary" size="sm" onClick={handleReject}>
-                    {rejectLabel}
-                  </Button>
                 )}
+                <Button variant="secondary" size="sm" onClick={handleReject}>
+                  {rejectLabel}
+                </Button>
+                <Button variant="primary" size="sm" onClick={handleAcceptAll}>
+                  {acceptLabel}
+                </Button>
               </>
             )}
           </div>

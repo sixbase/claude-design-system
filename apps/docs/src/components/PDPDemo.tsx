@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
   Badge, Breadcrumb, Button, Caption,
-  Carousel, CarouselSlide, ColorPicker,
+  Carousel, CarouselSlide, ColorPicker, CookieConsent,
   FeatureBlock, Heading, ImageGallery,
   PriceDisplay, QuantitySelector, StarRating, StockIndicator, Text,
 } from '@ds/components';
@@ -191,6 +191,17 @@ export function PDPDemo() {
         title="12 Grams of Confidence"
         description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
         image={<img src={makeLifestylePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+      />
+
+      <CookieConsent
+        categories={[
+          { id: 'essential', label: 'Strictly Necessary Cookies', description: "These keep the site running — things like staying logged in, keeping your cart, and processing secure payments. They can't be turned off.", required: true, defaultChecked: true, learnMoreHref: '#' },
+          { id: 'functional', label: 'Functional Cookies', description: "These remember your preferences — like your language, region, or how you've customized the site. Some are set by us, others by third-party services we use to enhance your experience. If you turn these off, some of those features may not work as expected.", defaultChecked: true, learnMoreHref: '#' },
+          { id: 'performance', label: 'Performance Cookies', description: "These help us understand how the site is performing and how people are using it — things like which pages get the most visits, where traffic is coming from, and where things could be smoother. This data helps us improve the experience. None of it is tied to you personally.", defaultChecked: true, learnMoreHref: '#' },
+          { id: 'targeting', label: 'Targeting Cookies', description: "These may be placed by our advertising partners to build a profile of your interests based on your browsing activity. They're used to show you more relevant ads on other sites. They don't store personal information directly, but work by identifying your browser and device. If you turn these off, you'll see less targeted advertising.", learnMoreHref: '#' },
+        ]}
+        onAccept={(ids) => console.log('Accepted:', ids)}
+        onReject={() => console.log('Rejected all')}
       />
     </>
   );

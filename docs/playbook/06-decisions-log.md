@@ -732,3 +732,31 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 **Decision:** Constrain all body/paragraph text to `max-width: 65ch` using `ch` units. Applied at three levels: (1) `.ds-text` base class in Typography.css — covers all Text component body copy automatically, only affects block-level renderings since inline elements ignore max-width; (2) raw `<p>` elements in components that don't use Text (FeatureBlock description, CookieConsent description); (3) `.ds-readable-width` utility class for non-component usage.
 **Rationale:** 65 characters is the typographic sweet spot for reading comfort (Bringhurst, 45–75ch range). Using `ch` units keeps the constraint relative to the font, so it adapts automatically if type sizes or fonts change. Headings are exempt to maintain visual hierarchy — they can run wider than body text.
 **Status:** Active
+
+---
+
+### Content-Width Tokens for Container Max-Widths
+
+**Date/Phase:** 2026-03-15, cookie consent polish
+**Context:** The CookieConsent banner was using a hardcoded `max-width: 960px`. Needed a way to constrain content containers (dialogs, overlays, banners) without magic numbers. The primitives-first workflow requires: (1) add token to `tokens.json`, (2) document it on the docs foundation page, (3) then consume it in the component.
+**Options considered:**
+1. Hardcoded pixel values per component — inconsistent, not reusable
+2. A single `--size-content` token — not flexible enough for different contexts
+3. Three-tier content-width tokens (sm/md/lg) — covers constrained dialogs through wide page containers
+**Decision:** Added `--size-content-sm` (640px), `--size-content-md` (768px), `--size-content-lg` (960px) to the `primitive.size` category in `tokens.json`. Documented on the Spacing foundation page under a "Content widths" section with usage annotations. CookieConsent banner uses `--size-content-sm`.
+**Rationale:** Three breakpoints cover the common range: sm for constrained overlays (cookie consent, cookie banners), md for form containers and settings panels, lg for wide page-level containers. Values align with common responsive breakpoints (640/768/960). Adding them as primitives ensures any component can reference them without hardcoding.
+**Status:** Active
+
+---
+
+### Cookie Consent — 3-Button Main Dialog + 2-Button Preferences
+
+**Date/Phase:** 2026-03-15, final copy implementation
+**Context:** Finalizing the cookie consent UX with approved copy. Needed to decide button layout for the main dialog and the preferences screen.
+**Options considered:**
+1. Main: Accept All + Decline All (2 buttons, no preferences inline)
+2. Main: Manage Preferences + Accept All (2 buttons, decline hidden in preferences)
+3. Main: Manage Preferences + Decline All + Accept All (3 buttons — all options visible upfront)
+**Decision:** Main dialog shows 3 buttons: Manage Preferences (secondary), Decline All (secondary), Accept All (primary). Preferences screen shows 2 buttons: Back (secondary), Save Preferences (primary). "Back" returns to main dialog without saving or closing the banner.
+**Rationale:** Three buttons on the main dialog gives users every option immediately without forcing them into a sub-screen. Keeping the preferences screen to just Back + Save reduces cognitive load when the user is already making granular choices. "Back" (not "Close") makes it clear the banner stays open.
+**Status:** Active

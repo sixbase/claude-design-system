@@ -8,23 +8,30 @@ const categories: CookieCategory[] = [
   {
     id: 'essential',
     label: 'Strictly Necessary Cookies',
-    description: 'These cookies are essential for the website to function and cannot be switched off in our systems. They are usually only set in response to actions made by you.',
+    description: 'These keep the site running — things like staying logged in, keeping your cart, and processing secure payments. They can\'t be turned off.',
     required: true,
+    defaultChecked: true,
+    learnMoreHref: '#',
   },
   {
     id: 'functional',
     label: 'Functional Cookies',
-    description: 'These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers.',
+    description: 'These remember your preferences — like your language, region, or how you\'ve customized the site. Some are set by us, others by third-party services we use to enhance your experience. If you turn these off, some of those features may not work as expected.',
+    defaultChecked: true,
+    learnMoreHref: '#',
   },
   {
     id: 'performance',
     label: 'Performance Cookies',
-    description: 'These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site.',
+    description: 'These help us understand how the site is performing and how people are using it — things like which pages get the most visits, where traffic is coming from, and where things could be smoother. This data helps us improve the experience. None of it is tied to you personally.',
+    defaultChecked: true,
+    learnMoreHref: '#',
   },
   {
     id: 'targeting',
     label: 'Targeting Cookies',
-    description: 'These cookies may be set through our site by our advertising partners. They may be used to build a profile of your interests and show you relevant adverts on other sites.',
+    description: 'These may be placed by our advertising partners to build a profile of your interests based on your browsing activity. They\'re used to show you more relevant ads on other sites. They don\'t store personal information directly, but work by identifying your browser and device. If you turn these off, you\'ll see less targeted advertising.',
+    learnMoreHref: '#',
   },
 ];
 
