@@ -73,7 +73,7 @@ export const Sizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
-          <p style={{ marginBottom: '0.5rem', fontWeight: 600 }}>Size: {size}</p>
+          <p style={{ marginBottom: 'var(--spacing-2)', fontWeight: 'var(--font-weight-semibold)' }}>Size: {size}</p>
           <Accordion type="single" collapsible size={size}>
             <AccordionItem value="item">
               <AccordionTrigger>Accordion trigger ({size})</AccordionTrigger>

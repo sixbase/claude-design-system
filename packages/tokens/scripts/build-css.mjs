@@ -58,6 +58,13 @@ const css = lines(
   ...Object.entries(p.zIndex).map(([k, v]) => `  --z-index-${k}: ${v};`),
   // breakpoints (for JS access; use raw values in @media queries)
   ...Object.entries(p.breakpoint).map(([k, v]) => `  --breakpoint-${k}: ${v};`),
+  ``,
+  `  /* ── Composite tokens (derived from primitives) ──── */`,
+  `  --color-overlay: color-mix(in srgb, var(--color-foreground) 38.2%, transparent);`,
+  `  --focus-ring-color: color-mix(in srgb, var(--color-focus-ring) 20%, transparent);`,
+  `  --focus-ring: 0 0 0 3px var(--focus-ring-color);`,
+  `  --focus-ring-inset: inset 0 0 0 3px var(--focus-ring-color);`,
+  `  --focus-ring-error: 0 0 0 3px color-mix(in srgb, var(--color-destructive) 20%, transparent);`,
   `}`,
   ``,
   `/* ─── Semantic tokens — light mode ─────────────────── */`,
@@ -118,6 +125,10 @@ const css = lines(
 );
 
 const globals = lines(
+  ``,
+  `/* ─── Scrollbar hiding utility ──────────────────────── */`,
+  `.ds-scroll-hidden { scrollbar-width: none; }`,
+  `.ds-scroll-hidden::-webkit-scrollbar { display: none; }`,
   ``,
   `/* ─── Form element font inheritance ────────────────── */`,
   `/* Browsers don't inherit font on form controls — fix globally */`,

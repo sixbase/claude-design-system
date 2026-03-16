@@ -45,7 +45,7 @@
 
 .ds-card--interactive:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 .ds-card--interactive:active {
@@ -54,8 +54,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ds-card--interactive,
+  .ds-card--interactive:hover,
+  .ds-card--interactive:active {
+    transform: none;
+  }
   .ds-card--interactive {
-    transform: none !important;
     transition: box-shadow var(--transition-normal);
   }
 }

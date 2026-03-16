@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import tokens from '../../../../../packages/tokens/src/tokens.json';
+import '../../styles/token-docs.css';
 
 const { font } = tokens.primitive;
 ---
@@ -171,61 +172,144 @@ const { font } = tokens.primitive;
     </div>
 
     <h2>Line heights</h2>
-    <div class="token-table token-table--two-col">
+    <div class="token-table">
       {Object.entries(font.lineHeight).map(([name, value]) => (
         <div class="token-row">
           <span class="token-name"><code>--line-height-{name}</code></span>
+          <span class="token-preview" style={`line-height: ${value}; font-size: 0.875rem;`}>
+            The quick brown fox jumps<br />over the lazy dog nearby
+          </span>
           <span class="token-value">{value}</span>
         </div>
       ))}
     </div>
+
+    <h2>Letter spacing</h2>
+    <div class="token-table">
+      {Object.entries(font.letterSpacing).map(([name, value]) => (
+        <div class="token-row">
+          <span class="token-name"><code>--letter-spacing-{name}</code></span>
+          <span class="token-preview" style={`letter-spacing: ${value}; font-size: 1.25rem;`}>
+            Design System
+          </span>
+          <span class="token-value">{value}</span>
+        </div>
+      ))}
+    </div>
+
+    <h2>Semantic mapping</h2>
+    <p>How the typography components combine these tokens. Use this table when building custom text styles outside the components.</p>
+    <table class="mapping-table">
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Size</th>
+          <th>Weight</th>
+          <th>Line height</th>
+          <th>Letter spacing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Heading h1</td>
+          <td><code>4xl</code> / 54px</td>
+          <td><code>semibold</code></td>
+          <td><code>tight</code> / 1.15</td>
+          <td><code>tight</code> / -0.025em</td>
+        </tr>
+        <tr>
+          <td>Heading h2</td>
+          <td><code>3xl</code> / 42px</td>
+          <td><code>semibold</code></td>
+          <td><code>tight</code> / 1.15</td>
+          <td><code>tight</code> / -0.025em</td>
+        </tr>
+        <tr>
+          <td>Heading h3</td>
+          <td><code>2xl</code> / 33px</td>
+          <td><code>semibold</code></td>
+          <td><code>tight</code> / 1.15</td>
+          <td><code>tight</code> / -0.025em</td>
+        </tr>
+        <tr>
+          <td>Heading h4</td>
+          <td><code>xl</code> / 26px</td>
+          <td><code>semibold</code></td>
+          <td><code>tight</code> / 1.15</td>
+          <td><code>tight</code> / -0.025em</td>
+        </tr>
+        <tr>
+          <td>Text lg</td>
+          <td><code>lg</code> / 20px</td>
+          <td><code>normal</code></td>
+          <td><code>snug</code> / 1.375</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Text base</td>
+          <td><code>base</code> / 16px</td>
+          <td><code>normal</code></td>
+          <td><code>snug</code> / 1.375</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Text sm</td>
+          <td><code>sm</code> / 14px</td>
+          <td><code>normal</code></td>
+          <td><code>normal</code> / 1.5</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Caption</td>
+          <td><code>xs</code> / 12px</td>
+          <td><code>normal</code></td>
+          <td><code>normal</code> / 1.5</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Code</td>
+          <td>0.9em (relative)</td>
+          <td><code>normal</code></td>
+          <td>inherited</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </BaseLayout>
 
 <style>
+  /* ─── Typography-specific: grid layout for token rows ─── */
   .token-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
     margin: var(--spacing-4) 0 var(--spacing-8);
-    background-color: var(--color-background-surface);
   }
+
   .token-row {
     display: grid;
     grid-template-columns: 220px 1fr 120px;
     align-items: center;
-    padding: var(--spacing-3) var(--spacing-4);
-    border-bottom: 1px solid var(--color-border);
     gap: var(--spacing-4);
   }
+
   .token-table--annotated .token-row {
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: var(--spacing-3);
   }
-  .token-table--annotated .token-name {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+
   .token-table--annotated .token-name code {
     display: inline;
   }
+
   .token-table--annotated .token-value {
     display: none;
   }
-  .token-size-info {
-    font-family: var(--font-family-code);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-muted);
-  }
+
   .token-row--header {
     background: var(--color-background-subtle);
     align-items: center;
   }
+
   .token-row--header span {
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
@@ -237,71 +321,54 @@ const { font } = tokens.primitive;
     padding: 0;
     font-family: inherit;
   }
+
   .token-row--header .token-value {
     text-align: right;
   }
-  .token-usage {
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-subtle);
-    line-height: var(--line-height-relaxed);
-  }
-  .token-row:last-child { border-bottom: none; }
-  .token-name code {
-    font-size: var(--font-size-xs);
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--color-foreground);
-  }
-  .token-preview {
-    color: var(--color-foreground);
-  }
-  .token-value {
-    font-family: var(--font-family-code);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-subtle);
-    text-align: right;
-  }
-  .scale-desc {
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    margin-top: calc(var(--spacing-1) * -1);
-    margin-bottom: var(--spacing-2);
-  }
-  .scale-badge {
-    display: inline-block;
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    vertical-align: middle;
-    margin-left: var(--spacing-2);
-    font-family: var(--font-family-code);
-  }
-  .scale-badge--primary {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
-  }
-  .scale-badge--secondary {
-    background: var(--color-secondary);
-    color: var(--color-secondary-foreground);
-    border: 1px solid var(--color-border);
-  }
-  .scale-badge--muted {
-    background: transparent;
-    color: var(--color-foreground-muted);
-    border: 1px solid var(--color-border);
-  }
-  .token-table--muted {
-    opacity: var(--opacity-high);
-  }
+
   .token-table--two-col .token-row {
     grid-template-columns: 1fr auto;
   }
+
   .token-px {
     display: block;
     font-size: var(--font-size-xs);
     color: var(--color-foreground-muted);
     margin-top: 2px;
+  }
+
+  /* ─── Semantic mapping table ─────────────────────────── */
+  .mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-4) 0 var(--spacing-8);
+    background-color: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .mapping-table th {
+    text-align: left;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground);
+  }
+  .mapping-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-foreground-subtle);
+  }
+  .mapping-table tr:last-child td {
+    border-bottom: none;
+  }
+  .mapping-table code {
+    font-size: var(--font-size-xs);
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-foreground);
   }
 </style>

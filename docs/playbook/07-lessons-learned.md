@@ -460,3 +460,171 @@ Extracting the `makePlaceholder()` function (identical SVG-generation logic dupl
 ### Redundant declarations are overrides in disguise
 
 When auditing block components for primitive overrides, don't just look for **conflicting** values — also check for **redundant** ones. If a block component sets `font-size: var(--font-size-sm)` on a wrapper element inside an Accordion that already applies `font-size: var(--font-size-sm)` via its `sm` size variant, the output looks identical today. But it's a hidden coupling: if the primitive's `sm` size changes tomorrow, the block component won't follow because it has its own hardcoded copy. Treat redundant declarations the same as conflicting overrides — delete them and let the primitive own the value. Found this in `CookieConsent`, where `.ds-cookie-consent__category-description` duplicated `font-family`, `font-size`, `line-height`, and `color` that the Accordion primitive already provided.
+
+### Form elements don't inherit `font-family` — always add a global reset {#form-font-inheritance}
+
+**Problem:** `<input>`, `<select>`, `<textarea>`, and `<button>` elements rendered in the browser's default font (Arial/system font) instead of the design system's `--font-family-body`, even when all parent elements had the correct font set.
+
+**Root cause:** Browser UA stylesheets set `font-family: monospace` (textarea), `font-family: -apple-system, ...` or similar on form controls, overriding CSS inheritance. Unlike `color` and most text properties, `font-family` on form elements does NOT inherit from parent elements by default.
+
+**The fix:** Add a global reset in the token CSS output (`build-css.mjs`):
+```css
+button, input, select, textarea {
+  font-family: inherit;
+}
+```
+
+**Why system-level, not per-component:** We initially patched individual components (`Input.css`, `Accordion.css`) with `font-family: inherit`. This worked but was whack-a-mole — every new form-based component would need the same fix. Moving it to the global token CSS ensures any consumer of the design system gets the fix automatically. Zero-effort for future components.
+
+**Rule:** Every design system should include this reset from day one. Add it to your CSS reset/normalize layer alongside `box-sizing: border-box`. Don't wait until someone notices the wrong font on an input.
+
+### Token naming: role-based > classification-based {#token-naming-role-vs-classification}
+
+**Problem:** `--font-family-sans` pointed to `'Ancizar Serif'` — a serif font. This was confusing and counterintuitive. Anyone reading the CSS would assume it was a sans-serif font.
+
+**The fix:** Rename to role-based tokens: `--font-family-body` (for body/UI text) and `--font-family-code` (for code/monospace). The name describes what the token is *for*, not what the font *is*.
+
+**Why it matters for the next system:** Classification-based names (`sans`/`mono`/`serif`) feel natural at first because Tailwind uses them. But they encode the *current value's classification* into the *token name*. When the brand direction changes and you swap a serif for a sans-serif, you either live with a misleading name or do a codebase-wide rename. Role-based names (`body`/`code`) survive any font swap without renaming.
+
+**Rule:** Name tokens by intent/role, not by value classification. This applies beyond fonts — `--color-blue` should be `--color-info`, `--shadow-big` should be `--shadow-xl`.
+
+### Doc/prose styles MUST use direct child selectors to prevent leaking into component previews {#prose-child-selectors}
+
+**Problem:** `.prose h1 { letter-spacing: var(--letter-spacing-tighter) }` in the docs site's `base.css` was leaking into headings rendered inside `<Preview>` component galleries. The component's own `letter-spacing: var(--letter-spacing-tight)` was being overridden by the more specific `.prose h1` selector.
+
+**Why it was hard to diagnose:** The component CSS was correct. The Typography component tests passed. The issue only appeared in the docs site because the gallery was nested inside a `.prose` container. DevTools showed the correct CSS rule on the component, but the computed value was wrong because of the cascade.
+
+**The fix:** Scope all prose typography rules to direct children only:
+```css
+/* ✗ Leaks into any nested h1, including component previews */
+.prose h1 { letter-spacing: var(--letter-spacing-tighter); }
+
+/* ✓ Only targets h1 directly inside .prose */
+.prose > h1 { letter-spacing: var(--letter-spacing-tight); }
+```
+
+**Rule:** Any docs site that wraps MDX/markdown content in a styling container (`.prose`, `.markdown-body`, etc.) MUST use `>` direct child selectors for heading and paragraph styles. Component preview boxes will inevitably contain these same elements, and descendant selectors will leak.
+
+### Serif fonts don't need negative letter-spacing — start at normal {#serif-letter-spacing}
+
+**Problem:** `--letter-spacing-tighter` (-0.05em) caused visible letter collision on Ancizar Serif at 54px (h1 size). Even `--letter-spacing-tight` (-0.025em) felt too tight. Serif typefaces have built-in optical spacing from their stroke terminals and decorative elements — negative tracking fights the type designer's intent.
+
+**The fix:** Removed all negative letter-spacing from headings. All heading levels (h1–h4) now use `normal` (0em) letter-spacing, letting the serif's natural spacing breathe.
+
+**Rule for the next system:** Always start with `normal` letter-spacing for serif fonts and only tighten if the typeface specifically calls for it. Negative tracking is primarily a tool for geometric sans-serifs at large display sizes. When tuning, test with the largest heading size in the actual brand font, not a generic system font.
+
+### Line-height: golden ratio (1.618) is too airy for serif body text {#serif-line-height}
+
+**Problem:** `--line-height-relaxed` (1.618, the golden ratio) was used for body text (`Text` component, lg and base sizes). While mathematically elegant, it created too much vertical spacing between lines in long paragraphs — the text felt sparse and disconnected.
+
+**The fix:** Changed body text line-height from `relaxed` (1.618) to `snug` (1.375). The text immediately felt more cohesive and readable.
+
+**Why serif fonts amplify this:** Serif fonts like Ancizar Serif have tall ascenders and x-heights relative to their body. Combined with generous line-height, each line of text sits in a visually isolated band of whitespace. Sans-serif fonts are more forgiving because their simpler letterforms create less visual weight per line.
+
+**Rule:** Don't assume typographic "ideal" ratios work universally. Golden ratio line-height works great for short text blocks, pull quotes, and marketing copy where breathing room is desirable. For long-form reading paragraphs, especially with serif fonts, 1.375–1.5 is the sweet spot. Always test with realistic paragraph content (3+ sentences), not single-line samples.
+
+### Always document semantic token mappings — they're invisible from raw token lists {#semantic-mapping-docs}
+
+**Problem:** The Foundation Typography page documented every individual token (font sizes, weights, line heights, letter spacing) but had no section showing how the Typography *components* combine these tokens. A developer could see that `--line-height-snug` exists and that `--font-size-lg` exists, but had no way to know that `<Text size="lg">` uses both together. They'd have to read Typography.css to discover this.
+
+**The fix:** Added a "Semantic mapping" table to the Foundation Typography docs page showing every typography component variant and the exact token combination it uses:
+
+| Element | Size | Weight | Line height | Letter spacing |
+|---------|------|--------|-------------|----------------|
+| Heading h1 | `--font-size-4xl` | semibold | `--line-height-tight` | `--letter-spacing-tight` |
+| Text base | `--font-size-base` | normal | `--line-height-snug` | normal |
+| Caption | `--font-size-xs` | normal | `--line-height-normal` | normal |
+
+**Rule:** For every token category that components combine (typography, spacing, color), document the semantic mapping alongside the raw token values. Raw values tell you what's available; semantic mappings tell you what's actually used and how. This is the single most useful reference when building new layouts — you can pick the right component variant without reading CSS source files.
+
+### Typography token docs need visual previews for ALL categories, not just obvious ones {#visual-previews-all-tokens}
+
+**Problem:** The Foundation Typography page had visual previews for font families and font sizes but showed line heights and letter spacing as raw token tables only (name + value). Developers had to guess what `--line-height-snug` vs `--line-height-normal` actually looked like.
+
+**The fix:** Added visual preview sections for both line heights (two-line paragraph samples at each value) and letter spacing ("Design System" rendered at each tracking value).
+
+**Rule:** Every token category in the docs should have a visual preview. If a token affects appearance, show it — don't just list the name and value. The cost of adding a preview is ~10 lines of HTML; the time saved by developers not having to build a mental model from raw numbers is enormous. Applies especially to: line heights, letter spacing, shadows, border radius, opacity, and transitions.
+
+### Heading semantic level ≠ visual size — decouple them, but document it loudly {#heading-semantic-vs-visual}
+
+**Problem:** Seeing `<Heading as="h1" size="2xl">` on the PDP product title caused confusion — "why isn't h1 using the h1 size?" The `Heading` component correctly decouples semantic level (`as`) from visual size (`size`), but this isn't obvious, and the size scale names (`xl`–`4xl`) create an implicit mental mapping to heading levels (h4–h1) that makes overrides feel wrong.
+
+**Why decoupling is necessary:** Layout context determines appropriate visual size, not document hierarchy. A product name should be `h1` for SEO/accessibility, but a 54px heading inside a 50%-width PDP details column would dominate the viewport. The PDP uses `size="2xl"` (33px max) — visually proportional to the column, semantically correct for the page.
+
+**Why not add semantic aliases (e.g. `size="h1"`):** Tempting, but creates two naming systems for the same scale. "Is `h3` the same as `2xl`?" becomes the new confusion. One abstract scale is cleaner — it just needs clear documentation.
+
+**Rule:** When your Heading component decouples `as` from `size`, document this pattern prominently with a real-world example (like the PDP). The abstract size scale will confuse people who expect h1 = biggest. Make the default mapping intuitive (`<Heading as="h1">` defaults to `4xl`) so the common case just works, and explain overrides as the exception, not the rule.
+
+### Focus ring duplication: use composite tokens, not raw expressions {#focus-ring-tokens}
+
+**Problem:** The focus ring `box-shadow` expression (`0 0 0 3px color-mix(...)`) was copy-pasted into 14 locations across 10 component CSS files. Three variants existed: standard, error, and inset. Changing the ring width, color opacity, or style required editing all 14 locations with no guarantee of consistency.
+
+**The fix:** Created composite CSS custom properties (`--focus-ring`, `--focus-ring-error`, `--focus-ring-inset`) in the token build script. Each component now references a single token.
+
+**Why not a utility class:** A class like `.ds-focus-ring` can't compose with `box-shadow` — Button's primary variant needs `box-shadow: var(--shadow-sm), var(--focus-ring)`, which requires the value to be a CSS custom property, not a class.
+
+**Rule:** When a CSS expression appears more than 3 times and varies in predictable ways (standard/error/inset), create a composite token. Composite tokens live in `build-css.mjs` alongside the semantic color tokens, not in `tokens.json` (which holds only primitive values).
+
+### SVG IDs in reusable React components must use useId() {#svg-use-id}
+
+**Problem:** `StarRating` used a hardcoded `id="ds-star-half"` for an SVG `<clipPath>`. When two StarRating components rendered on the same page (common on PDPs with product rating + review list), all half-stars referenced the first component's clipPath, breaking the second instance.
+
+**The fix:** Used React's `useId()` hook in the parent component to generate a unique ID per instance.
+
+**Rule:** Never hardcode SVG element IDs (`id`, `clipPath`, `mask`, `filter`, `linearGradient`) in reusable React components. Always use `useId()` to ensure uniqueness. Generate the ID at the highest component level that needs it, not inside mapped child elements.
+
+### Never use !important in component CSS — restructure cascade instead {#no-important}
+
+**Problem:** `Button.css` and `Card.css` used `!important` in `@media (prefers-reduced-motion: reduce)` blocks because the reduced-motion rules had lower specificity than the variant-specific `:active` rules they needed to override.
+
+**The fix:** (1) Matched the specificity of the rules being overridden (e.g., `.ds-button:active:not(:disabled)` instead of `.ds-button:active`). (2) Moved the `@media` block to the end of the file so cascade order resolves ties.
+
+**Rule:** `!important` in a design system is always a specificity problem in disguise. Fix it by restructuring cascade order (place overriding rules after the rules they override) and matching specificity. This prevents the `!important` arms race where each new rule needs `!important` to override the previous one.
+
+### Story and demo files must use tokens — they're documentation {#story-tokens}
+
+**Problem:** 60+ inline styles across story and gallery files used raw pixel values (`gap: '12px'`, `fontWeight: 600`) instead of token references. Developers copying story code as a starting point would inherit hardcoded values that bypass the token system.
+
+**The fix:** Converted all pixel values to token references (`gap: 'var(--spacing-3)'`). Created `demo-utilities.css` with shared utility classes for common patterns (`.ds-unstyled-link`, `.ds-demo-cover-image`).
+
+**Rule:** Story files are documentation — they're often the first code a developer copies. Every inline style in a story should use a token reference. Container widths for decorators are the one exception (test harness setup). For repeated patterns across stories, create utility classes in a shared CSS file rather than duplicating inline styles.
+
+### Transition token naming: generated names must match consumed names {#transition-token-naming}
+
+**Problem:** Accordion and CookieConsent CSS referenced `--transition-timing-ease-out` and `--transition-timing-ease-in`, but the token build generates `--transition-easing-out` and `--transition-easing-in`. The CSS variables silently failed to resolve, falling back to browser defaults. No error, no warning — the animation just used a different easing curve than intended.
+
+**The fix:** Global find-and-replace: `--transition-timing-ease-*` → `--transition-easing-*` across all component CSS files.
+
+**Rule:** After renaming tokens in `tokens.json` or `build-css.mjs`, grep the entire `packages/components/src/` directory for the OLD name. CSS custom properties fail silently — a reference to a non-existent variable simply returns `initial`, which is almost impossible to notice visually. Add a CI step or build-time check if this bites you more than once.
+
+### Hardcoded easing values bypass the token system {#hardcoded-easing}
+
+**Problem:** Select.css used `ease-out` (a hardcoded CSS keyword) while every other component used `var(--transition-easing-out)` for the same purpose. This meant changing the system-wide easing curve wouldn't affect the Select dropdown animation.
+
+**The fix:** Replaced the hardcoded `ease-out` with `var(--transition-easing-out)`.
+
+**Rule:** Easing functions are design decisions, not implementation details. If duration is tokenized, easing should be too. Grep for bare `ease-in`, `ease-out`, `ease-in-out`, and `cubic-bezier(` in component CSS — every instance should be a token reference.
+
+### Demo/gallery components should use Typography primitives, not raw HTML {#gallery-typography}
+
+**Problem:** Gallery components (CardGallery, ModalGallery, CarouselGallery) used raw `<p style={{ margin: 0, fontSize: '...' }}>` elements instead of the design system's `<Text>` and `<Heading>` components. This created two issues: (1) inline styles with hardcoded values that bypass tokens, (2) inconsistent rendering since raw `<p>` elements don't get the same optical centering, font-family, or line-height as `<Text>`.
+
+**The fix:** Replaced all raw `<p>` elements with `<Text>` and `<Heading>` components. Created CSS utility classes in `demo-utilities.css` for repeated patterns (`.ds-demo-slide-image`, `.ds-demo-prose`, `.ds-demo-section-label`).
+
+**Rule:** Gallery/demo code should use the component library's own primitives. If you wouldn't write `<p style={{ fontSize: '14px' }}>` in a real app, don't write it in a demo. Developers copy demo code — make it exemplary.
+
+### Composite tokens turn magic numbers into named concepts {#composite-tokens}
+
+**Problem:** Modal.css used `color-mix(in srgb, var(--color-foreground) 40%, transparent)` — the `40%` was an unnamed magic number. Even though the token system had `--opacity-medium: 0.382` (38.2%, derived from 1/φ), the overlay wasn't using it.
+
+**The fix:** Added a `--color-overlay` composite token in `build-css.mjs` that uses the φ-derived 38.2% value. Modal.css now just says `background-color: var(--color-overlay)`.
+
+**Rule:** When a value has semantic meaning (like "overlay dimming"), give it a composite token name. This is the same pattern used for `--focus-ring-color`. Composite tokens live in the build script alongside the focus ring definitions.
+
+### Fixed heights on content containers are usually wrong {#fixed-height-antipattern}
+
+**Problem:** CookieConsent had `max-height: 260px` on the preferences panel, forcing a scrollbar when the accordion content was taller. This is a common CSS instinct — cap the height, add `overflow: auto` — but it fights the content.
+
+**The fix:** Removed the fixed max-height on desktop. On mobile, used `max-height: 50vh` as a viewport-relative safety cap.
+
+**Rule:** Prefer content-driven sizing. Use `max-height` only when the container truly must be bounded (e.g., viewport-relative mobile constraints), and use viewport units (`vh`) rather than fixed pixels. If you're adding `overflow-y: auto`, ask: "Would the user prefer to scroll inside this box, or have it just be taller?"

@@ -28,7 +28,7 @@ export const Default: Story = {
 
 export const SemanticTokens: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-4)' }}>
       <ColorSwatch color="var(--color-background)" name="--color-background" />
       <ColorSwatch color="var(--color-background-subtle)" name="--color-background-subtle" />
       <ColorSwatch color="var(--color-foreground)" name="--color-foreground" />
@@ -45,7 +45,7 @@ export const SemanticTokens: Story = {
 
 export const StonePalette: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-4)' }}>
       <ColorSwatch color="#FFFFFF" name="stone-0" value="#FFFFFF" />
       <ColorSwatch color="#FAF9F7" name="stone-50" value="#FAF9F7" />
       <ColorSwatch color="#F2F0EB" name="stone-100" value="#F2F0EB" />
@@ -64,10 +64,10 @@ export const StonePalette: Story = {
 
 export const BrandPalettes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
       <div>
-        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Brick</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wider)', marginBottom: 'var(--spacing-3)', color: 'var(--color-foreground-muted)' }}>Brick</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-4)' }}>
           <ColorSwatch color="#FDF0ED" name="brick-50" value="#FDF0ED" />
           <ColorSwatch color="#FAE0D8" name="brick-100" value="#FAE0D8" />
           <ColorSwatch color="#E07060" name="brick-400" value="#E07060" />
@@ -77,8 +77,8 @@ export const BrandPalettes: Story = {
         </div>
       </div>
       <div>
-        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Sage</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wider)', marginBottom: 'var(--spacing-3)', color: 'var(--color-foreground-muted)' }}>Sage</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-4)' }}>
           <ColorSwatch color="#F2F7F0" name="sage-50" value="#F2F7F0" />
           <ColorSwatch color="#E0EDD9" name="sage-100" value="#E0EDD9" />
           <ColorSwatch color="#82B074" name="sage-400" value="#82B074" />

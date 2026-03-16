@@ -858,3 +858,159 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 **Decision:** Option 2. Renamed `--font-family-sans` → `--font-family-body`, `--font-family-mono` → `--font-family-code`, deleted unused `--font-family-serif`. Updated `tokens.json`, all 18 CSS files, 6 TSX files, 3 Astro doc pages, and playbook references.
 **Rationale:** Role-based naming is industry best practice for design tokens. Token names should describe intent (what the token is *for*) not the current value (what the font *is*). This way, swapping Ancizar Serif for a sans-serif body font in the future won't require renaming every token reference. The `serif` token was dead code with zero consumers.
 **Status:** Active
+
+---
+
+### Global Form Element Font Inheritance Reset
+
+**Date/Phase:** 2026-03-15, typography polish
+**Context:** `<input>` elements were rendering in the browser's default font (Arial) instead of the design system's Ancizar Serif, even when parent elements had `font-family: var(--font-family-body)`. Browser UA stylesheets override `font-family` on form controls (`<button>`, `<input>`, `<select>`, `<textarea>`).
+**Options considered:**
+1. Per-component `font-family: inherit` on each form-based component CSS — works but is whack-a-mole
+2. Global reset in `tokens.css` — one rule fixes all form elements system-wide
+3. Require consumers to add their own CSS reset — shifts the burden
+**Decision:** Option 2. Added `button, input, select, textarea { font-family: inherit; }` to the globals section of `build-css.mjs`. Removed per-component `font-family: inherit` from Accordion.css and Input.css.
+**Rationale:** A global reset ensures every consumer of `@ds/tokens/css` gets the fix automatically. No future form-based component will ever have this bug. This is a well-known CSS reset pattern (normalize.css includes it) that should have been added from day one.
+**Status:** Active
+
+---
+
+### Body Text Line-Height: `relaxed` (1.618) → `snug` (1.375)
+
+**Date/Phase:** 2026-03-15, typography tuning
+**Context:** Body text (`Text` component, lg and base sizes) used `--line-height-relaxed` (1.618, the golden ratio). While mathematically elegant, it created excessive vertical spacing between lines in multi-sentence paragraphs — the text felt sparse and disconnected, especially with Ancizar Serif.
+**Options considered:**
+1. `--line-height-normal` (1.5) — standard web default
+2. `--line-height-snug` (1.375) — tighter but still comfortable
+3. Keep `--line-height-relaxed` — preserve the golden ratio connection
+**Decision:** Option 2 — `snug` (1.375) for both `lg` and `base` sizes. `sm` text retains `--line-height-normal` (1.5) because small text benefits from more leading.
+**Rationale:** Tested with realistic paragraph content (3+ sentences of product copy). `relaxed` was noticeably airy — each line felt isolated. `snug` creates cohesive paragraphs while remaining comfortable for extended reading. The golden ratio still lives in the token system for use cases where generous leading is desired (pull quotes, hero text), but it's not the right default for body copy.
+**Status:** Active
+
+---
+
+### Heading Letter-Spacing: `tighter` (-0.05em) → `normal` (0em)
+
+**Date/Phase:** 2026-03-15, typography tuning
+**Context:** Large display headings (h1/4xl, 54px) used `--letter-spacing-tighter` (-0.05em), which caused visible letter collision on Ancizar Serif. The serif's stroke terminals and decorative elements need more breathing room than a sans-serif at the same size. After trying `tight` (-0.025em) as an intermediate step, it still felt too tight.
+**Options considered:**
+1. `--letter-spacing-tight` (-0.025em) — half the tightening, still perceptibly tracked in
+2. `--letter-spacing-normal` (0) — no tightening at all, let the typeface's natural spacing breathe
+3. Create a new font-specific token — over-engineering
+**Decision:** Option 2. Removed all negative letter-spacing from headings in both `Typography.css` (component) and `base.css` (docs prose styles). Also scoped prose heading styles to direct children (`.prose > h1`) to prevent leaking into component preview boxes.
+**Rationale:** Ancizar Serif's natural spacing works well at all heading sizes without any negative tracking. Serif typefaces have built-in optical spacing from their stroke terminals — forcing them tighter fights the type designer's intent. This is a key lesson: always start with `normal` letter-spacing for serif fonts and only tighten if needed.
+**Status:** Active
+
+---
+
+### Foundation Typography Docs: Visual Previews + Semantic Mapping Table
+
+**Date/Phase:** 2026-03-15, documentation completeness
+**Context:** The Foundation Typography page showed font families and font sizes with visual previews but presented line heights and letter spacing as raw value tables only. No section documented how typography components combine individual tokens.
+**Options considered:**
+1. Keep raw tables only — minimal but leaves developers guessing
+2. Add visual previews for all categories + a semantic mapping table — comprehensive reference
+**Decision:** Option 2. Added: (1) Line height section with two-line paragraph previews at each value, (2) Letter spacing section with "Design System" text previews at each tracking value, (3) Semantic mapping table showing exactly which tokens each typography component variant uses (Heading h1–h4, Text lg/base/sm, Caption, Code).
+**Rationale:** Token docs that only show names and values force developers to read component CSS to understand how tokens are combined. The semantic mapping table is the single most useful reference for anyone building layouts — it answers "what does `<Heading as='h2'>` actually apply?" without leaving the docs page.
+**Status:** Active
+
+---
+
+### Focus Ring Consolidation: Composite Token over Inline Expressions
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** The `color-mix()` focus ring expression was duplicated 14 times across 10 component CSS files (standard, error, and inset variants). Any change to the focus ring style required editing all 14 locations.
+**Options considered:**
+1. CSS utility class (`.ds-focus-ring`) — requires adding class in TSX, doesn't compose with `box-shadow`
+2. Composite CSS custom properties (`--focus-ring`, `--focus-ring-error`, `--focus-ring-inset`) — composes naturally with `box-shadow`, no TSX changes
+3. Sass mixin — we don't use a preprocessor
+**Decision:** Option 2. Added composite tokens to `build-css.mjs` `:root` block. Each component's `:focus-visible` now references `var(--focus-ring)` instead of the raw expression.
+**Rationale:** CSS custom properties compose with `box-shadow` (e.g., `box-shadow: var(--shadow-sm), var(--focus-ring)`) which a utility class cannot do. The inset variant (`--focus-ring-inset`) handles Accordion's inset ring. Zero TSX changes required.
+**Status:** Active
+
+---
+
+### StarRating: useId() for SVG clipPath Uniqueness
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** `StarRating` used a hardcoded `id="ds-star-half"` for the SVG clipPath. Multiple instances on the same page (e.g., PDP with product rating + review ratings) would share the same ID, breaking half-star rendering on all but the first instance.
+**Decision:** Use React `useId()` in the parent `StarRating` component to generate a unique clipPath ID per instance.
+**Rationale:** `useId()` is SSR-safe and generates deterministic IDs. Generated at the parent level (not inside `StarIcon`) because there's at most one half-star per rating.
+**Status:** Active
+
+---
+
+### Remove !important from Reduced-Motion Overrides
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** `Button.css` and `Card.css` used `!important` in `@media (prefers-reduced-motion: reduce)` blocks to override active-state transforms. The `!important` was a specificity shortcut, not a necessity.
+**Decision:** Remove `!important` by (1) matching the specificity of the rules being overridden (e.g., `.ds-button:active:not(:disabled)` instead of `.ds-button:active`), and (2) placing the `@media` block at the end of the file so cascade order wins for equal-specificity rules.
+**Rationale:** `!important` is a code smell in a design system — it signals a specificity problem. Restructuring cascade order is the correct fix and prevents future rules from needing `!important` escalation.
+**Status:** Active
+
+---
+
+### Demo Files: Shared Utility CSS + Token-Based Inline Styles
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** 60+ inline styles across story and gallery files used raw pixel values (`gap: '12px'`, `fontWeight: 600`) instead of design tokens. Common patterns (unstyled links, cover images) were duplicated as inline styles across multiple demo pages.
+**Decision:** (1) Created `apps/docs/src/styles/demo-utilities.css` with shared utility classes (`.ds-unstyled-link`, `.ds-demo-cover-image`). (2) Converted all hardcoded pixel values in inline styles to token references.
+**Rationale:** Demo files should demonstrate the token system, not bypass it. Developers copying story code should get token-based patterns by default. Container/decorator widths remain as inline styles since they're test harness constraints, not reusable patterns.
+**Status:** Active
+
+---
+
+### Full Codebase Audit — Token Integrity and Code Quality Pass
+
+**Date/Phase:** 2026-03-15, refactoring audit
+**Context:** Comprehensive audit of all component CSS, TSX, docs site, stories, and token system to identify overrides, dead code, hardcoded values, and inconsistencies.
+**Options considered:** (1) Incremental fixes as issues surface. (2) Full audit with systematic refactoring.
+**Decision:** Full audit. Key fixes applied:
+- **Critical bug:** Transition token naming mismatch — Accordion.css and CookieConsent.css referenced `--transition-timing-ease-out/in` but tokens generate `--transition-easing-out/in`. Silent failure.
+- **Hardcoded easing:** Select.css used bare `ease-out` instead of `var(--transition-easing-out)`.
+- **Gallery refactor:** Replaced raw `<p>` elements with `<Text>` components, extracted repeated inline styles to utility CSS classes (`.ds-demo-slide-image`, `.ds-demo-prose`, `.ds-demo-section-label`).
+- **Story cleanup:** Replaced hardcoded `fontSize: '11px'` and `letterSpacing: '0.08em'` with token references in ColorSwatch and Checkbox stories.
+- **Import consolidation:** Merged fragmented `@ds/components` imports in CollectionDemo and CartDemo.
+- **Preview.css:** Replaced hardcoded `0.7rem` and `4px 10px` with token references.
+**Rationale:** CSS custom properties fail silently. Periodic audits are the only way to catch drift between token names and their consumers. Establishing this as a practice prevents accumulation of technical debt.
+**Status:** Active
+
+---
+
+### CookieConsent Preferences Panel: Remove Fixed max-height
+
+**Date/Phase:** Polish pass
+**Context:** The CookieConsent preferences panel had `max-height: 260px` (desktop) / `200px` (mobile) with `overflow-y: auto`, forcing a scrollbar when the bordered accordion inside it exceeded that height. The user wanted the banner to grow naturally to fit its content.
+**Options considered:**
+1. Increase the fixed max-height to a larger value
+2. Remove max-height entirely, let the panel auto-size
+3. Use a viewport-relative max-height as a safety cap
+**Decision:** Option 2 on desktop (no max-height), option 3 on mobile (`max-height: 50vh` with `overflow-y: auto` as a safety cap to prevent the banner from covering the entire mobile screen).
+**Rationale:** A fixed pixel max-height is arbitrary and doesn't adapt to content. The accordion is the natural height constraint — it only has as many items as the site defines. On mobile, viewport height is limited, so a 50vh cap prevents the banner from becoming unusable while still being generous.
+**Status:** Active
+
+---
+
+### Modal Overlay: `--color-overlay` Composite Token
+
+**Date/Phase:** Polish pass
+**Context:** Modal.css used `color-mix(in srgb, var(--color-foreground) 40%, transparent)` for the overlay background. The `40%` was a hardcoded magic number. The token system already has `--opacity-medium: 0.382` (≈38.2%, derived from 1/φ).
+**Options considered:**
+1. Replace 40% with `calc(var(--opacity-medium) * 100%)` inline
+2. Add a `--color-overlay` composite token in the build script
+**Decision:** Option 2 — added `--color-overlay` as a composite token in `build-css.mjs`, using `38.2%` (the φ-derived opacity value). Modal.css now references `var(--color-overlay)`.
+**Rationale:** A named composite token is self-documenting and reusable. Any future component needing an overlay (drawers, lightboxes) references the same token. The 38.2% value aligns with the system's golden-ratio-derived opacity scale rather than an arbitrary 40%.
+**Status:** Active
+
+---
+
+### Token Doc Pages: Shared CSS Extraction
+
+**Date/Phase:** Polish pass
+**Context:** The three token documentation pages (colors.astro, spacing.astro, typography.astro) each had duplicated `<style>` blocks containing identical styles for `.scale-badge`, `.section-desc`, `.token-table` base, `.token-name code`, `.token-usage`, `.token-size-info`, and `.token-value`.
+**Options considered:**
+1. Leave duplication in place (it's just docs)
+2. Extract shared styles to a CSS file imported in each page
+**Decision:** Option 2 — created `apps/docs/src/styles/token-docs.css` with all shared styles. Each Astro page imports it via frontmatter (`import '../../styles/token-docs.css'`) and retains only page-specific styles in its `<style>` block.
+**Rationale:** Even in documentation, DRY matters. Three copies of identical styles means three places to update when the design evolves. The import pattern is idiomatic Astro and keeps each page's `<style>` block focused on what's unique to that page.
+**Status:** Active

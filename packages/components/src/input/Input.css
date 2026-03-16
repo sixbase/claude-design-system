@@ -68,7 +68,7 @@
 /* Focus */
 .ds-input-field:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 /* Hover (non-focused, non-disabled) */
@@ -82,7 +82,7 @@
 }
 
 .ds-input-field[aria-invalid="true"]:focus {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-destructive) 20%, transparent);
+  box-shadow: var(--focus-ring-error);
 }
 
 /* Disabled */

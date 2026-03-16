@@ -6,11 +6,11 @@
   left: 0;
   right: 0;
   z-index: var(--z-index-toast);
-  animation: ds-cookie-consent-in var(--transition-duration-normal) var(--transition-timing-ease-out) forwards;
+  animation: ds-cookie-consent-in var(--transition-duration-normal) var(--transition-easing-out) forwards;
 }
 
 .ds-cookie-consent--closing {
-  animation: ds-cookie-consent-out var(--transition-duration-normal) var(--transition-timing-ease-in) forwards;
+  animation: ds-cookie-consent-out var(--transition-duration-normal) var(--transition-easing-in) forwards;
 }
 
 /* ─── Slide-in / Slide-out ─────────────────────────────────── */
@@ -72,8 +72,8 @@
 /* ─── Preferences panel ───────────────────────────────────── */
 
 .ds-cookie-consent__preferences {
-  max-height: 260px;
-  overflow-y: auto;
+  /* No fixed max-height — panel grows to fit the bordered accordion content.
+     On short viewports the banner's own constraints naturally limit height. */
 }
 
 /* Category description inside expanded accordion — inherits font/color from Accordion primitive */
@@ -106,8 +106,10 @@
     border-radius: 0;
   }
 
+  /* Preferences panel: cap at 50vh on mobile to prevent covering the full screen */
   .ds-cookie-consent__preferences {
-    max-height: 200px;
+    max-height: 50vh;
+    overflow-y: auto;
   }
 
   .ds-cookie-consent__actions {

@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
-import { Heading } from '../typography/Typography';
-import { Text } from '../typography/Typography';
+import { Heading, Text } from '../typography/Typography';
 import './FeatureBlock.css';
 
 export interface FeatureBlockProps extends HTMLAttributes<HTMLDivElement> {

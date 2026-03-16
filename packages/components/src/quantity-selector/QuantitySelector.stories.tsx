@@ -21,7 +21,7 @@ export const Default: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--spacing-4)', alignItems: 'center' }}>
       <Controlled size="sm" />
       <Controlled size="md" />
       <Controlled size="lg" />

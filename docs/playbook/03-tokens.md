@@ -337,7 +337,8 @@ Gaps in the numeric scale are intentional to encourage consistency. For φ-propo
 
 ### Typography
 ```
-Font families:  sans (Ancizar Serif), mono (JetBrains Mono), serif (system fallback)
+Font families:  body (Ancizar Serif), code (JetBrains Mono)
+Note: Named by role, not classification — see 06-decisions-log.md "Font-Family Token Rename"
 
 Default scale (√φ step ratio):
   xs (12px) → sm (14px) → base (16px) → lg (20px) → xl (26px) → 2xl (33px) → 3xl (42px) → 4xl (54px) → 5xl (68px)

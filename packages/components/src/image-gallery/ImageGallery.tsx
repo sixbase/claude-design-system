@@ -117,7 +117,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(functi
       {images.length > 1 && (
         <div
           ref={thumbsRef}
-          className="ds-image-gallery__thumbs"
+          className="ds-image-gallery__thumbs ds-scroll-hidden"
           role="tablist"
           tabIndex={-1}
           aria-label="Product images"

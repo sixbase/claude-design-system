@@ -37,7 +37,7 @@ export const Default: Story = {
           </ModalDescription>
         </ModalHeader>
         <ModalBody>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
             <Input label="Name" defaultValue="Jane Doe" />
             <Input label="Email" defaultValue="jane@example.com" />
           </div>
@@ -91,15 +91,15 @@ export const Large: Story = {
           </ModalDescription>
         </ModalHeader>
         <ModalBody>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
             <p style={{ margin: 0 }}>
               Organic Cotton T-Shirt × 2 — $58.00
             </p>
             <p style={{ margin: 0 }}>
               Merino Wool Beanie × 1 — $32.00
             </p>
-            <hr style={{ border: 'none', borderTop: '1px solid var(--color-border)', margin: '4px 0' }} />
-            <p style={{ margin: 0, fontWeight: 600 }}>
+            <hr style={{ border: 'none', borderTop: '1px solid var(--color-border)', margin: 'var(--spacing-1) 0' }} />
+            <p style={{ margin: 0, fontWeight: 'var(--font-weight-semibold)' }}>
               Total: $90.00
             </p>
           </div>

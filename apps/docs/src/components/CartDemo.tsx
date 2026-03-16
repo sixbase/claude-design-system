@@ -1,7 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Heading, Text } from '@ds/components';
-import { Button } from '@ds/components';
-import { QuantitySelector } from '@ds/components';
+import { Heading, Text, Button, QuantitySelector } from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
 import type { Product } from '../data/products';
 import './CartDemo.css';

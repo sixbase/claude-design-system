@@ -53,11 +53,6 @@
   display: flex;
   gap: var(--spacing-2);
   overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.ds-image-gallery__thumbs::-webkit-scrollbar {
-  display: none;
 }
 
 /* Vertical thumbnails on desktop for left position */
@@ -90,7 +85,7 @@
 
 .ds-image-gallery__thumb:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 .ds-image-gallery__thumb-img {

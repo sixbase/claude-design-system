@@ -32,7 +32,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           .join(' ')}
         {...props}
       >
-        <div className="ds-carousel__track">
+        <div className="ds-carousel__track ds-scroll-hidden">
           {children}
         </div>
       </div>

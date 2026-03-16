@@ -19,7 +19,6 @@
   font-family: var(--font-family-body);
   color: var(--color-foreground);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
   margin: 0;
 
@@ -30,7 +29,6 @@
 
 .ds-heading--4xl {
   font-size: var(--font-size-4xl);
-  letter-spacing: var(--letter-spacing-tighter);
 }
 
 .ds-heading--3xl {
@@ -53,12 +51,12 @@
 /* ─── Body sizes ───────────────────────────────────────────── */
 .ds-text--lg {
   font-size: var(--font-size-lg);
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-snug);
 }
 
 .ds-text--base {
   font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-snug);
 }
 
 .ds-text--sm {

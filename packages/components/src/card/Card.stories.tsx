@@ -72,7 +72,7 @@ export const ProductCard: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--spacing-4)', flexWrap: 'wrap' }}>
       {(['elevated', 'outlined', 'ghost'] as const).map((variant) => (
         <Card key={variant} variant={variant} style={{ width: 200 }}>
           <CardBody>

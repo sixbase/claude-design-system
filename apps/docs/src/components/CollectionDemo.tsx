@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Breadcrumb } from '@ds/components';
-import { Heading, Text } from '@ds/components';
-import { Select, SelectItem } from '@ds/components';
-import { ProductCard } from '@ds/components';
+import {
+  Breadcrumb, Heading, Text,
+  Select, SelectItem, ProductCard,
+} from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
 import type { Product } from '../data/products';
 import './CollectionDemo.css';
@@ -83,7 +83,7 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
           <a
             key={product.id}
             href={`${basePath}/examples/product-detail`}
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            className="ds-unstyled-link"
           >
             <ProductCard
               name={product.name}

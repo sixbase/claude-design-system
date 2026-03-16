@@ -391,6 +391,56 @@ const id = useId()
 - `Heading` supports decoupled `size` (xl | 2xl | 3xl | 4xl) and `weight` (normal | medium | semibold | bold) props — semantic level (`as`) and visual size are independent. Default size maps to the level (h1 → 4xl, h2 → 3xl, h3 → 2xl, h4 → xl). Use `size` to render a visually smaller heading without changing the HTML element: `<Heading as="h1" size="2xl" weight="normal">`.
 - Icon-only content needs `aria-label` or `aria-hidden` + accompanying visible text
 
+**Semantic level ≠ visual size — and that's intentional.** The `as` prop controls the HTML element (accessibility/SEO), while `size` controls the visual scale. These are deliberately independent because layout context changes what size is appropriate. A product name on a PDP should be `h1` for document structure, but a 54px heading inside a 50%-width details column would be comically large — so the PDP uses `<Heading as="h1" size="2xl">` to get correct semantics at an appropriate visual scale. This is standard practice across mature design systems (Chakra, MUI, Atlassian). Don't add semantic aliases like `size="h1"` — two naming systems for the same thing creates more confusion than it solves.
+
+**Typography token mapping (how components combine tokens):**
+
+| Element | Size | Weight | Line height | Letter spacing |
+|---------|------|--------|-------------|----------------|
+| Heading h1 (4xl) | `--font-size-4xl` (54px) | semibold | `--line-height-tight` (1.15) | normal |
+| Heading h2 (3xl) | `--font-size-3xl` (42px) | semibold | `--line-height-tight` | normal |
+| Heading h3 (2xl) | `--font-size-2xl` (33px) | semibold | `--line-height-tight` | normal |
+| Heading h4 (xl) | `--font-size-xl` (26px) | semibold | `--line-height-tight` | normal |
+| Text lg | `--font-size-lg` (20px) | normal | `--line-height-snug` (1.375) | normal |
+| Text base | `--font-size-base` (16px) | normal | `--line-height-snug` (1.375) | normal |
+| Text sm | `--font-size-sm` (14px) | normal | `--line-height-normal` (1.5) | normal |
+| Caption | `--font-size-xs` (12px) | normal | `--line-height-normal` (1.5) | normal |
+| Code | 0.9em of parent | normal | inherited | normal |
+
+**Key tuning decisions:**
+- All headings use `normal` letter-spacing (0em) — serif fonts like Ancizar Serif have natural spacing that works well at all sizes without negative tracking
+- Body text (lg, base) uses `snug` (1.375), not `relaxed` (1.618) — golden ratio line-height is too airy for multi-paragraph serif body copy
+- sm text uses `normal` (1.5) — small text benefits from more leading for readability
+
+### Focus ring convention
+
+All interactive components use the `--focus-ring` composite token for `:focus-visible` styling:
+
+```css
+/* Standard focus ring */
+.ds-button:focus-visible { box-shadow: var(--focus-ring); }
+
+/* Composited with existing shadow */
+.ds-button--primary:focus-visible { box-shadow: var(--shadow-sm), var(--focus-ring); }
+
+/* Inset variant (for bordered containers like accordion triggers) */
+.ds-accordion__trigger:focus-visible { box-shadow: var(--focus-ring-inset); }
+
+/* Error state variant */
+.ds-input-field[aria-invalid="true"]:focus { box-shadow: var(--focus-ring-error); }
+```
+
+Defined in `build-css.mjs` as composite tokens derived from `--color-focus-ring` and `--color-destructive`. Never write the `color-mix()` expression directly — always use the token.
+
+### Demo file standards
+
+Story (`.stories.tsx`) and gallery (`*Gallery.tsx`) files must use token references in inline styles, never raw pixel values:
+- `gap: 'var(--spacing-3)'` not `gap: '12px'`
+- `fontWeight: 'var(--font-weight-semibold)'` not `fontWeight: 600`
+- Shared patterns (unstyled links, cover images) use utility classes from `demo-utilities.css`
+
+Container/decorator widths (e.g., `width: '320px'` for constraining a story) are acceptable as inline styles since they're test harness setup, not reusable patterns.
+
 ### Dialog / Modal *(implemented — `@radix-ui/react-dialog`)*
 - Focus trapped inside the modal while open
 - Focus returns to the trigger element when closed
@@ -824,7 +874,15 @@ h2 → Props (table: Prop, Type, Default, Description)
 h2 → Accessibility (ul of ARIA/keyboard details)
 ```
 
-Props table CSS is duplicated per page (Astro scoped styles). This is intentional — no shared stylesheet needed.
+Props table CSS is in shared `base.css` (extracted from per-page `<style>` blocks during codebase audit).
+
+### Foundation Token Pages: Always Include Visual Previews + Semantic Mapping
+
+Token documentation pages (typography, spacing, colors) must include:
+1. **Visual previews for every token category** — not just raw value tables. If a token affects appearance, show it rendered. Line heights need two-line paragraph samples, letter spacing needs text samples, shadows need box previews, etc.
+2. **Semantic mapping tables** where applicable — showing how components combine individual tokens. The Foundation Typography page includes a mapping table showing which size, weight, line-height, and letter-spacing each typography component variant uses. This is the single most-referenced section for developers building layouts.
+
+**Rule:** If a developer has to read component CSS to understand what tokens a component uses, the docs are incomplete.
 
 ---
 
@@ -931,3 +989,25 @@ All example pages follow these conventions established by the PDP:
 - **Typography**: Always use Heading/Text components, never raw HTML heading or paragraph tags
 - **Icons**: Inline SVG, no icon library dependency
 - **`asChild` for link-buttons**: Use `<Button asChild><a href="...">Label</a></Button>` instead of `onClick` navigation
+
+### Demo Utility Classes
+
+Shared CSS classes for demo/gallery/story files live in `apps/docs/src/styles/demo-utilities.css`. These are NOT part of the component library — they're documentation scaffolding only.
+
+| Class | Purpose |
+|-------|---------|
+| `.ds-unstyled-link` | Removes text-decoration and inherits color for card-wrapping links |
+| `.ds-demo-cover-image` | Full-width, 5:4 aspect ratio, cover-fit, rounded corners |
+| `.ds-demo-slide-image` | Full-width, block display, rounded corners (carousel slides) |
+| `.ds-demo-prose` | Max-width constrained to reading width for text demos |
+| `.ds-demo-section-label` | Font-size sm, font-weight medium, bottom margin (group headers) |
+
+**Rule:** If a pattern appears 3+ times across gallery/story files, extract it to `demo-utilities.css` instead of repeating inline styles. Gallery components should use `<Text>` and `<Heading>` primitives, never raw `<p>` or `<h2>` tags.
+
+### Token Integrity Convention
+
+After renaming, adding, or removing tokens in `tokens.json` or `build-css.mjs`:
+
+1. **Rebuild tokens:** `pnpm --filter @ds/tokens build`
+2. **Grep for old names:** `grep -r "old-token-name" packages/components/src/ apps/docs/src/`
+3. **Verify no silent failures:** CSS custom properties resolve to `initial` when the variable doesn't exist — there is no build error. The only way to catch stale references is to search for them.

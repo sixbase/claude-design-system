@@ -38,10 +38,10 @@
 
 /* Focus ring — visible for keyboard, hidden for mouse */
 .ds-button:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 .ds-button--primary:focus-visible {
-  box-shadow: var(--shadow-sm), 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--shadow-sm), var(--focus-ring);
 }
 
 /* ─── Size variants ─────────────────────────────────────── */
@@ -161,14 +161,6 @@
   to { transform: rotate(360deg); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ds-button__spinner {
-    animation: none;
-    opacity: 0.5;
-  }
-  .ds-button:active { transform: none !important; }
-}
-
 /* ─── Icon-only variant ─────────────────────────────────── */
 .ds-button--icon-only { padding: 0; }
 .ds-button--icon-only.ds-button--sm  { width: var(--size-control-sm); }
@@ -187,5 +179,18 @@
   }
   .ds-button:active:not(:disabled) {
     transform: translateY(0.05em) scale(0.98);
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────── */
+/* Placed last so cascade order wins over @supports fallback
+   at equal specificity. No !important needed. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-button__spinner {
+    animation: none;
+    opacity: 0.5;
+  }
+  .ds-button:active:not(:disabled) {
+    transform: none;
   }
 }

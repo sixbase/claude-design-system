@@ -107,7 +107,7 @@ export const Large: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
       <Input size="sm" label="Small" placeholder="32px height" />
       <Input size="md" label="Medium" placeholder="40px height (default)" />
       <Input size="lg" label="Large" placeholder="48px height" />

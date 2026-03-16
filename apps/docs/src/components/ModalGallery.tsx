@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   Input,
+  Text,
   Modal,
   ModalBody,
   ModalClose,
@@ -27,7 +28,7 @@ export function ModalDefault() {
           </ModalDescription>
         </ModalHeader>
         <ModalBody>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
             <Input label="Name" defaultValue="Jane Doe" />
             <Input label="Email" defaultValue="jane@example.com" />
           </div>
@@ -45,7 +46,7 @@ export function ModalDefault() {
 
 export function ModalSizes() {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
       <Modal>
         <ModalTrigger asChild>
           <Button variant="secondary">Small (400px)</Button>
@@ -76,7 +77,7 @@ export function ModalSizes() {
             <ModalDescription>Default size — suitable for forms and confirmations.</ModalDescription>
           </ModalHeader>
           <ModalBody>
-            <p style={{ margin: 0 }}>Form content goes here.</p>
+            <Text>Form content goes here.</Text>
           </ModalBody>
           <ModalFooter>
             <ModalClose asChild>
@@ -97,8 +98,8 @@ export function ModalSizes() {
             <ModalDescription>Order placed on March 10, 2026 — 3 items</ModalDescription>
           </ModalHeader>
           <ModalBody>
-            <p style={{ margin: 0 }}>Organic Cotton T-Shirt × 2 — $58.00</p>
-            <p style={{ margin: 0 }}>Merino Wool Beanie × 1 — $32.00</p>
+            <Text>Organic Cotton T-Shirt × 2 — $58.00</Text>
+            <Text>Merino Wool Beanie × 1 — $32.00</Text>
           </ModalBody>
           <ModalFooter>
             <ModalClose asChild>
@@ -138,7 +139,7 @@ export function ModalConfirmation() {
 export function ModalControlled() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
       <Button onClick={() => setOpen(true)}>Open (controlled)</Button>
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>
@@ -149,9 +150,9 @@ export function ModalControlled() {
             </ModalDescription>
           </ModalHeader>
           <ModalBody>
-            <p style={{ margin: 0 }}>
+            <Text>
               Open state: <code>{String(open)}</code>
-            </p>
+            </Text>
           </ModalBody>
           <ModalFooter>
             <Button variant="secondary" onClick={() => setOpen(false)}>

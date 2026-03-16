@@ -18,9 +18,28 @@ export function HeadingGallery() {
 export function TextGallery() {
   return (
     <Preview stack>
-      <Text size="lg">Large — lead paragraph copy</Text>
-      <Text size="base">Base — default body copy for most content</Text>
-      <Text size="sm">Small — secondary or supporting text</Text>
+      <div className="ds-demo-prose">
+        <Text size="lg">
+          Every piece in the collection is designed to age with you — not against
+          you. We source full-grain leathers and woven textiles that develop
+          character over time.
+        </Text>
+      </div>
+      <div className="ds-demo-prose">
+        <Text size="base">
+          Our phone cases are made from aramid fiber, the same material used in
+          aerospace and body armor. At 0.65mm thin, they add virtually no bulk
+          while protecting against drops up to 6 feet. Each case is precision-cut
+          for your exact device model with openings for every port and button.
+        </Text>
+      </div>
+      <div className="ds-demo-prose">
+        <Text size="sm">
+          Free standard shipping on all orders over $50. Express and overnight
+          options are available at checkout. We ship to all 50 US states and
+          select international destinations.
+        </Text>
+      </div>
       <Text weight="semibold">Semibold weight for emphasis</Text>
       <Text muted>Muted text for subdued content</Text>
     </Preview>

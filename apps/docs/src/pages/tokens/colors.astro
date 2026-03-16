@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import tokens from '../../../../../packages/tokens/src/tokens.json';
+import '../../styles/token-docs.css';
 ---
 
 <BaseLayout title="Colors">
@@ -225,33 +226,6 @@ import tokens from '../../../../../packages/tokens/src/tokens.json';
 </BaseLayout>
 
 <style>
-  .section-desc {
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    margin-top: calc(var(--spacing-1) * -1);
-    margin-bottom: var(--spacing-4);
-  }
-
-  .scale-badge {
-    display: inline-block;
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    vertical-align: middle;
-    margin-left: var(--spacing-2);
-    font-family: var(--font-family-code);
-  }
-  .scale-badge--primary {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
-  }
-  .scale-badge--secondary {
-    background: var(--color-secondary);
-    color: var(--color-secondary-foreground);
-    border: 1px solid var(--color-border);
-  }
-
   /* ─── Semantic color table ───────────────────────── */
   .color-table {
     display: flex;

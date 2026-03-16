@@ -2,7 +2,7 @@
 .ds-modal__overlay {
   position: fixed;
   inset: 0;
-  background-color: color-mix(in srgb, var(--color-foreground) 40%, transparent);
+  background-color: var(--color-overlay);
   z-index: var(--z-index-modal);
   animation: ds-modal-overlay-in var(--transition-normal) forwards;
 }
@@ -73,9 +73,9 @@
 }
 
 /* ─── Size variants ───────────────────────────────────────── */
-.ds-modal__content--sm { max-width: 400px; }
-.ds-modal__content--md { max-width: 520px; }
-.ds-modal__content--lg { max-width: 680px; }
+.ds-modal__content--sm { max-width: var(--size-modal-sm); }
+.ds-modal__content--md { max-width: var(--size-modal-md); }
+.ds-modal__content--lg { max-width: var(--size-modal-lg); }
 
 /* ─── Close button ────────────────────────────────────────── */
 .ds-modal__close {
@@ -113,7 +113,7 @@
 
 .ds-modal__close:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 /* ─── Sections ────────────────────────────────────────────── */

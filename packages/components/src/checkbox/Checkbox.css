@@ -72,7 +72,7 @@
 /* Focus */
 .ds-checkbox-box:focus-visible {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 /* Checked / indeterminate */
@@ -94,7 +94,7 @@
 }
 
 .ds-checkbox-box--error:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-destructive) 20%, transparent);
+  box-shadow: var(--focus-ring-error);
 }
 
 /* Disabled */

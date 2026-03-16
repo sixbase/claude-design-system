@@ -43,7 +43,7 @@ const meta: Meta<typeof CookieConsent> = {
     // Contain the fixed-position banner within the Storybook canvas
     (Story) => (
       <div style={{ transform: 'translateZ(0)', position: 'relative', minHeight: 500, overflow: 'hidden' }}>
-        <div style={{ padding: 24 }}>
+        <div style={{ padding: 'var(--spacing-6)' }}>
           <p style={{ color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
             Page content behind the banner. Scroll down to see the cookie consent dialog.
           </p>
@@ -96,9 +96,9 @@ export const Controlled: Story = {
 
     return (
       <>
-        <div style={{ padding: 24 }}>
+        <div style={{ padding: 'var(--spacing-6)' }}>
           <Button onClick={() => setOpen(true)}>Show Cookie Banner</Button>
-          <p style={{ marginTop: 12, color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
+          <p style={{ marginTop: 'var(--spacing-3)', color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
             Banner is {open ? 'visible' : 'hidden'}
           </p>
         </div>

@@ -13,7 +13,7 @@ export default meta;
 
 export const HeadingScale: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
       <Heading as="h1">Heading 1 — Page title</Heading>
       <Heading as="h2">Heading 2 — Section title</Heading>
       <Heading as="h3">Heading 3 — Subsection</Heading>
@@ -24,7 +24,7 @@ export const HeadingScale: StoryObj = {
 
 export const BodyScale: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
       <Text size="lg">Large body — for lead paragraphs and introductory text.</Text>
       <Text size="base">Base body — the default size for most content.</Text>
       <Text size="sm">Small body — for secondary content, form hints, and labels.</Text>
@@ -34,7 +34,7 @@ export const BodyScale: StoryObj = {
 
 export const Weights: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
       <Text weight="normal">Normal weight (400)</Text>
       <Text weight="medium">Medium weight (500)</Text>
       <Text weight="semibold">Semibold weight (600)</Text>
@@ -45,7 +45,7 @@ export const Weights: StoryObj = {
 
 export const Muted: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
       <Heading as="h3">Normal heading</Heading>
       <Heading as="h3" muted>Muted heading</Heading>
       <Text>Normal text</Text>
@@ -56,7 +56,7 @@ export const Muted: StoryObj = {
 
 export const CaptionAndCode: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
       <Caption>Last modified March 14, 2026 · 2 min read</Caption>
       <Text>
         Use the <Code>Button</Code> component with <Code>variant="primary"</Code> for primary

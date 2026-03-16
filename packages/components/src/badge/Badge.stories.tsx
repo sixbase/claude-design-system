@@ -24,7 +24,7 @@ export const Small: Story = { args: { size: 'sm', children: 'New' } };
 
 export const AllVariants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--spacing-2)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge variant="default">New</Badge>
       <Badge variant="secondary">Sale</Badge>
       <Badge variant="success">In stock</Badge>
@@ -37,7 +37,7 @@ export const AllVariants: Story = {
 
 export const EcommerceContext: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--spacing-2)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge variant="default" size="sm">New arrival</Badge>
       <Badge variant="secondary" size="sm">20% off</Badge>
       <Badge variant="success" size="sm">Free shipping</Badge>

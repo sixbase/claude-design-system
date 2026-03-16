@@ -194,7 +194,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
         className="ds-pdp__feature-section"
         title="Engineered for Everyday Protection"
         description="Woven from 600D aramid fiber — the same material used in aerospace and body armor — this case delivers military-grade impact resistance at just 0.65mm thin. The precision-cut design wraps your device without adding bulk, while the raised camera lip keeps your lenses safe on any surface."
-        image={<img src={makePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" className="ds-demo-cover-image" />}
       />
 
       <FeatureBlock
@@ -202,14 +202,14 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
         reverse
         title="Seamless MagSafe Integration"
         description="Precision-aligned magnets ensure a perfect snap every time. Charge wirelessly, attach your favorite accessories, and never worry about compatibility. The ultra-thin profile means zero interference with MagSafe's full magnetic strength."
-        image={<img src={makePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" className="ds-demo-cover-image" />}
       />
 
       <FeatureBlock
         className="ds-pdp__feature-section"
         title="12 Grams of Confidence"
         description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
-        image={<img src={makePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" className="ds-demo-cover-image" />}
       />
 
       <CookieConsent

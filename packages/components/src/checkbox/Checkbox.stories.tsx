@@ -54,8 +54,8 @@ export const Small: Story = {
 
 export const FilterPanel: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '240px' }}>
-      <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-foreground-muted)', margin: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)', width: '240px' }}>
+      <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wider)', color: 'var(--color-foreground-muted)', margin: 0 }}>
         Size
       </p>
       <Checkbox size="sm" label="XS" defaultChecked />
@@ -69,7 +69,7 @@ export const FilterPanel: Story = {
 
 export const CheckoutForm: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '320px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)', width: '320px' }}>
       <Checkbox
         label="Save this card for future purchases"
         hint="Your card is encrypted and stored securely"

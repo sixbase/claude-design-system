@@ -45,13 +45,6 @@
   gap: var(--spacing-3);
 }
 
-/* Responsive bump: 2xl → 3xl at desktop */
-@media (min-width: 1024px) {
-  .ds-pdp__title {
-    font-size: var(--font-size-3xl);
-  }
-}
-
 .ds-pdp__price-row {
   display: flex;
   align-items: center;

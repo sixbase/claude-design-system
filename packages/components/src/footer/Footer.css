@@ -43,7 +43,7 @@
 
 .ds-footer__logo-img {
   display: block;
-  height: 20px;
+  height: var(--spacing-5);
   width: auto;
   color: var(--color-foreground);
 }

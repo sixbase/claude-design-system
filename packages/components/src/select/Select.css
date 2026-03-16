@@ -83,7 +83,7 @@
 .ds-select-trigger:focus-visible,
 .ds-select-trigger[data-state="open"] {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 /* Error */
@@ -93,7 +93,7 @@
 
 .ds-select-trigger--error:focus-visible,
 .ds-select-trigger--error[data-state="open"] {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-destructive) 20%, transparent);
+  box-shadow: var(--focus-ring-error);
 }
 
 /* Disabled */
@@ -134,7 +134,7 @@
 
   /* Animation */
   transform-origin: var(--radix-select-content-transform-origin);
-  animation: ds-select-open var(--transition-duration-fast) ease-out;
+  animation: ds-select-open var(--transition-duration-fast) var(--transition-easing-out);
 }
 
 @keyframes ds-select-open {
@@ -208,7 +208,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 24px;
+  height: var(--spacing-6);
   color: var(--color-foreground-subtle);
   cursor: default;
 }

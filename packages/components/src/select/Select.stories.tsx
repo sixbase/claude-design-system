@@ -103,7 +103,7 @@ export const FullWidth: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '220px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)', width: '220px' }}>
       <Select size="sm" label="Small" placeholder="Small">
         <SelectItem value="a">Option A</SelectItem>
         <SelectItem value="b">Option B</SelectItem>

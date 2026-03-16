@@ -42,6 +42,8 @@ const phiUsage: Record<string, string> = {
 // Content width tokens (filtered from size)
 const contentWidths = Object.entries(size).filter(([name]) => name.startsWith('content-'));
 
+import '../../styles/token-docs.css';
+
 const contentWidthUsage: Record<string, string> = {
   'content-sm': 'Constrained dialogs, cookie consent banners, narrow overlays',
   'content-md': 'Medium content areas, form containers, settings panels',
@@ -144,76 +146,7 @@ const radiusUsage: Record<string, string> = {
 </BaseLayout>
 
 <style>
-  .section-desc {
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-subtle);
-    margin-top: calc(var(--spacing-1) * -1);
-    margin-bottom: var(--spacing-4);
-  }
-
-  .scale-badge {
-    display: inline-block;
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    vertical-align: middle;
-    margin-left: var(--spacing-2);
-    font-family: var(--font-family-code);
-  }
-  .scale-badge--primary {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
-  }
-  .scale-badge--muted {
-    background: transparent;
-    color: var(--color-foreground-muted);
-    border: 1px solid var(--color-border);
-  }
-
-  /* ─── Token table ────────────────────────────────── */
-  .token-table {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin: var(--spacing-3) 0 var(--spacing-8);
-    background-color: var(--color-background-surface);
-  }
-  .token-table--muted {
-    opacity: var(--opacity-high);
-  }
-
-  .token-row {
-    padding: var(--spacing-3) var(--spacing-4);
-    border-bottom: 1px solid var(--color-border);
-  }
-  .token-row:last-child { border-bottom: none; }
-
-  .token-name {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .token-name code {
-    font-size: var(--font-size-xs);
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--color-foreground);
-  }
-  .token-size-info {
-    font-family: var(--font-family-code);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-muted);
-  }
-  .token-usage {
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-subtle);
-    line-height: var(--line-height-relaxed);
-  }
-
+  /* ─── Spacing-specific: visual bar ─────────────── */
   .token-bar {
     display: block;
     height: 6px;

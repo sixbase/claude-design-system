@@ -70,7 +70,7 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
             <CarouselSlide key={product.id} size="sm">
               <a
                 href={`${basePath}/examples/product-detail`}
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                className="ds-unstyled-link"
               >
                 <ProductCard
                   name={product.name}
@@ -95,7 +95,7 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
               <img
                 src={feature.image}
                 alt={feature.title}
-                style={{ aspectRatio: '5/4', objectFit: 'cover', width: '100%', borderRadius: 'var(--radius-lg)' }}
+                className="ds-demo-cover-image"
               />
             }
           />

@@ -32,7 +32,7 @@
 
 .ds-header__logo-img {
   display: block;
-  height: 20px;
+  height: var(--spacing-5);
   width: auto;
   color: var(--color-foreground);
 }
@@ -70,7 +70,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  width: 36px;  /* intentional — 36px touch target, no matching token */
   height: 36px;
   border: none;
   background: none;
@@ -91,7 +91,7 @@
 
 .ds-header__icon-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+  box-shadow: var(--focus-ring);
 }
 
 /* Theme toggle icon visibility */

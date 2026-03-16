@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
 import type { HTMLAttributes } from 'react';
 import './StarRating.css';
 
@@ -15,7 +15,7 @@ export interface StarRatingProps extends HTMLAttributes<HTMLDivElement> {
 
 const STAR_COUNT = 5;
 
-function StarIcon({ fill }: { fill: 'full' | 'half' | 'empty' }) {
+function StarIcon({ fill, clipId }: { fill: 'full' | 'half' | 'empty'; clipId: string }) {
   return (
     <svg
       className={`ds-star-rating__star ds-star-rating__star--${fill}`}
@@ -25,7 +25,7 @@ function StarIcon({ fill }: { fill: 'full' | 'half' | 'empty' }) {
       {fill === 'half' ? (
         <>
           <defs>
-            <clipPath id="ds-star-half">
+            <clipPath id={clipId}>
               <rect x="0" y="0" width="10" height="20" />
             </clipPath>
           </defs>
@@ -35,7 +35,7 @@ function StarIcon({ fill }: { fill: 'full' | 'half' | 'empty' }) {
           />
           <path
             d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.49L10 14.26 5.06 16.7 6 11.21l-4-3.9 5.53-.8L10 1.5z"
-            clipPath="url(#ds-star-half)"
+            clipPath={`url(#${clipId})`}
             className="ds-star-rating__star-fill"
           />
         </>
@@ -58,6 +58,7 @@ export const StarRating = forwardRef<HTMLDivElement, StarRatingProps>(
     { rating, reviewCount, size = 'md', className, ...props },
     ref,
   ) {
+    const clipId = useId();
     const clamped = Math.max(0, Math.min(STAR_COUNT, rating));
 
     const stars = Array.from({ length: STAR_COUNT }, (_, i) => {
@@ -82,7 +83,7 @@ export const StarRating = forwardRef<HTMLDivElement, StarRatingProps>(
       >
         <span className="ds-star-rating__stars">
           {stars.map((fill, i) => (
-            <StarIcon key={i} fill={fill} />
+            <StarIcon key={i} fill={fill} clipId={`${clipId}-half`} />
           ))}
         </span>
         {reviewCount != null && (
