@@ -1,0 +1,491 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/token-docs.css';
+---
+
+<BaseLayout title="Layout">
+  <div class="prose">
+    <h1>Layout</h1>
+    <p>
+      The grid system defines how every page is structured — breakpoints, containers, product grids,
+      section spacing, and two-column layouts. This is the canonical reference for building pages
+      and translating the design system to a Shopify theme.
+    </p>
+
+    <!-- ─── Breakpoints ──────────────────────────────────── -->
+
+    <h2>Breakpoints</h2>
+    <p class="section-desc">
+      Four breakpoints, mobile-first. All components use <code>min-width</code> media queries at these values.
+      <code>xl</code> is not a media query — it's the max-width for page containers.
+    </p>
+
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Value</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sm</code></td>
+          <td>640px</td>
+          <td>Two-column grids, compact tablet</td>
+        </tr>
+        <tr>
+          <td><code>md</code></td>
+          <td>768px</td>
+          <td>Standard tablet, container padding steps up</td>
+        </tr>
+        <tr>
+          <td><code>lg</code></td>
+          <td>1024px</td>
+          <td>Desktop — 4-column grids, gap steps up, sticky sidebars</td>
+        </tr>
+        <tr>
+          <td><code>xl</code></td>
+          <td>1280px</td>
+          <td>Max content width (Container default). Not a media query.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="layout-note">
+      <strong>Shopify mapping:</strong> These map directly to Shopify theme media queries.
+      Define them as CSS custom properties in your theme's <code>base.css</code>.
+    </div>
+
+    <!-- ─── Container ────────────────────────────────────── -->
+
+    <h2>Container</h2>
+    <p class="section-desc">
+      Horizontally centers content with a max-width and responsive padding.
+      Content goes <em>inside</em> a Container. Full-bleed backgrounds go <em>outside</em>.
+    </p>
+
+    <h3>Padding progression</h3>
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Viewport</th>
+          <th>Token</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; 768px</td>
+          <td><code>--spacing-4</code></td>
+          <td>16px</td>
+        </tr>
+        <tr>
+          <td>≥ 768px</td>
+          <td><code>--spacing-8</code></td>
+          <td>32px</td>
+        </tr>
+        <tr>
+          <td>≥ 1024px</td>
+          <td><code>--spacing-16</code></td>
+          <td>64px</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Size variants</h3>
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>Max-width</th>
+          <th>Use case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sm</code></td>
+          <td>640px</td>
+          <td>Auth forms, dialogs, narrow overlays</td>
+        </tr>
+        <tr>
+          <td><code>md</code></td>
+          <td>768px</td>
+          <td>Legal/prose content, settings panels</td>
+        </tr>
+        <tr>
+          <td><code>lg</code></td>
+          <td>960px</td>
+          <td>Feature sections, wide forms</td>
+        </tr>
+        <tr>
+          <td><code>xl</code> <span class="scale-badge scale-badge--primary">default</span></td>
+          <td>1280px</td>
+          <td>Full-width page container</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><code>{`import { Container } from '@ds/components';
+
+{/* Standard page wrapper */}
+<Container>
+  <h1>Page content</h1>
+</Container>
+
+{/* Narrow prose content */}
+<Container size="md">
+  <article>Long-form text...</article>
+</Container>
+
+{/* Full-bleed background with contained content */}
+<section style={{ background: 'var(--color-background-subtle)' }}>
+  <Container>
+    <h2>Featured section</h2>
+  </Container>
+</section>`}</code></pre>
+
+    <div class="layout-note">
+      <strong>Shopify mapping:</strong> Container = Shopify's <code>page-width</code> class.
+      The padding progression becomes CSS custom properties on <code>.page-width</code>.
+    </div>
+
+    <!-- ─── Product Grid ─────────────────────────────────── -->
+
+    <h2>Product Grid</h2>
+    <p class="section-desc">
+      The standard layout for product listings. Uses a 2-tier gap system —
+      tighter on mobile/tablet, more breathing room on desktop.
+    </p>
+
+    <h3>Column progression</h3>
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Viewport</th>
+          <th>Columns</th>
+          <th>Gap token</th>
+          <th>Gap value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; 640px</td>
+          <td>1</td>
+          <td><code>--spacing-4</code></td>
+          <td>16px</td>
+        </tr>
+        <tr>
+          <td>≥ 640px (sm)</td>
+          <td>2</td>
+          <td><code>--spacing-4</code></td>
+          <td>16px</td>
+        </tr>
+        <tr>
+          <td>≥ 768px (md)</td>
+          <td>3</td>
+          <td><code>--spacing-4</code></td>
+          <td>16px</td>
+        </tr>
+        <tr>
+          <td>≥ 1024px (lg)</td>
+          <td>4</td>
+          <td><code>--spacing-6</code></td>
+          <td>24px</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="layout-rule">
+      <strong>Rule:</strong> All cards inside a Grid must use the <code>fluid</code> prop.
+      Never use fixed-width cards in a grid — the grid cell defines the width.
+    </div>
+
+    <pre><code>{`import { Grid, ProductCard } from '@ds/components';
+
+{/* Standard product grid — 1→2→3→4 columns */}
+<Grid cols={2} colsSm={2} colsMd={3} colsLg={4}>
+  {products.map((product) => (
+    <ProductCard fluid name={product.name} price={product.price} image={product.image} />
+  ))}
+</Grid>`}</code></pre>
+
+    <div class="layout-note">
+      <strong>Shopify mapping:</strong> Grid = the collection product grid section.
+      Column counts and gap values become section settings in <code>{'{% schema %}'}</code>.
+    </div>
+
+    <!-- ─── Two-Column Layouts ───────────────────────────── -->
+
+    <h2>Two-Column Layouts</h2>
+    <p class="section-desc">
+      Product detail and cart pages use a golden-ratio split at desktop,
+      collapsing to a single column on mobile.
+    </p>
+
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Viewport</th>
+          <th>Layout</th>
+          <th>Ratio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; 1024px</td>
+          <td>Single column (stacked)</td>
+          <td>1fr</td>
+        </tr>
+        <tr>
+          <td>≥ 1024px</td>
+          <td>Two columns</td>
+          <td>1.618fr 1fr (golden ratio)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><code>{`/* PDP / Cart two-column layout */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-6);
+}
+
+@media (min-width: 1024px) {
+  .page-layout {
+    grid-template-columns: 1.618fr 1fr;
+  }
+}
+
+/* Breadcrumb spans both columns */
+.page-layout__breadcrumb {
+  grid-column: 1 / -1;
+}
+
+/* Details column sticks on desktop */
+@media (min-width: 1024px) {
+  .page-layout__sidebar {
+    position: sticky;
+    top: var(--spacing-6);
+    align-self: start;
+  }
+}`}</code></pre>
+
+    <div class="layout-note">
+      <strong>Shopify mapping:</strong> This becomes a custom section with two blocks.
+      The ratio and sticky behavior are defined in the section's CSS.
+    </div>
+
+    <!-- ─── Section Spacing ──────────────────────────────── -->
+
+    <h2>Section Spacing</h2>
+    <p class="section-desc">
+      Vertical rhythm between page sections uses <strong>phi tokens</strong>.
+      Component internals use standard tokens. Never mix the two scales within a component.
+    </p>
+
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Value</th>
+          <th>Use case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>--spacing-phi-13</code></td>
+          <td>26px</td>
+          <td>Within-section gaps (heading to content, filter bar to grid)</td>
+        </tr>
+        <tr>
+          <td><code>--spacing-phi-21</code></td>
+          <td>42px</td>
+          <td>Between related sections (feature block gaps)</td>
+        </tr>
+        <tr>
+          <td><code>--spacing-phi-34</code></td>
+          <td>68px</td>
+          <td>Major section breaks (hero to content, content to newsletter)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="layout-note">
+      <strong>Shopify mapping:</strong> Section spacing becomes CSS custom properties
+      on Shopify section containers, controlled via theme settings.
+    </div>
+
+    <!-- ─── Carousel ─────────────────────────────────────── -->
+
+    <h2>Carousel</h2>
+    <p class="section-desc">
+      Carousels use flex-based horizontal scroll with snap points — not CSS Grid.
+      Cards inside carousels must use the <code>fluid</code> prop to fill their slide.
+    </p>
+
+    <h3>Slide sizes</h3>
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>&lt; 768px</th>
+          <th>≥ 768px</th>
+          <th>≥ 1024px</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sm</code></td>
+          <td>70%</td>
+          <td>45%</td>
+          <td>33.3%</td>
+        </tr>
+        <tr>
+          <td><code>md</code></td>
+          <td>85%</td>
+          <td>65%</td>
+          <td>50%</td>
+        </tr>
+        <tr>
+          <td><code>lg</code></td>
+          <td>95%</td>
+          <td>80%</td>
+          <td>66.6%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><code>{`import { Carousel, CarouselSlide, ProductCard } from '@ds/components';
+
+<Carousel gap="md">
+  {products.map((product) => (
+    <CarouselSlide size="sm">
+      <ProductCard fluid name={product.name} price={product.price} image={product.image} />
+    </CarouselSlide>
+  ))}
+</Carousel>`}</code></pre>
+
+    <!-- ─── Shopify Theme Mapping ────────────────────────── -->
+
+    <h2>Shopify Theme Mapping</h2>
+    <p class="section-desc">
+      Reference for translating this design system to a Shopify theme.
+    </p>
+
+    <table class="layout-table">
+      <thead>
+        <tr>
+          <th>Design System</th>
+          <th>Shopify Theme</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Container</td>
+          <td><code>.page-width</code> class</td>
+        </tr>
+        <tr>
+          <td>Grid</td>
+          <td>Collection product grid section</td>
+        </tr>
+        <tr>
+          <td>Spacing tokens</td>
+          <td>CSS custom properties in <code>base.css</code></td>
+        </tr>
+        <tr>
+          <td>Breakpoints</td>
+          <td>Media queries in theme CSS</td>
+        </tr>
+        <tr>
+          <td>Page sections</td>
+          <td>Shopify sections with <code>{'{% schema %}'}</code></td>
+        </tr>
+        <tr>
+          <td>Section spacing</td>
+          <td>Section padding theme settings</td>
+        </tr>
+        <tr>
+          <td>Two-column layout</td>
+          <td>Custom section with two blocks</td>
+        </tr>
+        <tr>
+          <td>Carousel</td>
+          <td>Featured collection / slideshow section</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ─── Layout tables ────────────────────────────────── */
+  .layout-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-3) 0 var(--spacing-6);
+  }
+
+  .layout-table th {
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-foreground-subtle);
+  }
+
+  .layout-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+
+  .layout-table td code {
+    font-size: var(--font-size-xs);
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .layout-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ─── Callout boxes ────────────────────────────────── */
+  .layout-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground-subtle);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-background-subtle);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-4) 0 var(--spacing-6);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .layout-note strong {
+    color: var(--color-foreground);
+  }
+
+  .layout-rule {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-warning-subtle);
+    border-left: 3px solid var(--color-warning);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: var(--spacing-4) 0 var(--spacing-4);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .layout-rule strong {
+    color: var(--color-foreground);
+  }
+
+  .layout-rule code {
+    font-size: var(--font-size-xs);
+  }
+</style>

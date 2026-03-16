@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Breadcrumb, Heading, Text,
-  Select, SelectItem, ProductCard,
+  Select, SelectItem, ProductCard, Grid,
 } from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
 import type { Product } from '../data/products';
@@ -78,7 +78,7 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
         </div>
       </div>
 
-      <div className="ds-collection__grid">
+      <Grid cols={2} colsSm={2} colsMd={3} colsLg={4}>
         {sorted.map((product) => (
           <a
             key={product.id}
@@ -93,7 +93,7 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
             />
           </a>
         ))}
-      </div>
+      </Grid>
     </div>
   );
 }

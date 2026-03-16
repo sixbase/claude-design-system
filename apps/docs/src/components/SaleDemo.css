@@ -40,30 +40,6 @@
   flex-shrink: 0;
 }
 
-/* ─── Product Grid (same as PLP) ────────────────────────── */
-
-.ds-sale__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-4);
-}
-
-/* @breakpoint-md = 768px */
-@media (min-width: 768px) {
-  .ds-sale__grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-5);
-  }
-}
-
-/* @breakpoint-lg = 1024px */
-@media (min-width: 1024px) {
-  .ds-sale__grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-6);
-  }
-}
-
 /* ─── Card Wrapper with Badge Overlay ───────────────────── */
 
 .ds-sale__card-wrapper {

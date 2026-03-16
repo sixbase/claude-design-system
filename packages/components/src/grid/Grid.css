@@ -1,0 +1,44 @@
+/* ─── Grid ───────────────────────────────────────────────── */
+/*
+ * Responsive product/content grid.
+ * Default: 1 → 2 → 3 → 4 columns across breakpoints.
+ * Override via CSS custom properties or React props.
+ *
+ * Row-gap and column-gap always use the same token at each
+ * breakpoint so rhythm stays visually unified.
+ */
+
+.ds-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 1), 1fr);
+  gap: var(--grid-gap, var(--spacing-4));
+}
+
+/* @breakpoint-sm = 640px */
+@media (min-width: 640px) {
+  .ds-grid {
+    grid-template-columns: repeat(var(--grid-cols-sm, 2), 1fr);
+  }
+}
+
+/* @breakpoint-md = 768px */
+@media (min-width: 768px) {
+  .ds-grid {
+    grid-template-columns: repeat(var(--grid-cols-md, 3), 1fr);
+  }
+}
+
+/* @breakpoint-lg = 1024px */
+@media (min-width: 1024px) {
+  .ds-grid {
+    grid-template-columns: repeat(var(--grid-cols-lg, 4), 1fr);
+    gap: var(--grid-gap-lg, var(--grid-gap, var(--spacing-6)));
+  }
+}
+
+/* ─── Fixed-column convenience modifiers ─────────────────── */
+
+.ds-grid--cols-1 { --grid-cols: 1; --grid-cols-sm: 1; --grid-cols-md: 1; --grid-cols-lg: 1; }
+.ds-grid--cols-2 { --grid-cols: 2; --grid-cols-sm: 2; --grid-cols-md: 2; --grid-cols-lg: 2; }
+.ds-grid--cols-3 { --grid-cols: 3; --grid-cols-sm: 3; --grid-cols-md: 3; --grid-cols-lg: 3; }
+.ds-grid--cols-4 { --grid-cols: 4; --grid-cols-sm: 4; --grid-cols-md: 4; --grid-cols-lg: 4; }

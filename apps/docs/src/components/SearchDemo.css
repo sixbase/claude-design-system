@@ -32,30 +32,6 @@
   flex-shrink: 0;
 }
 
-/* ─── Product Grid (same as PLP) ────────────────────────── */
-
-.ds-search__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-4);
-}
-
-/* @breakpoint-md = 768px */
-@media (min-width: 768px) {
-  .ds-search__grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-5);
-  }
-}
-
-/* @breakpoint-lg = 1024px */
-@media (min-width: 1024px) {
-  .ds-search__grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-6);
-  }
-}
-
 /* ─── Empty / No Results ────────────────────────────────── */
 
 .ds-search__empty {

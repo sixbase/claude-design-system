@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import {
-  Button, Heading, Input, ProductCard, Select, SelectItem, Text,
+  Button, Grid, Heading, Input, ProductCard, Select, SelectItem, Text,
 } from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
 import type { Product } from '../data/products';
@@ -122,7 +122,7 @@ export function SearchDemo({ basePath = '' }: { basePath?: string }) {
             </div>
           </div>
 
-          <div className="ds-search__grid">
+          <Grid cols={2} colsSm={2} colsMd={3} colsLg={4}>
             {results.map((product) => (
               <a
                 key={product.id}
@@ -137,7 +137,7 @@ export function SearchDemo({ basePath = '' }: { basePath?: string }) {
                 />
               </a>
             ))}
-          </div>
+          </Grid>
         </>
       )}
 

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import {
-  Badge, Breadcrumb, Button, Heading, ProductCard,
+  Badge, Breadcrumb, Button, Grid, Heading, ProductCard,
   PriceDisplay, Select, SelectItem, Text,
 } from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
@@ -112,7 +112,7 @@ export function SaleDemo({ basePath = '' }: { basePath?: string }) {
       </div>
 
       {/* ── Product Grid ─────────────────────────────────── */}
-      <div className="ds-sale__grid">
+      <Grid cols={2} colsSm={2} colsMd={3} colsLg={4}>
         {sorted.map((product) => (
           <a
             key={product.id}
@@ -141,7 +141,7 @@ export function SaleDemo({ basePath = '' }: { basePath?: string }) {
             </div>
           </a>
         ))}
-      </div>
+      </Grid>
     </div>
   );
 }

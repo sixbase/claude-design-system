@@ -1109,6 +1109,27 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 
 ---
 
+### Layout Primitives: Grid + Container Components
+
+**Date/Phase:** Grid system establishment
+**Context:** The design system had no formal layout primitives. Container patterns (max-width + centering + responsive horizontal padding) were duplicated across Header, Footer, and FullWidthLayout. Grid layouts were built ad-hoc in each demo component's CSS. This made it hard for consumers to build new pages without copy-pasting layout boilerplate.
+**Options considered:**
+1. CSS utility classes (`.ds-grid--cols-2`, `.ds-grid--gap-4`) — composable but breaks BEM convention
+2. React components with typed props — matches existing component patterns, provides autocomplete
+3. A single `layout/` folder with both Grid and Container — simpler structure
+4. Separate `grid/` and `container/` folders following the 4-file rule
+**Decision:** React components (option 2) in separate folders (option 4). Grid uses CSS custom properties for column/gap overrides set via inline styles from props. Container uses BEM modifier classes for size variants.
+**Rationale:** React components match the existing pattern (Card, Badge, etc.) and give consumers type safety + autocomplete. CSS custom property overrides for Grid avoid combinatorial explosion of modifier classes (6 cols × 4 breakpoints = 24 classes). Separate folders follow the 4-file rule strictly — deviating for "these are just utilities" would erode the convention. Container provides only horizontal padding (no vertical) because every existing consumer uses different vertical padding.
+
+**Grid defaults:** 1 → 2 → 3 → 4 columns across sm/md/lg breakpoints. Gap: `spacing-4` (16px) at mobile/tablet, `spacing-6` (24px) at desktop. Overridable via `cols`, `colsSm`, `colsMd`, `colsLg`, and `gap` props.
+
+**Container defaults:** `size-content-xl` (1280px) max-width. Horizontal padding: `spacing-4` → `spacing-8` → `spacing-16`. Size variants: sm (640px), md (768px), lg (960px), xl (1280px), fluid (no max-width).
+
+**Migration:** CollectionDemo migrated to use `<Grid>`. Header, Footer, and FullWidthLayout migration deferred to follow-up PRs (non-breaking).
+**Status:** Active
+
+---
+
 ### Badge WCAG 2.1 AA Accessibility Remediation
 
 **Date/Phase:** Component hardening — accessibility audit
@@ -1137,4 +1158,16 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 - `--size-touch-target` (36px) — minimum WCAG touch target for icon buttons
 Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 **Rationale:** Components should never reference primitive palette tokens. Every color and size used in a component must flow through a semantic token so themes can override them. The destructive badge dark mode uses `--color-destructive-hover` (brick.400) which is semantically close enough to avoid a new token. The `foreground-secondary` token closes the documented token gap between foreground-subtle (stone.500) and foreground (stone.950).
+**Status:** Active
+
+---
+
+### Layout Spec Documentation Page
+**Date/Phase:** Component documentation
+**Context:** Grid and Container components existed but had no documented usage spec. Example pages used inconsistent grid patterns — Collection used the Grid component, but Sale and Search had manual CSS grids with 3-tier gap escalation (spacing-4→5→6). The Homepage carousel had fixed-width 220px product cards creating massive gaps on desktop. With a Shopify theme build upcoming, a canonical layout reference was needed.
+**Options considered:**
+1. Document Grid and Container as separate component pages — follows existing pattern but fragments the layout story
+2. Create a single Layout spec page under Foundation — treats layout as a system-level concept alongside Colors, Typography, Spacing
+**Decision:** Option 2 — a single `/tokens/layout` page documenting breakpoints, Container, product Grid, two-column layouts, section spacing, carousel, and Shopify theme mapping. Also migrated Sale/Search pages to Grid component and fixed Homepage carousel cards to use `fluid` prop.
+**Rationale:** Layout is foundational, not a component. A single reference page is more useful for page builders than scattered component docs. The Shopify mapping table makes this directly actionable for theme development.
 **Status:** Active
