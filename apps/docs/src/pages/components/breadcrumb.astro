@@ -1,23 +1,41 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbTruncated, BreadcrumbShort } from '../../components/BreadcrumbGallery';
 ---
 
-<BaseLayout title="Breadcrumb">
-  <div class="prose">
-    <h1>Breadcrumb</h1>
-    <p>
-      A navigation aid showing the user's location within a site hierarchy.
-      The last item is automatically marked as the current page.
-    </p>
-
-    <h2>Installation</h2>
-    <pre><code>{`import { Breadcrumb } from '@ds/components';`}</code></pre>
-
-    <h2>Default</h2>
-    <p>Pass an array of items. The last item renders as plain text with a chevron (›) separator.</p>
-    <BreadcrumbDefault client:load />
-    <pre><code>{`<Breadcrumb
+<ComponentPage
+  title="Breadcrumb"
+  description="A navigation aid showing the user's location within a site hierarchy. The last item is automatically marked as the current page."
+  installCode="import { Breadcrumb } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>items</code>', '<code>BreadcrumbItem[]</code>', '—', 'Ordered list of breadcrumb items'],
+        ['<code>separator</code>', '<code>ReactNode</code>', "<code>'›'</code>", 'Separator between items'],
+        ['<code>maxItems</code>', '<code>number</code>', '—', 'Max visible items. Middle items collapse to "…"'],
+      ],
+    },
+    {
+      name: 'BreadcrumbItem',
+      headers: ['Property', 'Type', 'Description'],
+      rows: [
+        ['<code>label</code>', '<code>string</code>', 'Display text'],
+        ['<code>href</code>', '<code>string</code>', 'Optional link URL. Omit for the current page.'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Renders as <code>&lt;nav aria-label="Breadcrumb"&gt;</code>',
+    'Uses an <code>&lt;ol&gt;</code> for ordered semantic structure',
+    'Last item has <code>aria-current="page"</code>',
+    'Separators and ellipsis are hidden from screen readers with <code>aria-hidden</code>',
+  ]}
+>
+  <h2>Default</h2>
+  <p>Pass an array of items. The last item renders as plain text with a chevron (›) separator.</p>
+  <BreadcrumbDefault client:load />
+  <pre><code>{`<Breadcrumb
   items={[
     { label: 'Home', href: '/' },
     { label: 'Women', href: '/women' },
@@ -26,10 +44,10 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbTruncated, Brea
   ]}
 />`}</code></pre>
 
-    <h2>Truncated</h2>
-    <p>Use <code>maxItems</code> to collapse middle items into an ellipsis. Useful for deep hierarchies on mobile.</p>
-    <BreadcrumbTruncated client:load />
-    <pre><code>{`<Breadcrumb
+  <h2>Truncated</h2>
+  <p>Use <code>maxItems</code> to collapse middle items into an ellipsis. Useful for deep hierarchies on mobile.</p>
+  <BreadcrumbTruncated client:load />
+  <pre><code>{`<Breadcrumb
   items={[
     { label: 'Home', href: '/' },
     { label: 'Electronics', href: '#' },
@@ -40,73 +58,17 @@ import { BreadcrumbDefault, BreadcrumbCustomSeparator, BreadcrumbTruncated, Brea
   maxItems={3}
 />`}</code></pre>
 
-    <h2>Custom separator</h2>
-    <p>Override the default "›" separator with any string or ReactNode.</p>
-    <BreadcrumbCustomSeparator client:load />
-    <pre><code>{`<Breadcrumb items={[...]} separator="/" />`}</code></pre>
+  <h2>Custom separator</h2>
+  <p>Override the default "›" separator with any string or ReactNode.</p>
+  <BreadcrumbCustomSeparator client:load />
+  <pre><code>{`<Breadcrumb items={[...]} separator="/" />`}</code></pre>
 
-    <h2>Short trail</h2>
-    <BreadcrumbShort client:load />
-    <pre><code>{`<Breadcrumb
+  <h2>Short trail</h2>
+  <BreadcrumbShort client:load />
+  <pre><code>{`<Breadcrumb
   items={[
     { label: 'Home', href: '/' },
     { label: 'Cart' },
   ]}
 />`}</code></pre>
-
-    <h2>Props</h2>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>items</code></td><td><code>BreadcrumbItem[]</code></td><td>—</td><td>Ordered list of breadcrumb items</td></tr>
-        <tr><td><code>separator</code></td><td><code>ReactNode</code></td><td><code>'›'</code></td><td>Separator between items</td></tr>
-        <tr><td><code>maxItems</code></td><td><code>number</code></td><td>—</td><td>Max visible items. Middle items collapse to "…"</td></tr>
-      </tbody>
-    </table>
-
-    <h3>BreadcrumbItem</h3>
-    <table class="props-table">
-      <thead>
-        <tr><th>Property</th><th>Type</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>label</code></td><td><code>string</code></td><td>Display text</td></tr>
-        <tr><td><code>href</code></td><td><code>string</code></td><td>Optional link URL. Omit for the current page.</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Renders as <code>&lt;nav aria-label="Breadcrumb"&gt;</code></li>
-      <li>Uses an <code>&lt;ol&gt;</code> for ordered semantic structure</li>
-      <li>Last item has <code>aria-current="page"</code></li>
-      <li>Separators and ellipsis are hidden from screen readers with <code>aria-hidden</code></li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-</style>
+</ComponentPage>

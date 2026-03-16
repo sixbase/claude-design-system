@@ -22,7 +22,7 @@ export function ColorPickerDefault() {
 export function ColorPickerSizes() {
   const [value, setValue] = useState('black');
   return (
-    <Preview direction="column">
+    <Preview stack>
       <ColorPicker options={COLORS} value={value} onChange={setValue} size="sm" />
       <ColorPicker options={COLORS} value={value} onChange={setValue} size="md" />
       <ColorPicker options={COLORS} value={value} onChange={setValue} size="lg" />

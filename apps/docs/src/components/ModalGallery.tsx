@@ -15,39 +15,37 @@ import {
 
 export function ModalDefault() {
   return (
-    <div className="gallery-row">
-      <Modal>
-        <ModalTrigger asChild>
-          <Button>Edit profile</Button>
-        </ModalTrigger>
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle>Edit profile</ModalTitle>
-            <ModalDescription>
-              Make changes to your profile. Click save when you're done.
-            </ModalDescription>
-          </ModalHeader>
-          <ModalBody>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <Input label="Name" defaultValue="Jane Doe" />
-              <Input label="Email" defaultValue="jane@example.com" />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <ModalClose asChild>
-              <Button variant="secondary">Cancel</Button>
-            </ModalClose>
-            <Button>Save changes</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
+    <Modal>
+      <ModalTrigger asChild>
+        <Button>Edit profile</Button>
+      </ModalTrigger>
+      <ModalContent>
+        <ModalHeader>
+          <ModalTitle>Edit profile</ModalTitle>
+          <ModalDescription>
+            Make changes to your profile. Click save when you're done.
+          </ModalDescription>
+        </ModalHeader>
+        <ModalBody>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Input label="Name" defaultValue="Jane Doe" />
+            <Input label="Email" defaultValue="jane@example.com" />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <ModalClose asChild>
+            <Button variant="secondary">Cancel</Button>
+          </ModalClose>
+          <Button>Save changes</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
 export function ModalSizes() {
   return (
-    <div className="gallery-row">
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
       <Modal>
         <ModalTrigger asChild>
           <Button variant="secondary">Small (400px)</Button>
@@ -115,34 +113,32 @@ export function ModalSizes() {
 
 export function ModalConfirmation() {
   return (
-    <div className="gallery-row">
-      <Modal>
-        <ModalTrigger asChild>
-          <Button variant="destructive">Remove from cart</Button>
-        </ModalTrigger>
-        <ModalContent size="sm">
-          <ModalHeader>
-            <ModalTitle>Remove item?</ModalTitle>
-            <ModalDescription>
-              "Organic Cotton T-Shirt" will be removed from your cart.
-            </ModalDescription>
-          </ModalHeader>
-          <ModalFooter>
-            <ModalClose asChild>
-              <Button variant="secondary">Keep item</Button>
-            </ModalClose>
-            <Button variant="destructive">Remove</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
+    <Modal>
+      <ModalTrigger asChild>
+        <Button variant="destructive">Remove from cart</Button>
+      </ModalTrigger>
+      <ModalContent size="sm">
+        <ModalHeader>
+          <ModalTitle>Remove item?</ModalTitle>
+          <ModalDescription>
+            "Organic Cotton T-Shirt" will be removed from your cart.
+          </ModalDescription>
+        </ModalHeader>
+        <ModalFooter>
+          <ModalClose asChild>
+            <Button variant="secondary">Keep item</Button>
+          </ModalClose>
+          <Button variant="destructive">Remove</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
 export function ModalControlled() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="gallery-row">
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
       <Button onClick={() => setOpen(true)}>Open (controlled)</Button>
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>

@@ -9,33 +9,24 @@ import {
 } from '@ds/components';
 import type { ColorOption } from '@ds/components';
 import { ViewportIndicator } from './ViewportIndicator';
+import { makePlaceholder } from '../lib/placeholder';
 import './PDPDemo.css';
 
-function makePlaceholder(label: string, fill: string, textFill: string) {
-  return `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000"><rect width="800" height="1000" fill="${fill}"/><text x="400" y="500" text-anchor="middle" fill="${textFill}" font-size="32" font-family="sans-serif">${label}</text></svg>`,
-  )}`;
-}
+const portrait = { width: 800, height: 1000, fontSize: 32 };
 
 const galleryImages = [
-  { src: makePlaceholder('Front', '#E3DED6', '#675F56'), alt: 'Aramid Fiber Case — Front' },
-  { src: makePlaceholder('Back', '#C8C2B8', '#4E473F'), alt: 'Aramid Fiber Case — Back' },
-  { src: makePlaceholder('Side', '#A59E94', '#342F2A'), alt: 'Aramid Fiber Case — Side' },
-  { src: makePlaceholder('Detail', '#847D73', '#FAF9F7'), alt: 'Aramid Fiber Case — Detail' },
+  { src: makePlaceholder('Front', '#E3DED6', '#675F56', portrait), alt: 'Aramid Fiber Case — Front' },
+  { src: makePlaceholder('Back', '#C8C2B8', '#4E473F', portrait), alt: 'Aramid Fiber Case — Back' },
+  { src: makePlaceholder('Side', '#A59E94', '#342F2A', portrait), alt: 'Aramid Fiber Case — Side' },
+  { src: makePlaceholder('Detail', '#847D73', '#FAF9F7', portrait), alt: 'Aramid Fiber Case — Detail' },
 ];
 
-function makeLifestylePlaceholder(label: string, fill: string, textFill: string) {
-  return `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800"><rect width="1000" height="800" fill="${fill}"/><text x="500" y="400" text-anchor="middle" fill="${textFill}" font-size="28" font-family="sans-serif">${label}</text></svg>`,
-  )}`;
-}
-
 const lifestyleImages = [
-  { src: makeLifestylePlaceholder('Lifestyle 1', '#D6D0C7', '#6B6359'), alt: 'Lifestyle — desk setup' },
-  { src: makeLifestylePlaceholder('Lifestyle 2', '#C8C1B6', '#5A5248'), alt: 'Lifestyle — in hand' },
-  { src: makeLifestylePlaceholder('Lifestyle 3', '#BEB7AC', '#4E473D'), alt: 'Lifestyle — pocket' },
-  { src: makeLifestylePlaceholder('Lifestyle 4', '#B3AC9F', '#413A31'), alt: 'Lifestyle — outdoor' },
-  { src: makeLifestylePlaceholder('Lifestyle 5', '#A9A295', '#342F27'), alt: 'Lifestyle — travel' },
+  { src: makePlaceholder('Lifestyle 1', '#D6D0C7', '#6B6359'), alt: 'Lifestyle — desk setup' },
+  { src: makePlaceholder('Lifestyle 2', '#C8C1B6', '#5A5248'), alt: 'Lifestyle — in hand' },
+  { src: makePlaceholder('Lifestyle 3', '#BEB7AC', '#4E473D'), alt: 'Lifestyle — pocket' },
+  { src: makePlaceholder('Lifestyle 4', '#B3AC9F', '#413A31'), alt: 'Lifestyle — outdoor' },
+  { src: makePlaceholder('Lifestyle 5', '#A9A295', '#342F27'), alt: 'Lifestyle — travel' },
 ];
 
 const colorOptions: ColorOption[] = [
@@ -203,7 +194,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
         className="ds-pdp__feature-section"
         title="Engineered for Everyday Protection"
         description="Woven from 600D aramid fiber — the same material used in aerospace and body armor — this case delivers military-grade impact resistance at just 0.65mm thin. The precision-cut design wraps your device without adding bulk, while the raised camera lip keeps your lenses safe on any surface."
-        image={<img src={makeLifestylePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
       />
 
       <FeatureBlock
@@ -211,14 +202,14 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
         reverse
         title="Seamless MagSafe Integration"
         description="Precision-aligned magnets ensure a perfect snap every time. Charge wirelessly, attach your favorite accessories, and never worry about compatibility. The ultra-thin profile means zero interference with MagSafe's full magnetic strength."
-        image={<img src={makeLifestylePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
       />
 
       <FeatureBlock
         className="ds-pdp__feature-section"
         title="12 Grams of Confidence"
         description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
-        image={<img src={makeLifestylePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
+        image={<img src={makePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" style={{ aspectRatio: '5/4', objectFit: 'cover' }} />}
       />
 
       <CookieConsent

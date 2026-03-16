@@ -1,23 +1,44 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { ImageGalleryDefault, ImageGalleryAspectRatios, ImageGalleryThumbsLeft } from '../../components/ImageGalleryGallery';
 ---
 
-<BaseLayout title="Image Gallery">
-  <div class="prose">
-    <h1>Image Gallery</h1>
-    <p>
-      A product image viewer with thumbnail navigation and swipe support.
-      Configurable aspect ratios and thumbnail placement for different layouts.
-    </p>
-
-    <h2>Installation</h2>
-    <pre><code>{`import { ImageGallery } from '@ds/components';`}</code></pre>
-
-    <h2>Default</h2>
-    <p>Bottom thumbnails with 4:5 aspect ratio. Swipe to navigate on touch devices.</p>
-    <ImageGalleryDefault client:load />
-    <pre><code>{`<ImageGallery
+<ComponentPage
+  title="Image Gallery"
+  description="A product image viewer with thumbnail navigation and swipe support. Configurable aspect ratios and thumbnail placement for different layouts."
+  installCode="import { ImageGallery } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>images</code>', '<code>GalleryImage[]</code>', '—', 'Array of images to display'],
+        ['<code>aspectRatio</code>', "<code>'1/1' | '4/5' | '3/4' | '4/3' | '16/9'</code>", "<code>'4/5'</code>", 'Main image aspect ratio'],
+        ['<code>defaultIndex</code>', '<code>number</code>', '<code>0</code>', 'Initially selected image'],
+        ['<code>thumbnailPosition</code>', "<code>'bottom' | 'left'</code>", "<code>'bottom'</code>", 'Thumbnail strip placement'],
+      ],
+    },
+    {
+      name: 'GalleryImage',
+      headers: ['Property', 'Type', 'Description'],
+      rows: [
+        ['<code>src</code>', '<code>string</code>', 'Image source URL'],
+        ['<code>alt</code>', '<code>string</code>', 'Alt text for accessibility'],
+        ['<code>thumbSrc</code>', '<code>string</code>', 'Optional smaller thumbnail URL'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Thumbnails use <code>role="tablist"</code> and <code>role="tab"</code> pattern',
+    'Arrow keys navigate between thumbnails',
+    '<kbd>Home</kbd> / <kbd>End</kbd> jump to first/last image',
+    'Active thumbnail has <code>aria-selected="true"</code>',
+    'Roving tabindex keeps only active thumb in tab order',
+  ]}
+>
+  <h2>Default</h2>
+  <p>Bottom thumbnails with 4:5 aspect ratio. Swipe to navigate on touch devices.</p>
+  <ImageGalleryDefault client:load />
+  <pre><code>{`<ImageGallery
   images={[
     { src: '/product-1.jpg', alt: 'Front view' },
     { src: '/product-2.jpg', alt: 'Side view' },
@@ -26,81 +47,14 @@ import { ImageGalleryDefault, ImageGalleryAspectRatios, ImageGalleryThumbsLeft }
   ]}
 />`}</code></pre>
 
-    <h2>Aspect ratios</h2>
-    <p>Square format works well for product detail pages.</p>
-    <ImageGalleryAspectRatios client:load />
-    <pre><code>{`<ImageGallery images={images} aspectRatio="1/1" />
+  <h2>Aspect ratios</h2>
+  <p>Square format works well for product detail pages.</p>
+  <ImageGalleryAspectRatios client:load />
+  <pre><code>{`<ImageGallery images={images} aspectRatio="1/1" />
 {/* Also supports: '4/5' (default), '3/4', '4/3', '16/9' */}`}</code></pre>
 
-    <h2>Thumbnails on left</h2>
-    <p>Vertical thumbnail strip for wider layouts.</p>
-    <ImageGalleryThumbsLeft client:load />
-    <pre><code>{`<ImageGallery images={images} thumbnailPosition="left" />`}</code></pre>
-
-    <h2>Props</h2>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>images</code></td><td><code>GalleryImage[]</code></td><td>—</td><td>Array of images to display</td></tr>
-        <tr><td><code>aspectRatio</code></td><td><code>'1/1' | '4/5' | '3/4' | '4/3' | '16/9'</code></td><td><code>'4/5'</code></td><td>Main image aspect ratio</td></tr>
-        <tr><td><code>defaultIndex</code></td><td><code>number</code></td><td><code>0</code></td><td>Initially selected image</td></tr>
-        <tr><td><code>thumbnailPosition</code></td><td><code>'bottom' | 'left'</code></td><td><code>'bottom'</code></td><td>Thumbnail strip placement</td></tr>
-      </tbody>
-    </table>
-
-    <h3>GalleryImage</h3>
-    <table class="props-table">
-      <thead>
-        <tr><th>Property</th><th>Type</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>src</code></td><td><code>string</code></td><td>Image source URL</td></tr>
-        <tr><td><code>alt</code></td><td><code>string</code></td><td>Alt text for accessibility</td></tr>
-        <tr><td><code>thumbSrc</code></td><td><code>string</code></td><td>Optional smaller thumbnail URL</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Thumbnails use <code>role="tablist"</code> and <code>role="tab"</code> pattern</li>
-      <li>Arrow keys navigate between thumbnails</li>
-      <li><kbd>Home</kbd> / <kbd>End</kbd> jump to first/last image</li>
-      <li>Active thumbnail has <code>aria-selected="true"</code></li>
-      <li>Roving tabindex keeps only active thumb in tab order</li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-  kbd {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    background: var(--color-background-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 0.1em 0.4em;
-  }
-</style>
+  <h2>Thumbnails on left</h2>
+  <p>Vertical thumbnail strip for wider layouts.</p>
+  <ImageGalleryThumbsLeft client:load />
+  <pre><code>{`<ImageGallery images={images} thumbnailPosition="left" />`}</code></pre>
+</ComponentPage>

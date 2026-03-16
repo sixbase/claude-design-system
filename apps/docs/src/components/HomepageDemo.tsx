@@ -1,20 +1,11 @@
 import { useState } from 'react';
-import { Heading, Text } from '@ds/components';
-import { Button } from '@ds/components';
-import { Input } from '@ds/components';
-import { Carousel, CarouselSlide } from '@ds/components';
-import { ProductCard } from '@ds/components';
-import { FeatureBlock } from '@ds/components';
+import {
+  Button, Carousel, CarouselSlide, FeatureBlock,
+  Heading, Input, ProductCard, Text,
+} from '@ds/components';
 import { PRODUCTS } from '../data/products';
+import { makePlaceholder } from '../lib/placeholder';
 import './HomepageDemo.css';
-
-// ─── Placeholder helpers ──────────────────────────────────
-
-function makeLifestylePlaceholder(label: string, fill: string, textFill: string) {
-  return `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800"><rect width="1000" height="800" fill="${fill}"/><text x="500" y="400" text-anchor="middle" fill="${textFill}" font-size="28" font-family="sans-serif">${label}</text></svg>`,
-  )}`;
-}
 
 // ─── Data ─────────────────────────────────────────────────
 
@@ -25,19 +16,19 @@ const FEATURES = [
     title: 'Thoughtfully Sourced Materials',
     description:
       'Every product starts with the best raw materials — organic cotton, vegetable-tanned leather, and sustainably harvested wood. We partner directly with mills and tanneries to ensure quality from the source.',
-    image: makeLifestylePlaceholder('Materials', '#C8C1B6', '#4E473D'),
+    image: makePlaceholder('Materials', '#C8C1B6', '#4E473D'),
   },
   {
     title: 'Designed to Last',
     description:
       'We believe the most sustainable product is one you never have to replace. Our pieces are stress-tested and refined until they meet a standard of durability that makes fast fashion obsolete.',
-    image: makeLifestylePlaceholder('Durability', '#B3AC9F', '#413A31'),
+    image: makePlaceholder('Durability', '#B3AC9F', '#413A31'),
   },
   {
     title: 'Small-Batch, Zero Waste',
     description:
       'We produce in small runs to minimize overstock and waste. Off-cuts are repurposed into accessories, and our packaging is 100% recyclable or compostable.',
-    image: makeLifestylePlaceholder('Zero Waste', '#A9A295', '#342F27'),
+    image: makePlaceholder('Zero Waste', '#A9A295', '#342F27'),
   },
 ];
 

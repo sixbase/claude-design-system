@@ -119,6 +119,12 @@ const css = lines(
 
 const globals = lines(
   ``,
+  `/* ─── Form element font inheritance ────────────────── */`,
+  `/* Browsers don't inherit font on form controls — fix globally */`,
+  `button, input, select, textarea {`,
+  `  font-family: inherit;`,
+  `}`,
+  ``,
   `/* ─── Global focus-visible ──────────────────────────── */`,
   `/* Safety-net focus ring for any element not styled by a component */`,
   `*:focus-visible {`,

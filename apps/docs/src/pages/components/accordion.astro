@@ -1,23 +1,59 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { AccordionDefault, AccordionMultiple, AccordionSizes, AccordionWithCheckbox, AccordionBordered } from '../../components/AccordionGallery';
 ---
 
-<BaseLayout title="Accordion">
-  <div class="prose">
-    <h1>Accordion</h1>
-    <p>
-      A vertically stacked set of collapsible sections. Common for FAQs, product details,
-      and filtering. Built on Radix UI for full keyboard and screen reader support.
-    </p>
-
-    <h2>Installation</h2>
-    <pre><code>{`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@ds/components';`}</code></pre>
-
-    <h2>Single (collapsible)</h2>
-    <p>Only one item open at a time. Set <code>collapsible</code> to allow closing all items.</p>
-    <AccordionDefault client:load />
-    <pre><code>{`<Accordion type="single" collapsible>
+<ComponentPage
+  title="Accordion"
+  description="A vertically stacked set of collapsible sections. Common for FAQs, product details, and filtering. Built on Radix UI for full keyboard and screen reader support."
+  installCode="import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@ds/components';"
+  props={[
+    {
+      name: 'Accordion (root)',
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>type</code>', "<code>'single' | 'multiple'</code>", '—', 'Whether one or many items can be open'],
+        ['<code>collapsible</code>', '<code>boolean</code>', '<code>false</code>', 'Allow closing all items (single mode only)'],
+        ['<code>defaultValue</code>', '<code>string | string[]</code>', '—', 'Initially open item(s)'],
+        ['<code>value</code>', '<code>string | string[]</code>', '—', 'Controlled open item(s)'],
+        ['<code>onValueChange</code>', '<code>(value) =&gt; void</code>', '—', 'Called when open items change'],
+        ['<code>size</code>', "<code>'sm' | 'md' | 'lg'</code>", "<code>'md'</code>", 'Size variant'],
+        ['<code>flush</code>', '<code>boolean</code>', '<code>false</code>', 'Legacy — now a no-op. Inner-only dividers are the default behavior.'],
+        ['<code>bordered</code>', '<code>boolean</code>', '<code>false</code>', 'Wraps in a bordered, rounded panel'],
+      ],
+    },
+    {
+      name: 'AccordionItem',
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>value</code>', '<code>string</code>', '—', 'Unique identifier for this item'],
+        ['<code>disabled</code>', '<code>boolean</code>', '<code>false</code>', 'Prevent opening this item'],
+      ],
+    },
+    {
+      name: 'AccordionTrigger',
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>checked</code>', "<code>boolean | 'indeterminate'</code>", '—', 'Show a checkbox and control its state'],
+        ['<code>onCheckedChange</code>', '<code>(checked) =&gt; void</code>', '—', 'Called when checkbox is toggled'],
+        ['<code>checkboxDisabled</code>', '<code>boolean</code>', '<code>false</code>', 'Disable only the checkbox'],
+        ['<code>checkboxLabel</code>', '<code>string</code>', '—', 'Accessible label for the checkbox'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Keyboard: <kbd>Enter</kbd> / <kbd>Space</kbd> toggle the focused item',
+    '<kbd>Arrow Down</kbd> / <kbd>Arrow Up</kbd> move between triggers',
+    '<kbd>Home</kbd> / <kbd>End</kbd> jump to first / last trigger',
+    'Each trigger has <code>aria-expanded</code> and <code>aria-controls</code>',
+    'Content regions have <code>role="region"</code> with <code>aria-labelledby</code>',
+    'Checkbox variant: checkbox and trigger are independent — checking doesn\'t expand, expanding doesn\'t check',
+  ]}
+>
+  <h2>Single (collapsible)</h2>
+  <p>Only one item open at a time. Set <code>collapsible</code> to allow closing all items.</p>
+  <AccordionDefault client:load />
+  <pre><code>{`<Accordion type="single" collapsible>
   <AccordionItem value="shipping">
     <AccordionTrigger>Shipping & Delivery</AccordionTrigger>
     <AccordionContent>Free standard shipping…</AccordionContent>
@@ -28,37 +64,37 @@ import { AccordionDefault, AccordionMultiple, AccordionSizes, AccordionWithCheck
   </AccordionItem>
 </Accordion>`}</code></pre>
 
-    <h2>Multiple</h2>
-    <p>Multiple items can be open simultaneously. Use <code>defaultValue</code> to pre-expand items.</p>
-    <AccordionMultiple client:load />
-    <pre><code>{`<Accordion type="multiple" defaultValue={['features', 'specs']}>
+  <h2>Multiple</h2>
+  <p>Multiple items can be open simultaneously. Use <code>defaultValue</code> to pre-expand items.</p>
+  <AccordionMultiple client:load />
+  <pre><code>{`<Accordion type="multiple" defaultValue={['features', 'specs']}>
   <AccordionItem value="features">…</AccordionItem>
   <AccordionItem value="specs">…</AccordionItem>
 </Accordion>`}</code></pre>
 
-    <h2>Sizes</h2>
-    <AccordionSizes client:load />
-    <pre><code>{`<Accordion size="sm">…</Accordion>
+  <h2>Sizes</h2>
+  <AccordionSizes client:load />
+  <pre><code>{`<Accordion size="sm">…</Accordion>
 <Accordion size="md">…</Accordion>  {/* default */}
 <Accordion size="lg">…</Accordion>`}</code></pre>
 
-    <h2>Bordered</h2>
-    <p>Wraps the accordion in a bordered, rounded panel.</p>
-    <AccordionBordered client:load />
-    <pre><code>{`<Accordion type="single" collapsible bordered>
+  <h2>Bordered</h2>
+  <p>Wraps the accordion in a bordered, rounded panel.</p>
+  <AccordionBordered client:load />
+  <pre><code>{`<Accordion type="single" collapsible bordered>
   <AccordionItem value="faq-1">
     <AccordionTrigger>Question?</AccordionTrigger>
     <AccordionContent>Answer.</AccordionContent>
   </AccordionItem>
 </Accordion>`}</code></pre>
 
-    <h2>With Checkbox</h2>
-    <p>
-      Add checkboxes to accordion triggers for selection-based patterns like cookie preferences
-      or notification settings. The checkbox operates independently from the expand/collapse behavior.
-    </p>
-    <AccordionWithCheckbox client:load />
-    <pre><code>{`<Accordion type="multiple" size="sm" bordered>
+  <h2>With Checkbox</h2>
+  <p>
+    Add checkboxes to accordion triggers for selection-based patterns like cookie preferences
+    or notification settings. The checkbox operates independently from the expand/collapse behavior.
+  </p>
+  <AccordionWithCheckbox client:load />
+  <pre><code>{`<Accordion type="multiple" size="sm" bordered>
   <AccordionItem value="essential">
     <AccordionTrigger
       checked={true}
@@ -80,89 +116,4 @@ import { AccordionDefault, AccordionMultiple, AccordionSizes, AccordionWithCheck
     <AccordionContent>Enable enhanced functionality.</AccordionContent>
   </AccordionItem>
 </Accordion>`}</code></pre>
-
-    <h2>Props</h2>
-    <h3>Accordion (root)</h3>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>type</code></td><td><code>'single' | 'multiple'</code></td><td>—</td><td>Whether one or many items can be open</td></tr>
-        <tr><td><code>collapsible</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Allow closing all items (single mode only)</td></tr>
-        <tr><td><code>defaultValue</code></td><td><code>string | string[]</code></td><td>—</td><td>Initially open item(s)</td></tr>
-        <tr><td><code>value</code></td><td><code>string | string[]</code></td><td>—</td><td>Controlled open item(s)</td></tr>
-        <tr><td><code>onValueChange</code></td><td><code>(value) =&gt; void</code></td><td>—</td><td>Called when open items change</td></tr>
-        <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Size variant</td></tr>
-        <tr><td><code>flush</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Legacy — now a no-op. Inner-only dividers are the default behavior.</td></tr>
-        <tr><td><code>bordered</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Wraps in a bordered, rounded panel</td></tr>
-      </tbody>
-    </table>
-
-    <h3>AccordionItem</h3>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>value</code></td><td><code>string</code></td><td>—</td><td>Unique identifier for this item</td></tr>
-        <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevent opening this item</td></tr>
-      </tbody>
-    </table>
-
-    <h3>AccordionTrigger</h3>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>checked</code></td><td><code>boolean | 'indeterminate'</code></td><td>—</td><td>Show a checkbox and control its state</td></tr>
-        <tr><td><code>onCheckedChange</code></td><td><code>(checked) =&gt; void</code></td><td>—</td><td>Called when checkbox is toggled</td></tr>
-        <tr><td><code>checkboxDisabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disable only the checkbox</td></tr>
-        <tr><td><code>checkboxLabel</code></td><td><code>string</code></td><td>—</td><td>Accessible label for the checkbox</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Keyboard: <kbd>Enter</kbd> / <kbd>Space</kbd> toggle the focused item</li>
-      <li><kbd>Arrow Down</kbd> / <kbd>Arrow Up</kbd> move between triggers</li>
-      <li><kbd>Home</kbd> / <kbd>End</kbd> jump to first / last trigger</li>
-      <li>Each trigger has <code>aria-expanded</code> and <code>aria-controls</code></li>
-      <li>Content regions have <code>role="region"</code> with <code>aria-labelledby</code></li>
-      <li>Checkbox variant: checkbox and trigger are independent — checking doesn't expand, expanding doesn't check</li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-  kbd {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    background: var(--color-background-subtle);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 0.1em 0.4em;
-  }
-</style>
+</ComponentPage>

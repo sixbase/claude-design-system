@@ -1,80 +1,44 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { FeatureBlockDefault, FeatureBlockReverse } from '../../components/FeatureBlockGallery';
 ---
 
-<BaseLayout title="Feature Block">
-  <div class="prose">
-    <h1>Feature Block</h1>
-    <p>
-      A side-by-side layout pairing an image with marketing text. Stacks vertically
-      on mobile and sits side-by-side on tablet and up. Use <code>reverse</code> to
-      alternate the image position for visual rhythm.
-    </p>
-
-    <h2>Installation</h2>
-    <pre><code>{`import { FeatureBlock } from '@ds/components';`}</code></pre>
-
-    <h2>Default</h2>
-    <FeatureBlockDefault client:load />
-    <pre><code>{`<FeatureBlock
+<ComponentPage
+  title="Feature Block"
+  description="A side-by-side layout pairing an image with marketing text. Stacks vertically on mobile and sits side-by-side on tablet and up. Use <code>reverse</code> to alternate the image position for visual rhythm."
+  installCode="import { FeatureBlock } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>title</code>', '<code>string</code>', '—', 'Heading text'],
+        ['<code>description</code>', '<code>string</code>', '—', 'Body text'],
+        ['<code>image</code>', '<code>ReactNode</code>', '—', 'Image element or custom node'],
+        ['<code>reverse</code>', '<code>boolean</code>', '<code>false</code>', 'Swap image/text positions on tablet+'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Title renders as an <code>&lt;h2&gt;</code> — adjust heading level via CSS if needed in context',
+    'Image content should include appropriate <code>alt</code> text',
+    'Content order in the DOM remains image → text regardless of <code>reverse</code>, preserving reading order',
+  ]}
+>
+  <h2>Default</h2>
+  <FeatureBlockDefault client:load />
+  <pre><code>{`<FeatureBlock
   title="Engineered for Everyday Protection"
   description="Woven from 600D aramid fiber..."
   image={<img src="..." alt="Feature image" />}
 />`}</code></pre>
 
-    <h2>Reversed</h2>
-    <p>Swap image and text positions on tablet+ to create alternating layouts.</p>
-    <FeatureBlockReverse client:load />
-    <pre><code>{`<FeatureBlock
+  <h2>Reversed</h2>
+  <p>Swap image and text positions on tablet+ to create alternating layouts.</p>
+  <FeatureBlockReverse client:load />
+  <pre><code>{`<FeatureBlock
   reverse
   title="Seamless MagSafe Integration"
   description="Precision-aligned magnets..."
   image={<img src="..." alt="Feature image" />}
 />`}</code></pre>
-
-    <h2>Props</h2>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Heading text</td></tr>
-        <tr><td><code>description</code></td><td><code>string</code></td><td>—</td><td>Body text</td></tr>
-        <tr><td><code>image</code></td><td><code>ReactNode</code></td><td>—</td><td>Image element or custom node</td></tr>
-        <tr><td><code>reverse</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Swap image/text positions on tablet+</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Title renders as an <code>&lt;h2&gt;</code> — adjust heading level via CSS if needed in context</li>
-      <li>Image content should include appropriate <code>alt</code> text</li>
-      <li>Content order in the DOM remains image → text regardless of <code>reverse</code>, preserving reading order</li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-</style>
+</ComponentPage>

@@ -16,7 +16,7 @@
   justify-content: center;
   gap: var(--spacing-2);
   white-space: nowrap;
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-body);
   font-weight: var(--button-font-weight);
   border-radius: var(--button-radius);
   border: 1px solid transparent;
@@ -38,7 +38,10 @@
 
 /* Focus ring — visible for keyboard, hidden for mouse */
 .ds-button:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-focus-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
+}
+.ds-button--primary:focus-visible {
+  box-shadow: var(--shadow-sm), 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
 }
 
 /* ─── Size variants ─────────────────────────────────────── */
@@ -167,9 +170,10 @@
 }
 
 /* ─── Icon-only variant ─────────────────────────────────── */
-.ds-button--icon-only.ds-button--sm  { width: var(--size-control-sm); padding: 0; }
-.ds-button--icon-only.ds-button--md  { width: var(--size-control-md); padding: 0; }
-.ds-button--icon-only.ds-button--lg  { width: var(--size-control-lg); padding: 0; }
+.ds-button--icon-only { padding: 0; }
+.ds-button--icon-only.ds-button--sm  { width: var(--size-control-sm); }
+.ds-button--icon-only.ds-button--md  { width: var(--size-control-md); }
+.ds-button--icon-only.ds-button--lg  { width: var(--size-control-lg); }
 
 /* ─── Full-width ────────────────────────────────────────── */
 .ds-button--full-width {

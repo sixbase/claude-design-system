@@ -50,7 +50,7 @@ export function ViewportIndicator() {
         borderRadius: 'var(--radius-full)',
         backgroundColor: 'var(--color-primary)',
         color: 'var(--color-primary-foreground)',
-        fontFamily: 'var(--font-family-mono)',
+        fontFamily: 'var(--font-family-code)',
         fontSize: 'var(--font-size-xs)',
         lineHeight: 'var(--line-height-normal)',
         pointerEvents: 'none',

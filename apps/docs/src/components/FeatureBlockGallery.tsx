@@ -1,10 +1,5 @@
 import { FeatureBlock } from '@ds/components';
-
-function makePlaceholder(label: string, fill: string, textFill: string) {
-  return `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800"><rect width="1000" height="800" fill="${fill}"/><text x="500" y="400" text-anchor="middle" fill="${textFill}" font-size="28" font-family="sans-serif">${label}</text></svg>`,
-  )}`;
-}
+import { makePlaceholder } from '../lib/placeholder';
 
 export function FeatureBlockDefault() {
   return (

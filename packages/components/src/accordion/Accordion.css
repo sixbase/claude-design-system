@@ -1,6 +1,7 @@
 /* ─── Accordion ─────────────────────────────────────────── */
 .ds-accordion {
   width: 100%;
+  font-family: var(--font-family-body);
 }
 
 /* ─── Item ──────────────────────────────────────────────── */
@@ -35,7 +36,6 @@
   background: transparent;
   text-align: left;
   cursor: pointer;
-  font-family: var(--font-family-sans);
   font-weight: var(--font-weight-medium);
   color: var(--color-foreground);
   transition: color var(--transition-fast);
@@ -52,8 +52,8 @@
 }
 
 .ds-accordion__trigger:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: -2px;
+  outline: none;
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
   border-radius: var(--radius-sm);
 }
 
@@ -82,7 +82,6 @@
 .ds-accordion__content {
   overflow: hidden;
   color: var(--color-foreground-subtle);
-  font-family: var(--font-family-sans);
   line-height: var(--line-height-relaxed);
 }
 

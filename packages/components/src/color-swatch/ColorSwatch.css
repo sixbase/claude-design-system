@@ -18,14 +18,14 @@
 }
 
 .ds-color-swatch__name {
-  font-family: var(--font-family-mono);
+  font-family: var(--font-family-code);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-foreground);
 }
 
 .ds-color-swatch__value {
-  font-family: var(--font-family-mono);
+  font-family: var(--font-family-code);
   font-size: var(--font-size-xs);
   color: var(--color-foreground-subtle);
 }

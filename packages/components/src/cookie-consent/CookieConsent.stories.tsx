@@ -44,7 +44,7 @@ const meta: Meta<typeof CookieConsent> = {
     (Story) => (
       <div style={{ transform: 'translateZ(0)', position: 'relative', minHeight: 500, overflow: 'hidden' }}>
         <div style={{ padding: 24 }}>
-          <p style={{ color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-sans)', fontSize: 'var(--font-size-sm)' }}>
+          <p style={{ color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
             Page content behind the banner. Scroll down to see the cookie consent dialog.
           </p>
         </div>
@@ -98,7 +98,7 @@ export const Controlled: Story = {
       <>
         <div style={{ padding: 24 }}>
           <Button onClick={() => setOpen(true)}>Show Cookie Banner</Button>
-          <p style={{ marginTop: 12, color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-sans)', fontSize: 'var(--font-size-sm)' }}>
+          <p style={{ marginTop: 12, color: 'var(--color-foreground-subtle)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
             Banner is {open ? 'visible' : 'hidden'}
           </p>
         </div>

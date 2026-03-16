@@ -1,90 +1,55 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { ProductCardSingle, ProductCardLarge, ProductCardGrid } from '../../components/ProductCardGallery';
 ---
 
-<BaseLayout title="Product Card">
-  <div class="prose">
-    <h1>Product Card</h1>
-    <p>
-      A minimal product card composing <code>Card</code>, <code>CardImage</code>, and
-      <code>Typography</code>. Displays a 4:5 product image, name, and formatted price.
-    </p>
-
-    <h2>Installation</h2>
-    <pre><code>{`import { ProductCard } from '@ds/components';`}</code></pre>
-
-    <h2>Single card</h2>
-    <ProductCardSingle client:load />
-    <pre><code>{`<ProductCard
+<ComponentPage
+  title="Product Card"
+  description="A minimal product card composing <code>Card</code>, <code>CardImage</code>, and <code>Typography</code>. Displays a 4:5 product image, name, and formatted price."
+  installCode="import { ProductCard } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>name</code>', '<code>string</code>', '—', 'Product display name'],
+        ['<code>price</code>', '<code>number</code>', '—', 'Price in cents (e.g. 3200 = $32.00)'],
+        ['<code>image</code>', '<code>string</code>', '—', 'Product image URL'],
+        ['<code>currency</code>', '<code>string</code>', "<code>'USD'</code>", 'ISO 4217 currency code'],
+        ['<code>size</code>', "<code>'default' | 'lg'</code>", "<code>'default'</code>", 'Card size variant'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Image <code>alt</code> text is derived from the product <code>name</code>',
+    'Inherits interactive hover behavior from <code>Card</code>',
+    'Hover effects respect <code>prefers-reduced-motion</code>',
+  ]}
+>
+  <h2>Single card</h2>
+  <ProductCardSingle client:load />
+  <pre><code>{`<ProductCard
   name="Aramid Fiber iPhone 17 Pro Max Case"
   price={8500}
   image="/products/phone-case.jpg"
 />`}</code></pre>
 
-    <h2>Large card</h2>
-    <ProductCardLarge client:load />
-    <pre><code>{`<ProductCard
+  <h2>Large card</h2>
+  <ProductCardLarge client:load />
+  <pre><code>{`<ProductCard
   name="Aramid Fiber iPhone 17 Pro Max Case"
   price={8500}
   image="/products/phone-case.jpg"
   size="lg"
 />`}</code></pre>
 
-    <h2>Product grid</h2>
-    <p>
-      Place cards in a CSS Grid for product listings. The card fills the column width automatically.
-    </p>
-    <ProductCardGrid client:load />
-    <pre><code>{`<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--spacing-4)' }}>
+  <h2>Product grid</h2>
+  <p>
+    Place cards in a CSS Grid for product listings. The card fills the column width automatically.
+  </p>
+  <ProductCardGrid client:load />
+  <pre><code>{`<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--spacing-4)' }}>
   {products.map((p) => (
     <ProductCard key={p.name} {...p} />
   ))}
 </div>`}</code></pre>
-
-    <h2>Props</h2>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>name</code></td><td><code>string</code></td><td>—</td><td>Product display name</td></tr>
-        <tr><td><code>price</code></td><td><code>number</code></td><td>—</td><td>Price in cents (e.g. 3200 = $32.00)</td></tr>
-        <tr><td><code>image</code></td><td><code>string</code></td><td>—</td><td>Product image URL</td></tr>
-        <tr><td><code>currency</code></td><td><code>string</code></td><td><code>'USD'</code></td><td>ISO 4217 currency code</td></tr>
-        <tr><td><code>size</code></td><td><code>'default' | 'lg'</code></td><td><code>'default'</code></td><td>Card size variant</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Image <code>alt</code> text is derived from the product <code>name</code></li>
-      <li>Inherits interactive hover behavior from <code>Card</code></li>
-      <li>Hover effects respect <code>prefers-reduced-motion</code></li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-</style>
+</ComponentPage>

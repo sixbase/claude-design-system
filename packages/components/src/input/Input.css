@@ -4,11 +4,11 @@
   flex-direction: column;
   gap: var(--spacing-1);
   width: 100%;
+  font-family: var(--font-family-body);
 }
 
 /* ─── Label ────────────────────────────────────────────────── */
 .ds-input-label {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-foreground);
@@ -30,7 +30,6 @@
   align-items: center;
   width: 100%;
   padding: 0 var(--spacing-3);
-  font-family: var(--font-family-sans);
   color: var(--color-foreground);
   background-color: var(--input-bg);
   border: 1px solid var(--input-border-color);
@@ -131,14 +130,12 @@
 
 /* ─── Helper text / error message ──────────────────────────── */
 .ds-input-hint {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-xs);
   color: var(--color-foreground-subtle);
   line-height: var(--line-height-normal);
 }
 
 .ds-input-error {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-xs);
   color: var(--color-destructive);
   line-height: var(--line-height-normal);

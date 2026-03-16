@@ -63,7 +63,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
     .join(' ');
 
   return (
-    <div className={`ds-select-root${fullWidth ? ' ds-select-root--full-width' : ''}`}>
+    <div className={['ds-select-root', fullWidth && 'ds-select-root--full-width'].filter(Boolean).join(' ')}>
       {label && (
         <label id={labelId} className="ds-select-label">
           {label}

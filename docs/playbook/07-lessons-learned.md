@@ -355,7 +355,7 @@ Fonts have wildly different vertical metrics (ascender height, descender depth, 
 
 **[PENDING DECISION]** At what point should we add a `packages/icons` package? The current components accept `ReactNode` for icons which is flexible but inconsistent. A curated icon set (probably Lucide or Radix Icons) would make demos and docs more consistent.
 
-**[NEEDS INPUT]** Deployment target for the Astro docs site. Options: Vercel, Netlify, GitHub Pages. Currently running locally only.
+**[RESOLVED]** Deployment target: GitHub Pages via GitHub Actions (`deploy-docs.yml`). Astro `base: '/claude-design-system'` config, all internal links prefixed with `import.meta.env.BASE_URL`. Live at `https://sixbase.github.io/claude-design-system/`.
 
 ---
 
@@ -438,6 +438,24 @@ This flips black → white and works perfectly for monochrome logos. For multi-c
 ### Keep header and footer logos in sync
 
 The header and footer should use the same logo asset and the same rendering approach. We initially had the header using `<img src="logo.svg">` and the footer using plain text styled to look like a logo. This created a visual inconsistency — different font rendering, different weight, different alignment. Both now use the same SVG `<img>` at the same height (20px), with identical dark mode handling. If you change one, change the other.
+
+### Radix Portal content doesn't inherit from component roots
+
+When consolidating `font-family` declarations, we initially removed them from Select trigger and item elements. The Select dropdown broke — items rendered in system font. Root cause: Radix Select uses `<Portal>` to render the dropdown outside the component's DOM tree, so CSS inheritance from the component root doesn't reach it. The same applies to Modal content.
+
+**Rule:** Any element rendered via a Radix Portal (`Select.Content`, `Dialog.Content`, `Popover.Content`, etc.) must have its own `font-family` declaration. Only non-portalled children can rely on inheritance from the component root.
+
+### Dead CSS classes are silent bugs
+
+The ModalGallery used `className="gallery-row"` on 4 wrapper divs — a class that had no CSS definition anywhere in the codebase. These divs rendered as unstyled block elements. In two cases (ModalSizes, ModalControlled) they were the only thing providing row layout for sibling buttons, but since the class was dead, the buttons stacked vertically instead of flowing horizontally.
+
+**Rule:** When you see a className that isn't defined in any CSS file, it's either dead code to remove or a missing style to add. Never leave unresolved class references.
+
+### Shared doc utilities pay off immediately
+
+Extracting the `makePlaceholder()` function (identical SVG-generation logic duplicated in 4 files) into a shared `apps/docs/src/lib/placeholder.ts` utility eliminated 60+ lines of duplication. More importantly, the next person who needs a placeholder image finds the utility via imports instead of copy-pasting from another gallery file.
+
+**Rule:** If the same helper function appears in 2+ doc components, extract it to `apps/docs/src/lib/`. The bar for extraction in docs is lower than in the component library — docs code is internal, so DRY is always worth it.
 
 ### Redundant declarations are overrides in disguise
 

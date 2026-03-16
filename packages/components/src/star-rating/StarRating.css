@@ -3,7 +3,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-1);
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-body);
 }
 
 .ds-star-rating__stars {

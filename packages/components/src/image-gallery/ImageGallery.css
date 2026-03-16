@@ -89,8 +89,8 @@
 }
 
 .ds-image-gallery__thumb:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
 }
 
 .ds-image-gallery__thumb-img {

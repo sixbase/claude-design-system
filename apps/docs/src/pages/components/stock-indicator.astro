@@ -1,78 +1,42 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentPage from '../../layouts/ComponentPage.astro';
 import { StockIndicatorDefault, StockIndicatorStatuses, StockIndicatorCustomLabel } from '../../components/StockIndicatorGallery';
 ---
 
-<BaseLayout title="Stock Indicator">
-  <div class="prose">
-    <h1>Stock Indicator</h1>
-    <p>
-      Displays inventory status with a colored dot and label. Supports three
-      statuses — in stock, low stock, and out of stock — with a pulsing animation
-      for available items.
-    </p>
+<ComponentPage
+  title="Stock Indicator"
+  description="Displays inventory status with a colored dot and label. Supports three statuses — in stock, low stock, and out of stock — with a pulsing animation for available items."
+  installCode="import { StockIndicator } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>status</code>', "<code>'in-stock' | 'low-stock' | 'out-of-stock'</code>", "<code>'in-stock'</code>", 'Inventory status'],
+        ['<code>label</code>', '<code>string</code>', '—', 'Custom label text. Defaults to a label based on status.'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Renders as a <code>&lt;p&gt;</code> element for semantic text content',
+    'Color is not the sole indicator — text label always accompanies the dot',
+    'Pulse animation respects <code>prefers-reduced-motion</code> (inherits from system)',
+  ]}
+>
+  <h2>Default</h2>
+  <StockIndicatorDefault client:load />
+  <pre><code>{`<StockIndicator />`}</code></pre>
 
-    <h2>Installation</h2>
-    <pre><code>{`import { StockIndicator } from '@ds/components';`}</code></pre>
-
-    <h2>Default</h2>
-    <StockIndicatorDefault client:load />
-    <pre><code>{`<StockIndicator />`}</code></pre>
-
-    <h2>Statuses</h2>
-    <p>Three built-in statuses with default labels and color-coded dots.</p>
-    <StockIndicatorStatuses client:load />
-    <pre><code>{`<StockIndicator status="in-stock" />
+  <h2>Statuses</h2>
+  <p>Three built-in statuses with default labels and color-coded dots.</p>
+  <StockIndicatorStatuses client:load />
+  <pre><code>{`<StockIndicator status="in-stock" />
 <StockIndicator status="low-stock" />
 <StockIndicator status="out-of-stock" />`}</code></pre>
 
-    <h2>Custom labels</h2>
-    <p>Override the default label with the <code>label</code> prop.</p>
-    <StockIndicatorCustomLabel client:load />
-    <pre><code>{`<StockIndicator status="in-stock" label="Ships in 1–2 days" />
+  <h2>Custom labels</h2>
+  <p>Override the default label with the <code>label</code> prop.</p>
+  <StockIndicatorCustomLabel client:load />
+  <pre><code>{`<StockIndicator status="in-stock" label="Ships in 1–2 days" />
 <StockIndicator status="low-stock" label="Only 3 left" />
 <StockIndicator status="out-of-stock" label="Back in stock March 20" />`}</code></pre>
-
-    <h2>Props</h2>
-    <table class="props-table">
-      <thead>
-        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>status</code></td><td><code>'in-stock' | 'low-stock' | 'out-of-stock'</code></td><td><code>'in-stock'</code></td><td>Inventory status</td></tr>
-        <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Custom label text. Defaults to a label based on status.</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Accessibility</h2>
-    <ul>
-      <li>Renders as a <code>&lt;p&gt;</code> element for semantic text content</li>
-      <li>Color is not the sole indicator — text label always accompanies the dot</li>
-      <li>Pulse animation respects <code>prefers-reduced-motion</code> (inherits from system)</li>
-    </ul>
-  </div>
-</BaseLayout>
-
-<style>
-  .props-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    margin: var(--spacing-4) 0;
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border);
-  }
-  .props-table th {
-    text-align: left;
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-foreground);
-  }
-  .props-table td {
-    padding: var(--spacing-2) var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground-subtle);
-    vertical-align: top;
-  }
-</style>
+</ComponentPage>

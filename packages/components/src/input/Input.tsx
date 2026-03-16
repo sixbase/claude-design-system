@@ -71,7 +71,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {label && (
         <label
           htmlFor={id}
-          className={`ds-input-label${required ? ' ds-input-label--required' : ''}`}
+          className={['ds-input-label', required && 'ds-input-label--required'].filter(Boolean).join(' ')}
         >
           {label}
         </label>

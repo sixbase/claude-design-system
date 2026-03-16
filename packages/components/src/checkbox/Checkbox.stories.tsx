@@ -55,7 +55,7 @@ export const Small: Story = {
 export const FilterPanel: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '240px' }}>
-      <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-foreground-muted)', margin: 0 }}>
+      <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-foreground-muted)', margin: 0 }}>
         Size
       </p>
       <Checkbox size="sm" label="XS" defaultChecked />

@@ -131,8 +131,9 @@ BEM-inspired with a `ds-` namespace prefix to prevent collisions with consumer C
 .ds-input-error               /* error message child */
 ```
 
-Classes are assembled in the component with a filter:
+Classes are assembled in the component with the **array pattern** — always this pattern, never template literals:
 ```tsx
+// ✓ Always use this pattern
 const classes = [
   'ds-button',
   `ds-button--${variant}`,
@@ -140,7 +141,26 @@ const classes = [
   loading && 'ds-button--loading',
   className,
 ].filter(Boolean).join(' ')
+
+// ✗ Don't use template literals for conditional classes
+const classes = `ds-button ds-button--${variant}${loading ? ' ds-button--loading' : ''}`
 ```
+
+### CSS `font-family` inheritance
+
+Declare `font-family` once on the component root element. Let children inherit.
+
+```css
+/* ✓ Declare once on root */
+.ds-input-root { font-family: var(--font-family-body); }
+/* Children inherit automatically — no font-family needed */
+
+/* Exception: Radix Portal content renders outside the DOM tree */
+.ds-select-trigger { font-family: var(--font-family-body); }  /* Portalled */
+.ds-select-item    { font-family: var(--font-family-body); }  /* Portalled */
+```
+
+**Exception:** Select dropdown, Modal content, and any other Radix `<Portal>` elements don't inherit from the component root because they render at the document body level. These must declare `font-family` explicitly.
 
 ---
 

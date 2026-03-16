@@ -3,6 +3,7 @@
   display: inline-flex;
   flex-direction: column;
   gap: var(--spacing-1);
+  font-family: var(--font-family-body);
 }
 
 .ds-select-root--full-width {
@@ -11,7 +12,6 @@
 
 /* ─── Label ──────────────────────────────────────────────── */
 .ds-select-label {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-foreground);
@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-2);
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-body);
   font-size: var(--font-size-sm);
   color: var(--color-foreground);
   background-color: var(--select-bg);
@@ -157,7 +157,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-2) var(--spacing-3);
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-body);
   font-size: var(--font-size-sm);
   color: var(--color-foreground);
   border-radius: var(--radius-md);
@@ -215,14 +215,12 @@
 
 /* ─── Hint / error ───────────────────────────────────────── */
 .ds-select-hint {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-xs);
   color: var(--color-foreground-subtle);
   line-height: var(--line-height-normal);
 }
 
 .ds-select-error {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-xs);
   color: var(--color-destructive);
   line-height: var(--line-height-normal);

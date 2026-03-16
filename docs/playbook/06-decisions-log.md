@@ -760,3 +760,101 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 **Decision:** Main dialog shows 3 buttons: Manage Preferences (secondary), Decline All (secondary), Accept All (primary). Preferences screen shows 2 buttons: Back (secondary), Save Preferences (primary). "Back" returns to main dialog without saving or closing the banner.
 **Rationale:** Three buttons on the main dialog gives users every option immediately without forcing them into a sub-screen. Keeping the preferences screen to just Back + Save reduces cognitive load when the user is already making granular choices. "Back" (not "Close") makes it clear the banner stays open.
 **Status:** Active
+
+---
+
+### Codebase Audit: CSS `font-family` Consolidation Convention
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** During a full codebase audit, discovered that 6 component CSS files declared `font-family: var(--font-family-body)` on every child element (~20 redundant declarations total) instead of inheriting from the component root.
+**Options considered:**
+1. Keep per-element declarations for explicitness
+2. Declare once on the component root, let children inherit
+3. Declare on `:root` only, remove from components entirely
+**Decision:** Option 2 — declare on the component root element, remove from children. Exception: elements rendered in a Radix Portal (Select dropdown items, Modal content) keep their own declaration because they render outside the component's DOM tree and don't inherit.
+**Rationale:** CSS inheritance exists specifically for this. Per-element declarations are noise that obscure the styles that actually matter. The Portal exception is the only legitimate case where inheritance breaks.
+**Status:** Active
+
+---
+
+### Codebase Audit: Shared Props-Table CSS in `base.css`
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** 21 component doc pages each contained an identical `<style>` block (~25 lines) styling the `.props-table` and `kbd` elements. Total: ~525 lines of duplicated CSS across the docs site.
+**Options considered:**
+1. Keep per-page scoped styles (Astro's default pattern)
+2. Move to shared `base.css` imported by `BaseLayout.astro`
+3. Create a `PropsTable` Astro component with scoped styles
+**Decision:** Option 2 — moved to `base.css`. Removed all 21 `<style>` blocks from component pages.
+**Rationale:** The styles were byte-for-byte identical across every page. Scoped styles only make sense when styles vary between pages. Moving to `base.css` eliminates 500+ lines of duplication and ensures any future styling change applies everywhere automatically. Option 3 would be cleaner architecturally but is higher effort for the same result — revisit if the props table markup also needs extraction.
+**Status:** Active
+
+---
+
+### Codebase Audit: className Pattern Standardization
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** Two components (Input.tsx, Select.tsx) used template literal className construction (`className={`ds-foo${cond ? ' ds-foo--mod' : ''}`}`) while all other components used the array pattern (`[...classes].filter(Boolean).join(' ')`).
+**Decision:** Standardized on the array pattern everywhere.
+**Rationale:** One pattern across the codebase. The array pattern is more readable for multiple conditionals and consistent with the existing majority convention. Template literals are fine for single classes but diverge from what every other component does.
+**Status:** Active
+
+---
+
+### Codebase Audit: Unified Focus Ring Pattern
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** Focus rings across the component library used 4 different patterns: `outline` + `outline-offset`, double-layer box-shadow (2px + 4px), 3px solid box-shadow, and 3px color-mix box-shadow. This made the focus experience inconsistent.
+**Decision:** Unified all focus rings to `box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 20%, transparent)`. Accordion uses `inset` variant for full-width triggers. Button primary layers the focus ring with its existing shadow: `box-shadow: var(--shadow-sm), 0 0 0 3px color-mix(...)`.
+**Rationale:** Single pattern is easier to maintain and creates a consistent visual language. `color-mix` with 20% opacity creates a soft, accessible ring that works in both light and dark modes. `box-shadow` over `outline` because it respects `border-radius`.
+**Components affected:** Button, Card, Header icon buttons, Color Picker, Modal close, Image Gallery thumbnails, Accordion triggers, Checkbox
+**Status:** Active
+
+---
+
+### Codebase Audit: Unified Active Press Scale
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** Interactive components used two different press scales: `scale(0.98)` for large elements (buttons, select) and `scale(0.92)` for small controls (checkbox, modal close). The 0.92 scale was too aggressive.
+**Decision:** Unified all press scales to `transform: scale(0.98)`.
+**Rationale:** 0.98 provides subtle but perceptible press feedback for all element sizes. 0.92 was jarring on small controls — the 8% reduction was visually excessive.
+**Components affected:** Checkbox, Modal close button (both changed from 0.92 → 0.98)
+**Status:** Active
+
+---
+
+### Codebase Audit: Dead Token TS Exports Removed
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** `packages/tokens/src/` contained 8 TypeScript files (`colors.ts`, `spacing.ts`, `typography.ts`, `radius.ts`, `shadows.ts`, `transitions.ts`, `zIndex.ts`, `breakpoints.ts`) that exported JavaScript constant mirrors of `tokens.json`. Grep confirmed no actual code imported them — they were dead exports.
+**Decision:** Deleted all 8 files. `packages/tokens/src/index.ts` now exports only `export {}` with a comment explaining tokens are consumed via CSS custom properties.
+**Rationale:** The design system consumes tokens via `--color-*`, `--spacing-*` CSS variables, not JS imports. The TS exports added maintenance burden (keeping them in sync with `tokens.json`) for zero consumers. If JS access is ever needed, `tokens.json` can be imported directly.
+**Status:** Active
+
+---
+
+### Docs: Shared `ComponentPage.astro` Layout Template
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** 21 component doc pages followed an identical structure but each duplicated ~40 lines of boilerplate: layout wrapper, prose div, h1, description, installation section, props table markup, and accessibility section. Some pages used "Props" h2 + h3 sub-headings, others used "Props — ComponentName" as separate h2s — inconsistent.
+**Options considered:**
+1. Keep per-page duplication (simple but ~800 lines of identical boilerplate)
+2. Extract a `ComponentPage.astro` layout that wraps BaseLayout and handles structural boilerplate via props + `<slot />`
+3. Create separate Astro components for PropsTable and AccessibilitySection only
+**Decision:** Option 2. Created `apps/docs/src/layouts/ComponentPage.astro` with props: `title`, `description` (HTML), `installCode`, `props` (array of table definitions with headers + rows), `accessibility` (HTML string array). Feature sections go in the default `<slot />`.
+**Rationale:** Each page goes from ~85 lines to ~55 lines. The structural boilerplate (layout, prose wrapper, h1, description, installation, props tables, accessibility) is identical across every page — only the feature sections (galleries, code examples) vary. Using `<slot />` keeps `client:load` directives working naturally. Props tables are now consistently rendered with `<h2>Props</h2>` + `<h3>` sub-headings for multi-table pages. Modal (no props) and Typography (no accessibility) work via optional props.
+**Status:** Active
+
+---
+
+### Font-Family Token Rename: Classification → Role-Based
+
+**Date/Phase:** 2026-03-15, codebase audit
+**Context:** Font-family tokens used classification-based names (`--font-family-sans`, `--font-family-mono`, `--font-family-serif`) but the values didn't match their names — `--font-family-sans` pointed to Ancizar Serif (a serif font). This made the token naming counterintuitive and misleading. Additionally, `--font-family-serif` had zero usages anywhere in the codebase.
+**Options considered:**
+1. Keep classification-based names (`sans`/`mono`/`serif`) — familiar from Tailwind but misleading when values change
+2. Rename to role-based names (`body`/`code`) — names describe intent, not the font's classification
+3. Use generic names (`primary`/`secondary`) — too vague, no semantic meaning
+**Decision:** Option 2. Renamed `--font-family-sans` → `--font-family-body`, `--font-family-mono` → `--font-family-code`, deleted unused `--font-family-serif`. Updated `tokens.json`, all 18 CSS files, 6 TSX files, 3 Astro doc pages, and playbook references.
+**Rationale:** Role-based naming is industry best practice for design tokens. Token names should describe intent (what the token is *for*) not the current value (what the font *is*). This way, swapping Ancizar Serif for a sans-serif body font in the future won't require renaming every token reference. The `serif` token was dead code with zero consumers.
+**Status:** Active

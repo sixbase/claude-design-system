@@ -66,7 +66,7 @@ export const BrandPalettes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Brick</p>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Brick</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
           <ColorSwatch color="#FDF0ED" name="brick-50" value="#FDF0ED" />
           <ColorSwatch color="#FAE0D8" name="brick-100" value="#FAE0D8" />
@@ -77,7 +77,7 @@ export const BrandPalettes: Story = {
         </div>
       </div>
       <div>
-        <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Sage</p>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', color: 'var(--color-foreground-muted)' }}>Sage</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
           <ColorSwatch color="#F2F7F0" name="sage-50" value="#F2F7F0" />
           <ColorSwatch color="#E0EDD9" name="sage-100" value="#E0EDD9" />

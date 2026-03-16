@@ -41,7 +41,7 @@ function BannerContainer({ children, tall }: { children: React.ReactNode; tall?:
         border: '1px solid var(--color-border)',
       }}
     >
-      <div style={{ padding: 'var(--spacing-4)', color: 'var(--color-foreground-muted)', fontFamily: 'var(--font-family-sans)', fontSize: 'var(--font-size-sm)' }}>
+      <div style={{ padding: 'var(--spacing-4)', color: 'var(--color-foreground-muted)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)' }}>
         Page content appears behind the banner.
       </div>
       {children}
@@ -83,7 +83,7 @@ export function CookieConsentControlled() {
     <Preview stack>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)', alignItems: 'flex-start' }}>
         <Button size="sm" onClick={() => setOpen(true)}>Show Cookie Banner</Button>
-        <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: 'var(--font-size-sm)', color: 'var(--color-foreground-subtle)', margin: 0 }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)', color: 'var(--color-foreground-subtle)', margin: 0 }}>
           Banner is {open ? 'visible' : 'hidden'}
         </p>
       </div>
