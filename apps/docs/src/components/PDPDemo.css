@@ -10,6 +10,11 @@
   min-width: 0;
 }
 
+/* Grid gap already provides bottom spacing; neutralise component margin */
+.ds-pdp .ds-breadcrumb {
+  margin-bottom: 0;
+}
+
 /* @breakpoint-lg = 1024px */
 @media (min-width: 1024px) {
   .ds-pdp {
