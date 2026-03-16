@@ -95,8 +95,8 @@ export function SearchDemo({ basePath = '' }: { basePath?: string }) {
       {/* ── Results ────────────────────────────────────────── */}
       {query.trim() && results.length > 0 && (
         <>
-          <div className="ds-search__header">
-            <div className="ds-search__header-row">
+          <div className="ds-results-header">
+            <div className="ds-results-header__row">
               <div>
                 <Heading as="h1" size="2xl">
                   Results for &ldquo;{query}&rdquo;
@@ -105,7 +105,7 @@ export function SearchDemo({ basePath = '' }: { basePath?: string }) {
                   {results.length} {results.length === 1 ? 'product' : 'products'}
                 </Text>
               </div>
-              <div className="ds-search__sort">
+              <div className="ds-results-header__sort">
                 <Select
                   size="sm"
                   value={sortValue}

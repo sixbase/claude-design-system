@@ -660,3 +660,25 @@ button, input, select, textarea {
 **The fix:** Used primitives with component-level dark-mode overrides. Flagged two token gaps for the system: (1) a "moderate foreground" semantic token at stone.600 for light / stone.400 for dark, and (2) variant-specific `*-foreground` tokens for each status color.
 
 **Rule:** After building your initial semantic token set, run an accessibility audit on every component before calling the token architecture "complete." The audit will reveal contrast pairings that your semantic layer doesn't cover. It's better to discover these gaps early and extend the semantic layer than to accumulate primitive references with manual dark-mode overrides across many components.
+
+### Inline styles in gallery/demo components accumulate tech debt fast {#gallery-inline-styles}
+
+**Problem:** Gallery components used `style={{ width: '220px' }}` and similar inline styles "because they're just demo files." Over 4 gallery components, this produced 25+ inline style attributes — harder to maintain than CSS classes, invisible to search tools, and impossible to change system-wide.
+
+**The fix:** Created shared gallery utility classes in `demo-utilities.css`. One class change updates every gallery instance. Inline styles dropped to zero across all gallery files.
+
+**Rule:** Demo files deserve the same discipline as production code. If a pattern repeats 3+ times, extract it to a shared CSS class. "It's just a demo" is how tech debt starts.
+
+### `display: none` overrides on child components signal a missing API {#display-none-override}
+
+**Problem:** SaleDemo hides ProductCard's built-in price element with `.ds-sale__card-wrapper .ds-product-card__price { display: none }` to replace it with a PriceDisplay component. This works but it's fragile — it depends on ProductCard's internal class name, breaks if ProductCard changes its structure, and is invisible unless you read the CSS carefully.
+
+**Rule:** When you need to hide or replace part of a component's output, that's a signal the component needs a new prop or slot. Flag it, track it, and fix it in the component — don't work around it in consumer CSS.
+
+### Spacing scale consistency across pages requires a documented convention {#spacing-convention}
+
+**Problem:** Homepage and PDP used phi-scale tokens for section gaps. Cart used only standard-scale tokens. The visual rhythm between pages was inconsistent — Cart felt tighter and more "utility" while Homepage felt editorial. This wasn't a conscious design decision — it was just different developers (or different sessions) making independent choices.
+
+**The fix:** Established a documented convention: phi scale for section-level gaps, standard 4px grid for component internals. Applied to all 4 example pages.
+
+**Rule:** Document spacing conventions early, before page templates proliferate. "Which spacing scale do I use?" should have a one-sentence answer, not require reading 4 different CSS files to infer the pattern.

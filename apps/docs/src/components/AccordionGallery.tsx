@@ -5,7 +5,7 @@ import { Preview } from './Preview';
 export function AccordionDefault() {
   return (
     <Preview stack>
-      <div style={{ width: '100%' }}>
+      <div className="ds-gallery-full">
         <Accordion type="single" collapsible>
           <AccordionItem value="shipping">
             <AccordionTrigger>Shipping & Delivery</AccordionTrigger>
@@ -37,7 +37,7 @@ export function AccordionDefault() {
 export function AccordionMultiple() {
   return (
     <Preview stack>
-      <div style={{ width: '100%' }}>
+      <div className="ds-gallery-full">
         <Accordion type="multiple" defaultValue={['features', 'specs']}>
           <AccordionItem value="features">
             <AccordionTrigger>Features</AccordionTrigger>
@@ -68,8 +68,8 @@ export function AccordionMultiple() {
 export function AccordionSizes() {
   return (
     <Preview stack>
-      <div style={{ width: '100%' }}>
-        <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-foreground-muted)', margin: '0 0 var(--spacing-2)' }}>Small</p>
+      <div className="ds-gallery-full">
+        <p className="ds-gallery-label">Small</p>
         <Accordion type="single" collapsible size="sm">
           <AccordionItem value="item-1">
             <AccordionTrigger>Small accordion item</AccordionTrigger>
@@ -77,8 +77,8 @@ export function AccordionSizes() {
           </AccordionItem>
         </Accordion>
       </div>
-      <div style={{ width: '100%' }}>
-        <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-foreground-muted)', margin: '0 0 var(--spacing-2)' }}>Medium (default)</p>
+      <div className="ds-gallery-full">
+        <p className="ds-gallery-label">Medium (default)</p>
         <Accordion type="single" collapsible size="md">
           <AccordionItem value="item-1">
             <AccordionTrigger>Medium accordion item</AccordionTrigger>
@@ -86,8 +86,8 @@ export function AccordionSizes() {
           </AccordionItem>
         </Accordion>
       </div>
-      <div style={{ width: '100%' }}>
-        <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-foreground-muted)', margin: '0 0 var(--spacing-2)' }}>Large</p>
+      <div className="ds-gallery-full">
+        <p className="ds-gallery-label">Large</p>
         <Accordion type="single" collapsible size="lg">
           <AccordionItem value="item-1">
             <AccordionTrigger>Large accordion item</AccordionTrigger>
@@ -109,7 +109,7 @@ export function AccordionWithCheckbox() {
 
   return (
     <Preview stack>
-      <div style={{ width: '100%' }}>
+      <div className="ds-gallery-full">
         <Accordion type="multiple" size="sm" bordered>
           <AccordionItem value="essential">
             <AccordionTrigger
@@ -168,7 +168,7 @@ export function AccordionWithCheckbox() {
 export function AccordionBordered() {
   return (
     <Preview stack>
-      <div style={{ width: '100%' }}>
+      <div className="ds-gallery-full">
         <Accordion type="single" collapsible bordered>
           <AccordionItem value="faq-1">
             <AccordionTrigger>What payment methods do you accept?</AccordionTrigger>

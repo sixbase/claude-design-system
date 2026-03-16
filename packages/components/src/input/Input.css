@@ -87,7 +87,7 @@
 
 /* Disabled */
 .ds-input-field:disabled {
-  opacity: 0.5;
+  opacity: var(--opacity-medium);
   cursor: not-allowed;
   background-color: var(--color-background-subtle);
 }

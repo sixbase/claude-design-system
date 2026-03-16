@@ -4,17 +4,17 @@ import { Preview } from './Preview';
 export function CardVariants() {
   return (
     <Preview>
-      <Card variant="elevated" style={{ width: '200px' }}>
+      <Card variant="elevated" className="ds-gallery-card">
         <CardBody>
           <Text size="sm">Elevated card</Text>
         </CardBody>
       </Card>
-      <Card variant="outlined" style={{ width: '200px' }}>
+      <Card variant="outlined" className="ds-gallery-card">
         <CardBody>
           <Text size="sm">Outlined card</Text>
         </CardBody>
       </Card>
-      <Card variant="ghost" style={{ width: '200px' }}>
+      <Card variant="ghost" className="ds-gallery-card">
         <CardBody>
           <Text size="sm">Ghost card</Text>
         </CardBody>
@@ -26,10 +26,10 @@ export function CardVariants() {
 export function CardProduct() {
   return (
     <Preview>
-      <Card variant="elevated" interactive style={{ width: '220px' }}>
+      <Card variant="elevated" interactive className="ds-gallery-card--wide">
         <CardImage src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop" alt="Premium watch" aspectRatio="4/3" />
         <CardBody>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--spacing-1)' }}>
+          <div className="ds-gallery-product-meta">
             <Text size="sm" weight="semibold">Minimalist Watch</Text>
             <Badge variant="default" size="sm">New</Badge>
           </div>

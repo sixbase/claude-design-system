@@ -7,7 +7,7 @@
 }
 
 .ds-checkbox-root--disabled {
-  opacity: 0.5;
+  opacity: var(--opacity-medium);
   cursor: not-allowed;
 }
 

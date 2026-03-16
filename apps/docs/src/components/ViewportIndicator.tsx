@@ -15,6 +15,12 @@ function getBreakpoint(width: number): string {
   return 'xs';
 }
 
+function getDotClass(bp: string): string {
+  if (bp === 'xs' || bp === 'sm') return 'ds-viewport-indicator__dot--narrow';
+  if (bp === 'md') return 'ds-viewport-indicator__dot--mid';
+  return 'ds-viewport-indicator__dot--wide';
+}
+
 export function ViewportIndicator() {
   const [width, setWidth] = useState(0);
 
@@ -37,34 +43,8 @@ export function ViewportIndicator() {
   const bp = getBreakpoint(width);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        bottom: 'var(--spacing-4)',
-        right: 'var(--spacing-4)',
-        zIndex: 'var(--z-index-tooltip)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-2)',
-        padding: 'var(--spacing-1) var(--spacing-3)',
-        borderRadius: 'var(--radius-full)',
-        backgroundColor: 'var(--color-primary)',
-        color: 'var(--color-primary-foreground)',
-        fontFamily: 'var(--font-family-code)',
-        fontSize: 'var(--font-size-xs)',
-        lineHeight: 'var(--line-height-normal)',
-        pointerEvents: 'none',
-        userSelect: 'none',
-      }}
-    >
-      <span
-        style={{
-          width: 6,
-          height: 6,
-          borderRadius: '50%',
-          backgroundColor: bp === 'xs' || bp === 'sm' ? '#E07060' : bp === 'md' ? '#D4A040' : '#5E8F50',
-        }}
-      />
+    <div className="ds-viewport-indicator">
+      <span className={`ds-viewport-indicator__dot ${getDotClass(bp)}`} />
       {width}px — {bp}
     </div>
   );

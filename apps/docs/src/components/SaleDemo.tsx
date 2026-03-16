@@ -87,14 +87,14 @@ export function SaleDemo({ basePath = '' }: { basePath?: string }) {
       </div>
 
       {/* ── Results Header ───────────────────────────────── */}
-      <div className="ds-sale__header">
-        <div className="ds-sale__header-row">
+      <div className="ds-results-header">
+        <div className="ds-results-header__row">
           <div>
             <Text size="sm" muted>
               {sorted.length} {sorted.length === 1 ? 'item' : 'items'} on sale
             </Text>
           </div>
-          <div className="ds-sale__sort">
+          <div className="ds-results-header__sort">
             <Select
               size="sm"
               value={sortValue}

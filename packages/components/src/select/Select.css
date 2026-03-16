@@ -98,7 +98,7 @@
 
 /* Disabled */
 .ds-select-trigger[data-disabled] {
-  opacity: 0.5;
+  opacity: var(--opacity-medium);
   cursor: not-allowed;
 }
 
@@ -173,7 +173,7 @@
 }
 
 .ds-select-item[data-disabled] {
-  opacity: 0.5;
+  opacity: var(--opacity-medium);
   cursor: not-allowed;
   pointer-events: none;
 }

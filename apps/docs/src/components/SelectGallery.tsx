@@ -4,7 +4,7 @@ import { Preview } from './Preview';
 export function SelectDefault() {
   return (
     <Preview stack>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select label="Size" placeholder="Choose a size">
           <SelectItem value="xs">XS</SelectItem>
           <SelectItem value="sm">SM</SelectItem>
@@ -20,21 +20,21 @@ export function SelectDefault() {
 export function SelectStates() {
   return (
     <Preview stack>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select label="With hint" hint="Choose your preferred size" placeholder="Select...">
           <SelectItem value="sm">SM</SelectItem>
           <SelectItem value="md">MD</SelectItem>
           <SelectItem value="lg">LG</SelectItem>
         </Select>
       </div>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select label="With error" error="Please select a size" placeholder="Select...">
           <SelectItem value="sm">SM</SelectItem>
           <SelectItem value="md">MD</SelectItem>
           <SelectItem value="lg">LG</SelectItem>
         </Select>
       </div>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select label="Disabled" disabled placeholder="Out of stock">
           <SelectItem value="sm">SM</SelectItem>
         </Select>
@@ -46,19 +46,19 @@ export function SelectStates() {
 export function SelectSizes() {
   return (
     <Preview stack>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select size="sm" label="Small" placeholder="Small (32px)">
           <SelectItem value="a">Option A</SelectItem>
           <SelectItem value="b">Option B</SelectItem>
         </Select>
       </div>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select size="md" label="Medium" placeholder="Medium (40px)">
           <SelectItem value="a">Option A</SelectItem>
           <SelectItem value="b">Option B</SelectItem>
         </Select>
       </div>
-      <div style={{ width: '220px' }}>
+      <div className="ds-gallery-select">
         <Select size="lg" label="Large" placeholder="Large (48px)">
           <SelectItem value="a">Option A</SelectItem>
           <SelectItem value="b">Option B</SelectItem>
@@ -71,7 +71,7 @@ export function SelectSizes() {
 export function SelectGroups() {
   return (
     <Preview stack>
-      <div style={{ width: '240px' }}>
+      <div className="ds-gallery-select--wide">
         <Select label="Category" placeholder="Browse categories">
           <SelectGroup label="Clothing">
             <SelectItem value="tops">Tops</SelectItem>

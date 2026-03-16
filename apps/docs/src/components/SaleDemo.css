@@ -1,4 +1,5 @@
 /* ─── Sale Banner ────────────────────────────────────────── */
+/* Results header uses shared .ds-results-header from demo-utilities.css */
 
 .ds-sale__banner {
   display: flex;
@@ -10,34 +11,6 @@
   border-radius: var(--radius-lg);
   gap: var(--spacing-2);
   margin-bottom: var(--spacing-phi-13);
-}
-
-/* ─── Results Header ────────────────────────────────────── */
-
-.ds-sale__header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-  margin-bottom: var(--spacing-phi-13);
-}
-
-.ds-sale__header-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-}
-
-/* @breakpoint-md = 768px */
-@media (min-width: 768px) {
-  .ds-sale__header-row {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-}
-
-.ds-sale__sort {
-  flex-shrink: 0;
 }
 
 /* ─── Card Wrapper with Badge Overlay ───────────────────── */
@@ -54,8 +27,9 @@
 }
 
 /* ─── Price Override ────────────────────────────────────── */
-/* Hides ProductCard's default price and shows PriceDisplay
-   with compare-at styling instead. */
+/* FLAG: Hides ProductCard's default price via display:none override.
+   Proper fix: ProductCard should support a renderPrice prop or slot.
+   Keeping as-is — requires component API change. */
 
 .ds-sale__card-wrapper .ds-product-card__price {
   display: none;

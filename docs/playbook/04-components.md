@@ -1001,8 +1001,34 @@ Shared CSS classes for demo/gallery/story files live in `apps/docs/src/styles/de
 | `.ds-demo-slide-image` | Full-width, block display, rounded corners (carousel slides) |
 | `.ds-demo-prose` | Max-width constrained to reading width for text demos |
 | `.ds-demo-section-label` | Font-size sm, font-weight medium, bottom margin (group headers) |
+| `.ds-results-header` | Responsive results header (Collection, Search, Sale) — flex col → row at md |
+| `.ds-results-header__row` | Inner flex row for title + sort control |
+| `.ds-results-header__sort` | Flex-shrink wrapper for sort select |
+| `.ds-gallery-card` | Fixed 200px width for card variants in gallery |
+| `.ds-gallery-card--wide` | Fixed 220px width for product card demos |
+| `.ds-gallery-input` | Max-width 360px, full width — input demos |
+| `.ds-gallery-select` | Fixed 220px width for select demos |
+| `.ds-gallery-select--wide` | Fixed 240px width for grouped select demos |
+| `.ds-gallery-full` | Width 100% — accordion and full-width demos |
+| `.ds-gallery-label` | Size label (xs, muted, bottom margin) for variant labels in galleries |
+| `.ds-gallery-product-meta` | Flex row (space-between) for product card title + badge |
+| `.ds-viewport-indicator` | Fixed-position breakpoint indicator pill (dev tool) |
 
 **Rule:** If a pattern appears 3+ times across gallery/story files, extract it to `demo-utilities.css` instead of repeating inline styles. Gallery components should use `<Text>` and `<Heading>` primitives, never raw `<p>` or `<h2>` tags.
+
+### Page-Level Spacing Convention
+
+All example pages follow this rule:
+
+- **Section-level gaps** (between hero, product grid, feature blocks, newsletter): Use **phi scale** (`spacing-phi-13`, `spacing-phi-21`, `spacing-phi-34`)
+- **Component internals** (padding, element gaps inside cards, forms, accordions): Use **standard 4px scale** (`spacing-1` through `spacing-8`)
+- **Never mix scales within the same component**
+
+This creates an editorial, "designed not default" feeling at the page level while keeping component internals predictable on the 4px grid.
+
+### Disabled State Convention
+
+All interactive components use `opacity: var(--opacity-medium)` for disabled states. Never hardcode `opacity: 0.5` — always use the token.
 
 ### Token Integrity Convention
 

@@ -1183,3 +1183,71 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 2. layout.astro had `letter-spacing: 0.05em` hardcoded in scoped styles instead of `var(--letter-spacing-wider)`
 **Decision:** Fixed both. All other new files (AccountDemo, SaleDemo, SearchDemo, Grid, Container, Badge) passed audit with no issues.
 **Status:** Active
+
+---
+
+### Disabled State Opacity — Standardize to Token
+
+**Date/Phase:** Full codebase refactor
+**Context:** Four components (Button, Checkbox, Input, Select) used hardcoded `opacity: 0.5` for disabled states. QuantitySelector already used `var(--opacity-medium)`. The hardcoded value was close to `--opacity-medium` (0.382) but not identical, and violated the "no magic numbers" convention.
+**Options considered:**
+1. Keep `0.5` — familiar default, but diverges from the φ-derived opacity scale
+2. Use `var(--opacity-medium)` (0.382) — aligns with the system's golden ratio governance
+**Decision:** Standardized all disabled states to `var(--opacity-medium)`. The visual change is subtle (50% → 38.2%) but the consistency gain is significant — every disabled element now uses the same token.
+**Rationale:** Token compliance matters more than matching arbitrary browser defaults. The 0.382 value comes from 1/φ² and is consistent with how the system derives opacity values.
+**Status:** Active
+
+---
+
+### Deprecated clip → clip-path in sr-only
+
+**Date/Phase:** Full codebase refactor
+**Context:** PriceDisplay.css used `clip: rect(0, 0, 0, 0)` in the `.ds-sr-only` class. The `clip` property is deprecated in CSS.
+**Decision:** Replaced with `clip-path: inset(50%)` — the modern equivalent.
+**Status:** Active
+
+---
+
+### Shared Results Header Pattern (demo-utilities.css)
+
+**Date/Phase:** Full codebase refactor
+**Context:** Collection, Search, and Sale demos all had identical header-row CSS (flex column → responsive row at md breakpoint). ~18 lines duplicated across 3 files.
+**Options considered:**
+1. Leave as-is — each demo owns its own styles
+2. Extract to shared `.ds-results-header` pattern in demo-utilities.css
+**Decision:** Extracted to `.ds-results-header`, `.ds-results-header__row`, and `.ds-results-header__sort` in `demo-utilities.css`. Removed duplicate CSS from all 3 demo files and updated TSX class references.
+**Rationale:** The pattern was byte-for-byte identical. Three files importing a shared class is simpler than three files each defining the same rules.
+**Status:** Active
+
+---
+
+### Gallery Inline Styles → CSS Classes
+
+**Date/Phase:** Full codebase refactor
+**Context:** CardGallery, InputGallery, SelectGallery, and AccordionGallery used extensive inline `style={{ }}` attributes for widths, margins, and typography. This violated the convention of CSS classes over inline styles.
+**Decision:** Created gallery utility classes in demo-utilities.css (`.ds-gallery-card`, `.ds-gallery-input`, `.ds-gallery-select`, `.ds-gallery-full`, `.ds-gallery-label`, `.ds-gallery-product-meta`). Replaced all inline styles in gallery components with class references.
+**Status:** Active
+
+---
+
+### ViewportIndicator — Inline Styles to CSS
+
+**Date/Phase:** Full codebase refactor
+**Context:** ViewportIndicator component had 20+ inline style properties and hardcoded hex colors (#E07060, #D4A040, #5E8F50) for the breakpoint status dot. The hex values happened to match brick, amber, and sage palette colors but weren't using tokens.
+**Decision:** Moved all styles to `.ds-viewport-indicator` CSS class in demo-utilities.css. Replaced hex colors with `var(--color-destructive)`, `var(--color-warning)`, `var(--color-success)` semantic tokens.
+**Rationale:** Even developer tools should use the design system. The semantic tokens also mean the indicator dot colors adapt to dark mode automatically.
+**Status:** Active
+
+---
+
+### Page-Level Spacing Convention
+
+**Date/Phase:** Full codebase refactor
+**Context:** Example pages used inconsistent spacing systems. Homepage and PDP used phi-scale tokens for section gaps. Collection was mixed. Cart used only standard-scale tokens. This created different visual rhythms across pages that should feel like the same design system.
+**Options considered:**
+1. Standardize everything to standard scale — simpler but loses the editorial quality
+2. Standardize everything to phi scale — more beautiful but harder to reason about
+3. Convention: phi for section-level gaps, standard for component internals — clear rule, best of both
+**Decision:** Option 3. Updated Cart to use phi tokens for major section gaps (`spacing-phi-13` mobile, `spacing-phi-21` desktop). Component-internal spacing stays on standard scale.
+**Rationale:** Phi spacing creates the "designed, not default" feeling at page level. Standard 4px grid keeps component internals predictable. The rule "never mix scales within the same component" prevents confusion.
+**Status:** Active

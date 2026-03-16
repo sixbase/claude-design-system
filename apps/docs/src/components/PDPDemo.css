@@ -95,7 +95,7 @@
 }
 
 .ds-pdp__accordion-list li {
-  padding-block: var(--spacing-phi-1); /* 2px breathing room */
+  padding-block: var(--spacing-1); /* 4px breathing room */
 }
 
 /* ─── Lifestyle carousel ─────────────────────────────────── */

@@ -1,35 +1,8 @@
 /* ─── Search Layout ──────────────────────────────────────── */
+/* Results header uses shared .ds-results-header from demo-utilities.css */
 
 .ds-search__bar {
   margin-bottom: var(--spacing-phi-13);
-}
-
-/* ─── Results Header ────────────────────────────────────── */
-
-.ds-search__header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-  margin-bottom: var(--spacing-phi-13);
-}
-
-.ds-search__header-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-}
-
-/* @breakpoint-md = 768px */
-@media (min-width: 768px) {
-  .ds-search__header-row {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-}
-
-.ds-search__sort {
-  flex-shrink: 0;
 }
 
 /* ─── Empty / No Results ────────────────────────────────── */

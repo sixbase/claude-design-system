@@ -51,8 +51,8 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
         ]}
       />
 
-      <div className="ds-collection__header">
-        <div className="ds-collection__header-row">
+      <div className="ds-results-header">
+        <div className="ds-results-header__row">
           <div>
             <Heading level={1} size="2xl">
               All Products
@@ -61,7 +61,7 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
               {PRODUCTS.length} products
             </Text>
           </div>
-          <div className="ds-collection__sort">
+          <div className="ds-results-header__sort">
             <Select
               size="sm"
               value={sortValue}
