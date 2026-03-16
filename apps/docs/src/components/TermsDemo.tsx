@@ -42,7 +42,7 @@ export function TermsDemo({ basePath = '' }: { basePath?: string }) {
             without notice. We shall not be liable to you or to any third-party for any
             modification, price change, suspension, or discontinuance of a product.
           </Text>
-          <h3 className="ds-legal-content__h3">2.1 Product Descriptions</h3>
+          <Heading as="h3" size="lg" className="ds-legal-content__h3">2.1 Product Descriptions</Heading>
           <Text>
             We have made every effort to display as accurately as possible the colors and
             images of our products that appear at the store. We cannot guarantee that your
@@ -50,7 +50,7 @@ export function TermsDemo({ basePath = '' }: { basePath?: string }) {
             that the quality of any products, services, information, or other material
             purchased or obtained by you will meet your expectations.
           </Text>
-          <h3 className="ds-legal-content__h3">2.2 Pricing</h3>
+          <Heading as="h3" size="lg" className="ds-legal-content__h3">2.2 Pricing</Heading>
           <Text>
             All prices are listed in USD unless otherwise stated. Prices are inclusive of
             applicable taxes where required by law. Shipping costs are calculated at checkout
@@ -87,7 +87,7 @@ export function TermsDemo({ basePath = '' }: { basePath?: string }) {
             days of receiving the returned item. Shipping costs are non-refundable unless the
             return is due to our error.
           </Text>
-          <h3 className="ds-legal-content__h3">4.1 Exceptions</h3>
+          <Heading as="h3" size="lg" className="ds-legal-content__h3">4.1 Exceptions</Heading>
           <Text>
             The following items cannot be returned:
           </Text>

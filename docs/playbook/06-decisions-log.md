@@ -1171,3 +1171,15 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 **Decision:** Option 2 — a single `/tokens/layout` page documenting breakpoints, Container, product Grid, two-column layouts, section spacing, carousel, and Shopify theme mapping. Also migrated Sale/Search pages to Grid component and fixed Homepage carousel cards to use `fluid` prop.
 **Rationale:** Layout is foundational, not a component. A single reference page is more useful for page builders than scattered component docs. The Shopify mapping table makes this directly actionable for theme development.
 **Status:** Active
+
+---
+
+### Refactor Audit — New Example Pages (Account, Sale, Search, Terms)
+
+**Date/Phase:** Polish pass — post-addition audit
+**Context:** Four new example pages were added (Account, Sale, Search, Terms) along with Grid, Container, Badge enhancements, and a Layout spec doc page. Ran a full audit on all new/modified files to check for token compliance and pattern consistency.
+**Findings:** Code quality was 95%+ across the board. Only two issues:
+1. TermsDemo.tsx used raw `<h3>` elements instead of `<Heading as="h3" size="lg">` — inconsistent with the rest of the component which used `<Heading>` for h1/h2
+2. layout.astro had `letter-spacing: 0.05em` hardcoded in scoped styles instead of `var(--letter-spacing-wider)`
+**Decision:** Fixed both. All other new files (AccountDemo, SaleDemo, SearchDemo, Grid, Container, Badge) passed audit with no issues.
+**Status:** Active
