@@ -628,3 +628,35 @@ button, input, select, textarea {
 **The fix:** Removed the fixed max-height on desktop. On mobile, used `max-height: 50vh` as a viewport-relative safety cap.
 
 **Rule:** Prefer content-driven sizing. Use `max-height` only when the container truly must be bounded (e.g., viewport-relative mobile constraints), and use viewport units (`vh`) rather than fixed pixels. If you're adding `overflow-y: auto`, ask: "Would the user prefer to scroll inside this box, or have it just be taller?"
+
+### Fixed-width cards in fluid grids produce phantom gaps {#fixed-width-card-grid}
+
+**Problem:** ProductCard used `width: 220px` (fixed), but the collection grid used `grid-template-columns: repeat(N, 1fr)` (fluid). Cards didn't fill their cells, leaving uneven whitespace that looked like mismatched gaps — especially at wider viewports where the cell was much wider than 220px.
+
+**The fix:** Added a `fluid` prop/class (`ds-product-card--fluid`) that sets `--product-card-width: 100%`. Grid contexts opt in; standalone usage keeps the original fixed width. This is better than making all cards fluid by default because ProductCard is also used in carousels and story previews where fixed width is correct.
+
+**Rule:** When a component has a fixed dimension (width, height), always ask: "Will this ever live in a fluid layout context?" If yes, provide a fluid variant rather than making the default fluid — you'll break other contexts.
+
+### Escalating gap tokens per breakpoint creates visual noise {#gap-escalation}
+
+**Problem:** The product grid used a different gap token at each breakpoint (`spacing-4` → `spacing-5` → `spacing-6`). The 20px middle step (spacing-5) was particularly jarring — it doesn't align as cleanly on the 4px grid compared to 16px and 24px, and the three-step escalation made the grid feel inconsistent across viewport transitions.
+
+**The fix:** Collapsed to two tiers: `spacing-4` (16px) for mobile + tablet, `spacing-6` (24px) for desktop only. Same token for row-gap and column-gap at each breakpoint.
+
+**Rule:** Grid gaps should use the fewest distinct values possible. One or two tiers is usually enough. Row-gap and column-gap should reference the same token unless there's an intentional design reason to differentiate (e.g., a dashboard with dense horizontal data but loose vertical sections).
+
+### `color-mix(… %, transparent)` is fundamentally broken for WCAG contrast {#color-mix-contrast}
+
+**Problem:** The badge component used `color-mix(in srgb, var(--color-success) 8%, transparent)` for tinted backgrounds and 18% for borders. This produces near-invisible alpha layers. Even at 50% mix, borders couldn't reach the 3:1 non-text contrast threshold (WCAG 1.4.11). The approach is visually appealing but mathematically impossible to make accessible at low percentages.
+
+**The fix:** Replaced with solid primitive token references — 50-shade primitives for backgrounds (e.g., `sage.50`), 600-shade semantic tokens for borders, 700-shade primitives for text. Added `*-subtle` semantic tokens so the pattern is reusable. For dark mode, `color-mix` against `var(--color-background-subtle)` (an opaque dark color, not `transparent`) works because both sides are opaque.
+
+**Rule:** Never use `color-mix(… %, transparent)` for any element that needs to meet a WCAG contrast ratio. The only safe use is purely decorative elements. For accessible tinted backgrounds, always reference a solid color from the existing primitive scale (typically the 50 or 100 shade). For dark mode, mixing against an opaque background color (not `transparent`) is acceptable because the result is a predictable opaque color.
+
+### Semantic token gaps surface during accessibility audits {#semantic-token-gap}
+
+**Problem:** The badge audit revealed that no semantic token exists between `foreground-subtle` (stone.500, 4.07:1 on white — fails AA) and `foreground` (stone.950, 16+:1). This forced the outline badge to use the primitive `--color-stone-600` directly with a manual dark-mode override. Similarly, warning badge text needed `--color-amber-700` (a primitive) because `--color-warning` (amber.600) failed 4.5:1 against the subtle background.
+
+**The fix:** Used primitives with component-level dark-mode overrides. Flagged two token gaps for the system: (1) a "moderate foreground" semantic token at stone.600 for light / stone.400 for dark, and (2) variant-specific `*-foreground` tokens for each status color.
+
+**Rule:** After building your initial semantic token set, run an accessibility audit on every component before calling the token architecture "complete." The audit will reveal contrast pairings that your semantic layer doesn't cover. It's better to discover these gaps early and extend the semantic layer than to accumulate primitive references with manual dark-mode overrides across many components.

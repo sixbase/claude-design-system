@@ -13,23 +13,28 @@ import { BadgeVariants, BadgeSizes, BadgeEcommerce } from '../../components/Badg
       rows: [
         ['<code>variant</code>', "<code>'default' | 'secondary' | 'success' | 'warning' | 'destructive' | 'outline'</code>", '<code>\'default\'</code>', 'Visual style'],
         ['<code>size</code>', "<code>'sm' | 'md'</code>", "<code>'md'</code>", 'Size'],
+        ['<code>icon</code>', '<code>ReactNode</code>', '—', 'Icon element rendered before text (WCAG 1.4.1)'],
+        ['<code>count</code>', '<code>number</code>', '—', 'Notification count — auto-applies <code>role="status"</code> and <code>aria-label</code>'],
       ],
     },
   ]}
   accessibility={[
-    'Renders as <code>&lt;span&gt;</code> — not interactive, no keyboard behavior',
-    'Color is never the only indicator — also uses distinct background tints',
-    'For screen readers, consider pairing with visually hidden context: <code>&lt;Badge&gt;&lt;span aria-hidden="true"&gt;●&lt;/span&gt; In stock&lt;/Badge&gt;</code>',
+    'Status variants (<code>success</code>, <code>warning</code>, <code>destructive</code>) auto-apply <code>role="status"</code>',
+    'All text meets WCAG 1.4.3 AA — minimum 4.5:1 contrast against badge background',
+    'Borders meet WCAG 1.4.11 — minimum 3:1 non-text contrast against adjacent backgrounds',
+    'Use the <code>icon</code> prop on status badges to satisfy WCAG 1.4.1 (color is never the sole indicator)',
+    'Notification count badges receive <code>aria-label="N notifications"</code> automatically',
+    'Focus ring via <code>box-shadow: var(--focus-ring)</code> on <code>:focus-visible</code> for interactive usage',
   ]}
 >
   <h2>Variants</h2>
-  <p>Six semantic variants for different contexts.</p>
+  <p>Six semantic variants. Status badges include icons for color-independent meaning.</p>
   <BadgeVariants client:load />
   <pre><code>{`<Badge variant="default">New</Badge>
 <Badge variant="secondary">Sale</Badge>
-<Badge variant="success">In stock</Badge>
-<Badge variant="warning">Low stock</Badge>
-<Badge variant="destructive">Out of stock</Badge>
+<Badge variant="success" icon={<CheckIcon />}>In stock</Badge>
+<Badge variant="warning" icon={<AlertIcon />}>Low stock</Badge>
+<Badge variant="destructive" icon={<XIcon />}>Out of stock</Badge>
 <Badge variant="outline">Archive</Badge>`}</code></pre>
 
   <h2>Sizes</h2>
@@ -37,12 +42,17 @@ import { BadgeVariants, BadgeSizes, BadgeEcommerce } from '../../components/Badg
   <pre><code>{`<Badge size="sm">Small</Badge>
 <Badge size="md">Medium</Badge>   {/* default */}`}</code></pre>
 
+  <h2>Notification count</h2>
+  <p>Pass <code>count</code> for auto-labelled notification badges.</p>
+  <pre><code>{`<Badge count={3} />              {/* aria-label="3 notifications" */}
+<Badge count={1} variant="destructive" />`}</code></pre>
+
   <h2>Ecommerce context</h2>
   <p>Small badges work well as overlays or inline labels on product cards.</p>
   <BadgeEcommerce client:load />
   <pre><code>{`<Badge variant="default" size="sm">New arrival</Badge>
 <Badge variant="secondary" size="sm">20% off</Badge>
-<Badge variant="success" size="sm">Free shipping</Badge>
-<Badge variant="destructive" size="sm">Final sale</Badge>
-<Badge variant="warning" size="sm">2 left</Badge>`}</code></pre>
+<Badge variant="success" size="sm" icon={<CheckIcon />}>Free shipping</Badge>
+<Badge variant="destructive" size="sm" icon={<XIcon />}>Final sale</Badge>
+<Badge variant="warning" size="sm" icon={<AlertIcon />}>2 left</Badge>`}</code></pre>
 </ComponentPage>

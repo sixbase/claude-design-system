@@ -1,0 +1,90 @@
+/* ─── Sale Banner ────────────────────────────────────────── */
+
+.ds-sale__banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+  background-color: var(--color-background-subtle);
+  border-radius: var(--radius-lg);
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-phi-13);
+}
+
+/* ─── Results Header ────────────────────────────────────── */
+
+.ds-sale__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-phi-13);
+}
+
+.ds-sale__header-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+/* @breakpoint-md = 768px */
+@media (min-width: 768px) {
+  .ds-sale__header-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.ds-sale__sort {
+  flex-shrink: 0;
+}
+
+/* ─── Product Grid (same as PLP) ────────────────────────── */
+
+.ds-sale__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-4);
+}
+
+/* @breakpoint-md = 768px */
+@media (min-width: 768px) {
+  .ds-sale__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-5);
+  }
+}
+
+/* @breakpoint-lg = 1024px */
+@media (min-width: 1024px) {
+  .ds-sale__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-6);
+  }
+}
+
+/* ─── Card Wrapper with Badge Overlay ───────────────────── */
+
+.ds-sale__card-wrapper {
+  position: relative;
+}
+
+.ds-sale__card-badge {
+  position: absolute;
+  top: var(--spacing-2);
+  left: var(--spacing-2);
+  z-index: var(--z-index-raised);
+}
+
+/* ─── Price Override ────────────────────────────────────── */
+/* Hides ProductCard's default price and shows PriceDisplay
+   with compare-at styling instead. */
+
+.ds-sale__card-wrapper .ds-product-card__price {
+  display: none;
+}
+
+.ds-sale__price-override {
+  padding: 0 var(--spacing-phi-5);
+}

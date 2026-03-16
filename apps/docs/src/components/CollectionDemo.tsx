@@ -86,6 +86,7 @@ export function CollectionDemo({ basePath = '' }: { basePath?: string }) {
             className="ds-unstyled-link"
           >
             <ProductCard
+              fluid
               name={product.name}
               price={product.price}
               image={product.image}

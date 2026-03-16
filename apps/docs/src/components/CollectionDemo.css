@@ -27,6 +27,22 @@
 }
 
 /* ─── Product Grid ───────────────────────────────────────── */
+/*
+ * Grid foundation:
+ *   - row-gap and column-gap use the SAME token at each breakpoint
+ *     so horizontal and vertical rhythm stay visually unified.
+ *   - Gap escalates only once (sm/md → lg) to avoid jarring shifts.
+ *   - All spacing handled by grid gap — cards must not add outer margins.
+ *
+ * Breakpoint table:
+ *   ──────────────────────────────────────────────────────────
+ *   Breakpoint   Cols   Gap token       Gap value
+ *   ──────────────────────────────────────────────────────────
+ *   < 768px      2      --spacing-4     16px
+ *   ≥ 768px      3      --spacing-4     16px
+ *   ≥ 1024px     4      --spacing-6     24px
+ *   ──────────────────────────────────────────────────────────
+ */
 
 .ds-collection__grid {
   display: grid;
@@ -38,7 +54,7 @@
 @media (min-width: 768px) {
   .ds-collection__grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-5);
+    /* gap unchanged — same token as mobile for visual continuity */
   }
 }
 

@@ -1014,3 +1014,127 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 **Decision:** Option 2 — created `apps/docs/src/styles/token-docs.css` with all shared styles. Each Astro page imports it via frontmatter (`import '../../styles/token-docs.css'`) and retains only page-specific styles in its `<style>` block.
 **Rationale:** Even in documentation, DRY matters. Three copies of identical styles means three places to update when the design evolves. The import pattern is idiomatic Astro and keeps each page's `<style>` block focused on what's unique to that page.
 **Status:** Active
+
+---
+
+### Page Templates: Documented as Design System Specs, Not Shopify Templates
+
+**Date/Phase:** Page template design
+**Context:** Needed to establish core e-commerce page templates (PLP, Search, Account/Login, Terms & Conditions, Sale). Had to decide whether to build these as Shopify-ready Liquid templates or as design-system-level composition specs.
+**Options considered:**
+1. Build directly as Shopify Liquid templates with embedded design tokens
+2. Document as token-driven page compositions in the design system, then hand off to Shopify theming
+**Decision:** Option 2 — documented in `docs/playbook/08-page-templates.md` as composition specs with Shopify integration notes per page.
+**Rationale:** The design system should be platform-agnostic at the composition level. By specifying pages in terms of component composition, token references, and responsive behavior — then adding Shopify-specific notes as a separate concern — the specs remain useful even if the storefront platform changes. The Shopify notes flag friction points (e.g., rich text HTML styling vs. component rendering) without coupling the design to Liquid syntax.
+**Status:** Active
+
+---
+
+### Sale Page: Reuse PLP Composition Rather Than Separate Template
+
+**Date/Phase:** Page template design
+**Context:** The Sale page shares 90%+ of PLP structure. Deciding whether to create a distinct page composition or document it as a PLP variant.
+**Options considered:**
+1. Full separate page spec
+2. Document as PLP variant with a delta table showing what changes
+**Decision:** Option 2 — documented as a PLP variant in `08-page-templates.md` with an explicit "What Changes vs. PLP" table.
+**Rationale:** Composition over invention. Duplicating the entire PLP spec for the Sale page would create a maintenance burden — any grid/spacing change would need updating in two places. The delta approach makes it clear that Sale inherits PLP behavior and only modifies header treatment, badge display, and price rendering.
+**Status:** Active
+
+---
+
+### Account Page: Three Views as States, Not Separate Pages
+
+**Date/Phase:** Page template design
+**Context:** Login, Register, and Forgot Password could be separate pages or states of a single page composition.
+**Options considered:**
+1. Three separate page templates
+2. One page with three view states
+**Decision:** Option 2 — single page composition with Login, Register, and Forgot Password as distinct states sharing the same centered card container.
+**Rationale:** All three views share identical layout (centered card, same max-width, same padding). Treating them as states of one composition reduces duplication and matches the common SPA pattern where view switching is client-side. Shopify can still render them as separate templates if needed — the design spec is state-based, the routing is an implementation detail.
+**Status:** Active
+
+---
+
+### Terms Page: Prose Styling Class Over Component-Per-Element
+
+**Date/Phase:** Page template design
+**Context:** Terms & Conditions content comes from a CMS rich text editor as raw HTML. Deciding how to style it.
+**Options considered:**
+1. Render each element as a design system component (`Heading`, `Text`, etc.)
+2. Create a `.ds-prose` / `.ds-legal-content` wrapper class that styles native HTML elements using tokens
+**Decision:** Option 2 — documented a `.ds-legal-content` class approach that maps `h1`–`h3`, `p`, `a`, `ul`, `ol`, `li` to token-driven styles.
+**Rationale:** CMS rich text output is raw HTML — you can't wrap every `<p>` in a `<Text>` component at the Shopify template level. The prose class approach is the standard pattern (Tailwind Typography, GitHub Markdown) and works with any CMS output. It's also reusable across all content pages (About, FAQ, Privacy Policy).
+**Status:** Active
+
+---
+
+### Pagination: Flagged as Component Gap, Not Yet Built
+
+**Date/Phase:** Page template design
+**Context:** PLP, Search Results, and Sale pages all need pagination. No pagination component exists.
+**Options considered:**
+1. Build a Pagination component immediately
+2. Document the gap with a proposed API and defer building
+**Decision:** Option 2 — documented in the token gap report with proposed `PaginationProps` interface.
+**Rationale:** Page template documentation is a design exercise, not an implementation sprint. The proposed API (currentPage, totalPages, onPageChange, maxVisible) is specific enough to build from without further design decisions. Building it is a separate task that should follow the standard component workflow (4-file rule, tests, stories, docs).
+**Status:** [PENDING DECISION] — prioritize for v1 or defer?
+
+---
+
+### Product Grid System: Unified Gaps + Fluid Cards
+
+**Date/Phase:** Grid system establishment
+**Context:** The collection grid had three problems: (1) gap tokens escalated across every breakpoint (`spacing-4` → `spacing-5` → `spacing-6`), creating subtle visual inconsistency; (2) `spacing-5` (20px) at the tablet breakpoint is an awkward step on the 4px base grid; (3) ProductCard had a fixed `width: 220px` that prevented cards from filling CSS Grid cells, producing uneven whitespace that compounded the gap issue.
+**Options considered:**
+1. Single gap token across all breakpoints (fully uniform)
+2. Two-tier gap: same token for mobile + tablet, step up at desktop
+3. Keep three-tier escalation but fix to cleaner tokens
+**Decision:** Option 2 — `spacing-4` (16px) for mobile and tablet, `spacing-6` (24px) at desktop (≥1024px). Added `fluid` prop to ProductCard so cards fill their grid cell (`width: 100%`).
+**Rationale:** A single 16px gap felt too tight at desktop with 4 columns and wide content area. Two tiers (16px → 24px) gives breathing room at desktop without the jarring three-step escalation. Row-gap and column-gap always use the same token at each breakpoint to keep horizontal and vertical rhythm unified — differentiation would require a deliberate design reason. The `fluid` prop keeps ProductCard backward-compatible: standalone usage keeps the fixed 220px width, but grid contexts opt into fluid behavior.
+**Status:** Active
+
+---
+
+### Container Max-Width Token: `size-content-xl`
+
+**Date/Phase:** Grid system establishment
+**Context:** Header, Footer, and FullWidthLayout main all hardcoded `max-width: 1280px`. This violated the "no raw values" token rule and made the container width untrackable.
+**Options considered:**
+1. Add a new `size-content-xl: 1280px` token
+2. Reuse the `breakpoint-xl: 1280px` token for max-width
+**Decision:** Option 1 — new `size-content-xl` token added to the `size` category.
+**Rationale:** Breakpoint tokens describe media query thresholds; size tokens describe dimensional constraints. These are semantically different even when the values coincide. If we later change the container max-width to 1200px, we shouldn't have to touch breakpoint definitions. All three hardcoded `1280px` references (Header, Footer, FullWidthLayout) were replaced with `var(--size-content-xl)`.
+**Status:** Active
+
+---
+
+### Badge WCAG 2.1 AA Accessibility Remediation
+
+**Date/Phase:** Component hardening — accessibility audit
+**Context:** Badge component failed multiple WCAG 2.1 criteria. The `color-mix(in srgb, … 8%, transparent)` approach for status badge backgrounds and `color-mix(… 18%, transparent)` borders produced contrast ratios well below thresholds. Warning text (amber.600 on tinted background) measured 4.22:1 (needs 4.5:1). Outline text (stone.500 on white) measured 4.07:1. All status borders measured ~1.3:1 (needs 3:1). No focus ring, no semantic roles, and color was the only status differentiator.
+**Options considered:**
+1. Increase `color-mix` percentages to raise contrast — tested up to 50%, still failed 3:1 for borders
+2. Switch to solid primitive backgrounds (50-shade) with 600/700-shade text and solid semantic borders
+3. Switch to fully solid status badges (600-shade background, white text) — too visually heavy
+**Decision:** Option 2 — solid primitive 50-shade backgrounds, darker text, solid semantic-color borders. Added new semantic tokens `*-subtle` for backgrounds. Added dark-mode CSS overrides where primitives don't adapt. Added `icon` prop, `role="status"`, `count` + `aria-label` support.
+**Rationale:** The `color-mix` with `transparent` approach is fundamentally flawed for accessibility — it produces sub-1px alpha layers that cannot achieve sufficient contrast at any reasonable percentage. Solid colors from the existing scale (50 shades for backgrounds, 700 shades for text, 600 shades for borders) pass all thresholds with room to spare. This required 3 new semantic tokens (`success-subtle`, `warning-subtle`, `destructive-subtle`) and dark-mode overrides in the component CSS (first component to need them — the semantic token layer doesn't yet cover all status variant use cases).
+**Status:** Active
+
+---
+
+### Token Integrity Audit — Eliminate Primitive Color References in Components
+
+**Date/Phase:** Component hardening — token audit
+**Context:** Several components were consuming primitive palette tokens (`--color-sage-700`, `--color-amber-700`, `--color-brick-400`, `--color-stone-600`) or hardcoded pixel values (`1280px`, `36px`) directly instead of semantic design tokens. This breaks the theming contract: if a consumer overrides semantic tokens, these primitive references won't respond.
+**Options considered:**
+1. Leave primitives in place with comments documenting why — avoids token proliferation
+2. Add targeted semantic tokens for each gap and update components — ensures full theming support
+**Decision:** Option 2 — added five new semantic tokens:
+- `--color-success-foreground` (sage.700 light / sage.400 dark) — text on success-subtle backgrounds
+- `--color-warning-foreground` (amber.700 light / amber.400 dark) — text on warning-subtle backgrounds
+- `--color-foreground-secondary` (stone.600 light / stone.300 dark) — fills the gap between foreground-subtle and foreground
+- `--size-touch-target` (36px) — minimum WCAG touch target for icon buttons
+Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
+**Rationale:** Components should never reference primitive palette tokens. Every color and size used in a component must flow through a semantic token so themes can override them. The destructive badge dark mode uses `--color-destructive-hover` (brick.400) which is semantically close enough to avoid a new token. The `foreground-secondary` token closes the documented token gap between foreground-subtle (stone.500) and foreground (stone.950).
+**Status:** Active

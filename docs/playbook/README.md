@@ -18,7 +18,7 @@ This playbook captures every decision, dead end, config file, and "oh that's how
 
 ## How to Use This
 
-**First time building a design system:** Read sequentially, 01 through 07. The files are ordered to match the actual build sequence.
+**First time building a design system:** Read sequentially, 01 through 08. The files are ordered to match the actual build sequence.
 
 **Looking for something specific:** Jump directly to the relevant file using the table of contents below. The decisions log (`06`) and lessons learned (`07`) are especially useful if you're debugging a problem you've seen before.
 
@@ -56,6 +56,7 @@ This playbook captures every decision, dead end, config file, and "oh that's how
 | [05-workflows.md](./05-workflows.md) | New component checklist, dev environment, CI/CD, release process |
 | [06-decisions-log.md](./06-decisions-log.md) | Chronological log of every significant decision with rationale |
 | [07-lessons-learned.md](./07-lessons-learned.md) | What went well, harder than expected, bugs we hit, recommendations |
+| [08-page-templates.md](./08-page-templates.md) | PLP, Search, Account/Login, Terms & Conditions, Sale — composition specs, token maps, Shopify notes |
 
 ---
 

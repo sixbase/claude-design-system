@@ -3,7 +3,7 @@
 }
 
 .ds-header__inner {
-  max-width: 1280px;
+  max-width: var(--size-content-xl);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -70,8 +70,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;  /* intentional — 36px touch target, no matching token */
-  height: 36px;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
   border: none;
   background: none;
   cursor: pointer;

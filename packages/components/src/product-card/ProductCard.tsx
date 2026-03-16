@@ -15,6 +15,8 @@ export interface ProductCardProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   currency?: string;
   /** Card size */
   size?: 'default' | 'lg';
+  /** Fill parent width (use inside CSS Grid layouts) */
+  fluid?: boolean;
 }
 
 function formatPrice(cents: number, currency: string): string {
@@ -38,7 +40,7 @@ function formatPrice(cents: number, currency: string): string {
  * />
  */
 export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(function ProductCard(
-  { name, price, image, currency = 'USD', size = 'default', className, ...props },
+  { name, price, image, currency = 'USD', size = 'default', fluid, className, ...props },
   ref,
 ) {
   return (
@@ -50,6 +52,7 @@ export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(function
       className={[
         'ds-product-card',
         size !== 'default' && `ds-product-card--${size}`,
+        fluid && 'ds-product-card--fluid',
         className,
       ].filter(Boolean).join(' ')}
       {...props}

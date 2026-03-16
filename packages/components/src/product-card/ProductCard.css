@@ -10,6 +10,12 @@
   background-color: transparent;
 }
 
+/* Fluid mode: when placed inside a CSS Grid, fill the cell.
+   All inter-card spacing is handled by the parent grid gap. */
+.ds-product-card--fluid {
+  --product-card-width: 100%;
+}
+
 /* Image gets uniform radius since ghost card has no clipping background */
 .ds-product-card .ds-card-image {
   border-radius: var(--card-radius);

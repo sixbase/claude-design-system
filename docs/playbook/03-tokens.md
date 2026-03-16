@@ -383,6 +383,19 @@ icon        = 16px   (base font size)    — standard icon dimension
 
 Note: 34→42→55 approximates a √φ step ratio (42/34=1.235, 55/42=1.310, avg≈1.272=√φ).
 
+### Size (Content Widths)
+
+Max-width constraints for content areas at different layout levels:
+
+```
+content-sm = 640px   — constrained dialogs, cookie consent, narrow overlays
+content-md = 768px   — medium content areas, form containers, settings panels
+content-lg = 960px   — wide content areas, page-level containers, feature sections
+content-xl = 1280px  — full-width page container (header, footer, main)
+```
+
+Use `var(--size-content-xl)` instead of hardcoding `1280px` for page-level `max-width`.
+
 ### Z-Index
 ```
 base (0) → raised (10) → overlay (100) → modal (200) → toast (300) → tooltip (400)

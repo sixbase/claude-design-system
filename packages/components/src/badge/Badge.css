@@ -5,6 +5,7 @@
 
   display: inline-flex;
   align-items: center;
+  gap: var(--spacing-1);
   justify-content: center;
   border-radius: var(--badge-radius);
   font-family: var(--font-family-body);
@@ -24,6 +25,21 @@
   text-box-edge: cap alphabetic;
 }
 
+/* ─── Icon slot ─────────────────────────────────────────── */
+.ds-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.ds-badge__icon > svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
 /* ─── Size variants ──────────────────────────────────────── */
 .ds-badge--sm {
   padding: var(--spacing-1) var(--spacing-2);
@@ -36,43 +52,84 @@
 }
 
 /* ─── Variant: default (primary) ─────────────────────────── */
+/* stone.0 on stone.800 → 13.24:1 ✅ AAA */
 .ds-badge--default {
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
 }
 
 /* ─── Variant: secondary ─────────────────────────────────── */
+/* stone.900 on stone.200 → 12.67:1 ✅ AAA */
 .ds-badge--secondary {
   background-color: var(--color-secondary);
   color: var(--color-secondary-foreground);
 }
 
 /* ─── Variant: success ───────────────────────────────────── */
+/*
+ * Light: sage.700 on sage.50 → 7.72:1 ✅ AAA
+ * Dark: sage.400 on 12% sage.500/stone.900 → 7.01:1 ✅ AAA
+ * Border: sage.600 vs sage.50 → 5.25:1 ✅ (1.4.11)
+ */
 .ds-badge--success {
-  background-color: color-mix(in srgb, var(--color-success) 8%, transparent);
-  color: var(--color-success);
-  border-color: color-mix(in srgb, var(--color-success) 18%, transparent);
+  background-color: var(--color-success-subtle);
+  color: var(--color-success-foreground);
+  border-color: var(--color-success);
 }
 
 /* ─── Variant: warning ───────────────────────────────────── */
+/*
+ * Light: amber.700 on amber.50 → 6.44:1 ✅ AA
+ * Dark: amber.400 on 12% amber.500/stone.900 → 7.36:1 ✅ AAA
+ * Border: amber.600 vs amber.50 → 4.28:1 ✅ (1.4.11)
+ */
 .ds-badge--warning {
-  background-color: color-mix(in srgb, var(--color-warning) 8%, transparent);
-  color: var(--color-warning);
-  border-color: color-mix(in srgb, var(--color-warning) 18%, transparent);
+  background-color: var(--color-warning-subtle);
+  color: var(--color-warning-foreground);
+  border-color: var(--color-warning);
 }
 
 /* ─── Variant: destructive ───────────────────────────────── */
+/*
+ * Light: brick.600 on brick.50 → 6.08:1 ✅ AA
+ * Dark: brick.400 on 12% brick.500/stone.900 → 5.63:1 ✅ AA
+ * Border: brick.600 vs brick.50 → 6.08:1 ✅ (1.4.11)
+ */
 .ds-badge--destructive {
-  background-color: color-mix(in srgb, var(--color-destructive) 8%, transparent);
+  background-color: var(--color-destructive-subtle);
   color: var(--color-destructive);
-  border-color: color-mix(in srgb, var(--color-destructive) 18%, transparent);
+  border-color: var(--color-destructive);
+}
+
+:is(.dark, [data-theme="dark"]) .ds-badge--destructive {
+  color: var(--color-destructive-hover);
 }
 
 /* ─── Variant: outline ───────────────────────────────────── */
+/*
+ * Light: stone.600 on white → 6.27:1 ✅ AA
+ * Dark: stone.300 on stone.950 → 9.73:1 ✅ AAA
+ * Border: foreground-subtle → 4.07:1 ✅ (1.4.11 — 3:1 non-text)
+ */
 .ds-badge--outline {
   background-color: transparent;
-  color: var(--color-foreground-subtle);
+  color: var(--color-foreground-secondary);
+  border-color: var(--color-foreground-subtle);
+}
+
+:is(.dark, [data-theme="dark"]) .ds-badge--outline {
   border-color: var(--color-border-strong);
+}
+
+/* ─── Focus visibility (2.4.7 / 2.4.11) ─────────────────── */
+/*
+ * Badges are not inherently interactive, but may receive focus when
+ * used as links, buttons, or dismissible elements. Provide a visible
+ * focus ring using the system's established focus token.
+ */
+.ds-badge:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 /* ─── Optical centering fallback ─────────────────────────── */
