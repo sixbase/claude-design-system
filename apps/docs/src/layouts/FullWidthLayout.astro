@@ -87,7 +87,7 @@ const LEGAL_LINKS = [
       cartHref={`${base}/examples/cart`}
       cartCount={0}
     />
-    <main>
+    <main class="ds-page-container">
       <slot />
     </main>
     <Footer
@@ -105,21 +105,15 @@ const LEGAL_LINKS = [
 
 <style>
   /* ─── Main ────────────────────────────────────────────── */
+  /* Layout handled by .ds-page-container from layout-grid.css.
+     Only vertical padding added here (inline padding is in the grid system). */
   main {
-    max-width: var(--size-content-xl);
-    margin: 0 auto;
-    padding: var(--spacing-4);
+    padding-block: var(--spacing-4);
   }
 
   @media (min-width: 768px) {
     main {
-      padding: var(--spacing-6) var(--spacing-8);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    main {
-      padding: var(--spacing-6) var(--spacing-16);
+      padding-block: var(--spacing-6);
     }
   }
 </style>

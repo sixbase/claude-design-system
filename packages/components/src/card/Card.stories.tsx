@@ -22,7 +22,7 @@ export const Elevated: Story = {
   render: () => (
     <Card style={{ width: 280 }}>
       <CardBody>
-        <Text weight="semibold">Card title</Text>
+        <Text weight="semibold">Card Title</Text>
         <Text muted size="sm">Supporting text that describes the content of this card.</Text>
       </CardBody>
     </Card>
@@ -64,7 +64,7 @@ export const ProductCard: Story = {
         <Text weight="semibold">$285.00</Text>
       </CardBody>
       <CardFooter>
-        <Button fullWidth size="sm">Add to cart</Button>
+        <Button fullWidth size="sm">Add to Cart</Button>
       </CardFooter>
     </Card>
   ),

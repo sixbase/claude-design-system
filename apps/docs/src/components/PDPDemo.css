@@ -1,46 +1,11 @@
 /* ─── PDP Layout ─────────────────────────────────────────── */
-.ds-pdp {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-6);
-}
-
-.ds-pdp__breadcrumb {
-  grid-column: 1 / -1;
-  min-width: 0;
-}
-
-/* Grid gap already provides bottom spacing; neutralise component margin */
-.ds-pdp .ds-breadcrumb {
-  margin-bottom: 0;
-}
-
-/* @breakpoint-lg = 1024px */
-@media (min-width: 1024px) {
-  .ds-pdp {
-    grid-template-columns: 1.618fr 1fr;
-    gap: var(--spacing-6);
-  }
-
-  .ds-pdp__breadcrumb {
-    grid-column: 1 / -1;
-  }
-}
+/* Product area uses ds-layout--golden (7+5) from layout-grid.css. */
 
 /* ─── Details column ─────────────────────────────────────── */
 .ds-pdp__details {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-phi-8); /* 16px — tighter base rhythm */
-}
-
-/* @breakpoint-lg = 1024px */
-@media (min-width: 1024px) {
-  .ds-pdp__details {
-    position: sticky;
-    top: var(--spacing-6);
-    align-self: start;
-  }
 }
 
 /* ─── Header ─────────────────────────────────────────────── */
@@ -71,7 +36,6 @@
   align-items: flex-start;
   gap: var(--spacing-2);
 }
-
 
 /* ─── Actions ────────────────────────────────────────────── */
 .ds-pdp__actions {
@@ -104,10 +68,6 @@
 }
 
 /* ─── Lifestyle carousel ─────────────────────────────────── */
-.ds-pdp__lifestyle {
-  margin-top: var(--spacing-phi-34); /* 68px — major chapter break */
-}
-
 .ds-pdp__section-header {
   display: flex;
   flex-direction: column;
@@ -125,18 +85,3 @@
   border-radius: var(--radius-lg);
 }
 
-/* ─── Feature block spacing ──────────────────────────────── */
-.ds-pdp__feature-section {
-  margin-top: var(--spacing-phi-21); /* 42px — paragraph break */
-}
-
-/* @breakpoint-max-lg */
-@media (max-width: 1023px) {
-  .ds-pdp__lifestyle {
-    margin-top: var(--spacing-phi-21); /* 42px compressed */
-  }
-
-  .ds-pdp__feature-section {
-    margin-top: var(--spacing-phi-13); /* 26px compressed */
-  }
-}

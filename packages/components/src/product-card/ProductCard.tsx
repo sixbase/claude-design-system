@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import type { HTMLAttributes } from 'react';
-import { Card, CardImage, CardBody } from '../card/Card';
+import type { HTMLAttributes, ReactNode } from 'react';
+import { Card, CardBody } from '../card/Card';
 import { Text } from '../typography/Typography';
 import './ProductCard.css';
 
@@ -17,6 +17,12 @@ export interface ProductCardProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   size?: 'default' | 'lg';
   /** Fill parent width (use inside CSS Grid layouts) */
   fluid?: boolean;
+  /** Custom price renderer — overrides the default formatted price */
+  renderPrice?: (price: number, currency: string) => ReactNode;
+  /** Badge or label overlay positioned over the image */
+  badge?: ReactNode;
+  /** Secondary image URL shown on hover */
+  hoverImage?: string;
 }
 
 function formatPrice(cents: number, currency: string): string {
@@ -38,9 +44,30 @@ function formatPrice(cents: number, currency: string): string {
  *   price={3200}
  *   image="/products/tshirt.jpg"
  * />
+ *
+ * @example
+ * <ProductCard
+ *   name="Sale Item"
+ *   price={2400}
+ *   image="/products/sale.jpg"
+ *   badge={<Badge variant="destructive" size="sm">Sale</Badge>}
+ *   renderPrice={(price, currency) => <PriceDisplay price={price} />}
+ * />
  */
 export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(function ProductCard(
-  { name, price, image, currency = 'USD', size = 'default', fluid, className, ...props },
+  {
+    name,
+    price,
+    image,
+    currency = 'USD',
+    size = 'default',
+    fluid,
+    renderPrice,
+    badge,
+    hoverImage,
+    className,
+    ...props
+  },
   ref,
 ) {
   return (
@@ -53,14 +80,42 @@ export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(function
         'ds-product-card',
         size !== 'default' && `ds-product-card--${size}`,
         fluid && 'ds-product-card--fluid',
+        hoverImage && 'ds-product-card--has-hover-image',
         className,
-      ].filter(Boolean).join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     >
-      <CardImage src={image} alt={name} aspectRatio="4/5" />
+      <div className="ds-product-card__image-wrapper">
+        <div
+          className="ds-card-image"
+          style={{ '--card-image-ratio': '4/5' } as React.CSSProperties}
+        >
+          <img src={image} alt={name} className="ds-card-image__img" loading="lazy" />
+          {hoverImage && (
+            <img
+              src={hoverImage}
+              alt=""
+              className="ds-card-image__img ds-product-card__hover-image"
+              loading="lazy"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+        {badge && <div className="ds-product-card__badge">{badge}</div>}
+      </div>
       <CardBody>
-        <Text size="sm" className="ds-product-card__name">{name}</Text>
-        <Text size="sm" muted className="ds-product-card__price">{formatPrice(price, currency)}</Text>
+        <Text size="sm" className="ds-product-card__name">
+          {name}
+        </Text>
+        {renderPrice ? (
+          <div className="ds-product-card__price">{renderPrice(price, currency)}</div>
+        ) : (
+          <Text size="sm" muted className="ds-product-card__price">
+            {formatPrice(price, currency)}
+          </Text>
+        )}
       </CardBody>
     </Card>
   );

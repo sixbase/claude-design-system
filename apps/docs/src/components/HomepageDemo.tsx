@@ -40,7 +40,7 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
   return (
     <div>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="ds-homepage__hero">
+      <section className="ds-homepage__hero ds-section">
         <div className="ds-homepage__hero-content">
           <Heading level={1} size="4xl">
             Everyday Essentials,{'\u00A0'}Thoughtfully Made
@@ -55,7 +55,7 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
       </section>
 
       {/* ── Featured Products ────────────────────────────── */}
-      <section className="ds-homepage__section">
+      <section className="ds-section">
         <div className="ds-homepage__section-header">
           <Heading level={2} size="2xl">
             Featured Products
@@ -85,7 +85,7 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
       </section>
 
       {/* ── Feature Blocks ───────────────────────────────── */}
-      <section className="ds-homepage__features">
+      <section className="ds-homepage__features ds-section">
         {FEATURES.map((feature, i) => (
           <FeatureBlock
             key={feature.title}

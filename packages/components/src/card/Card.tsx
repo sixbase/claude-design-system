@@ -32,7 +32,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
  *     <Text>$42.00</Text>
  *   </CardBody>
  *   <CardFooter>
- *     <Button fullWidth>Add to cart</Button>
+ *     <Button fullWidth>Add to Cart</Button>
  *   </CardFooter>
  * </Card>
  */

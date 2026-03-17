@@ -28,7 +28,7 @@ export function ModalDefault() {
           </ModalDescription>
         </ModalHeader>
         <ModalBody>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+          <div className="ds-gallery-stack">
             <Input label="Name" defaultValue="Jane Doe" />
             <Input label="Email" defaultValue="jane@example.com" />
           </div>
@@ -46,7 +46,7 @@ export function ModalDefault() {
 
 export function ModalSizes() {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
+    <div className="ds-gallery-row">
       <Modal>
         <ModalTrigger asChild>
           <Button variant="secondary">Small (400px)</Button>
@@ -139,7 +139,7 @@ export function ModalConfirmation() {
 export function ModalControlled() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
+    <div className="ds-gallery-row">
       <Button onClick={() => setOpen(true)}>Open (controlled)</Button>
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>

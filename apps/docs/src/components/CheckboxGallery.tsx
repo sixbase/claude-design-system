@@ -4,7 +4,7 @@ import { Preview } from './Preview';
 export function CheckboxStates() {
   return (
     <Preview stack>
-      <Checkbox label="Unchecked (default)" />
+      <Checkbox label="Unchecked (Default)" />
       <Checkbox label="Checked" defaultChecked />
       <Checkbox label="Indeterminate" checked="indeterminate" />
       <Checkbox label="Disabled" disabled />
@@ -31,8 +31,8 @@ export function CheckboxWithText() {
 export function CheckboxFilter() {
   return (
     <Preview stack>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-        <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-xs)', fontWeight: 'var(--font-weight-semibold)', textTransform: 'uppercase', letterSpacing: 'var(--letter-spacing-wider)', color: 'var(--color-foreground-muted)' }}>
+      <div className="ds-gallery-stack">
+        <p className="ds-demo-section-label">
           Size
         </p>
         <Checkbox size="sm" label="XS" defaultChecked />

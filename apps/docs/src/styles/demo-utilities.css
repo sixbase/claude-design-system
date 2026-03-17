@@ -62,6 +62,15 @@
   flex-shrink: 0;
 }
 
+/* ─── Shared gallery layout utilities ────────────────────── */
+
+.ds-gallery-stack { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.ds-gallery-stack--lg { display: flex; flex-direction: column; gap: var(--spacing-8); }
+.ds-gallery-row { display: flex; flex-wrap: wrap; gap: var(--spacing-3); }
+.ds-gallery-row--lg { display: flex; flex-wrap: wrap; gap: var(--spacing-4); }
+.ds-gallery-constrained { max-width: var(--size-modal-sm); width: 100%; }
+.ds-gallery-constrained--md { max-width: var(--size-modal-md); width: 100%; }
+
 /* ─── Gallery utilities — doc component previews ─────────── */
 
 .ds-gallery-card { width: 200px; }

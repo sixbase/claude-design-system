@@ -1,18 +1,6 @@
 /* ─── Cart Layout ────────────────────────────────────────── */
-
-.ds-cart {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-phi-13);
-}
-
-/* @breakpoint-lg = 1024px */
-@media (min-width: 1024px) {
-  .ds-cart {
-    grid-template-columns: 1.618fr 1fr;
-    gap: var(--spacing-phi-21);
-  }
-}
+/* Uses ds-layout ds-layout--golden from layout-grid.css.
+   The cart's own grid is removed; column split comes from the grid system. */
 
 /* ─── Header ─────────────────────────────────────────────── */
 
@@ -20,13 +8,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
-}
-
-/* @breakpoint-lg: span full width */
-@media (min-width: 1024px) {
-  .ds-cart__header {
-    grid-column: 1 / -1;
-  }
 }
 
 /* ─── Line Items ─────────────────────────────────────────── */
@@ -116,15 +97,6 @@
   padding: var(--spacing-5);
   background-color: var(--color-background-subtle);
   border-radius: var(--radius-lg);
-}
-
-/* @breakpoint-lg: sticky sidebar */
-@media (min-width: 1024px) {
-  .ds-cart__summary {
-    position: sticky;
-    top: var(--spacing-6);
-    align-self: start;
-  }
 }
 
 .ds-cart__summary-row {

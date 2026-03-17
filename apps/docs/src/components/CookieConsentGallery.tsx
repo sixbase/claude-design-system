@@ -81,9 +81,9 @@ export function CookieConsentControlled() {
 
   return (
     <Preview stack>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)', alignItems: 'flex-start' }}>
+      <div className="ds-gallery-stack">
         <Button size="sm" onClick={() => setOpen(true)}>Show Cookie Banner</Button>
-        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--font-size-sm)', color: 'var(--color-foreground-subtle)', margin: 0 }}>
+        <p className="ds-gallery-label">
           Banner is {open ? 'visible' : 'hidden'}
         </p>
       </div>

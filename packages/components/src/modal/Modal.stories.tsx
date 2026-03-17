@@ -81,7 +81,7 @@ export const Large: Story = {
   render: () => (
     <Modal>
       <ModalTrigger asChild>
-        <Button>View details</Button>
+        <Button>View Details</Button>
       </ModalTrigger>
       <ModalContent size="lg">
         <ModalHeader>

@@ -19,7 +19,7 @@ describe('CookieConsent', () => {
 
   it('renders banner with heading and description', () => {
     render(<CookieConsent />);
-    expect(screen.getByText('We use cookies')).toBeInTheDocument();
+    expect(screen.getByText('We Use Cookies')).toBeInTheDocument();
     expect(screen.getByText(/cookies to improve your experience/)).toBeInTheDocument();
   });
 
@@ -165,7 +165,7 @@ describe('CookieConsent', () => {
     // Expand a category to see its content
     await user.click(screen.getByText('Functional Cookies'));
 
-    const links = screen.getAllByText('Learn more');
+    const links = screen.getAllByText('Learn More');
     expect(links.length).toBeGreaterThanOrEqual(1);
     const functionalLink = links.find((el) => el.closest('a')?.getAttribute('href') === '#functional');
     expect(functionalLink).toBeInTheDocument();
@@ -192,7 +192,7 @@ describe('CookieConsent', () => {
   it('has aria-labelledby pointing to the heading', () => {
     render(<CookieConsent />);
     const dialog = screen.getByRole('dialog');
-    const heading = screen.getByText('We use cookies');
+    const heading = screen.getByText('We Use Cookies');
     expect(dialog).toHaveAttribute('aria-labelledby', heading.id);
   });
 

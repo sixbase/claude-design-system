@@ -198,7 +198,7 @@ export function AccountDemo({ basePath = '' }: { basePath?: string }) {
                   className="ds-account__link-btn"
                   onClick={() => switchView('login')}
                 >
-                  <Text size="sm" muted>Already have an account? <strong>Sign in</strong></Text>
+                  <Text size="sm" muted>Already have an account? <strong>Sign In</strong></Text>
                 </button>
               </div>
             </form>
@@ -239,7 +239,7 @@ export function AccountDemo({ basePath = '' }: { basePath?: string }) {
                   className="ds-account__link-btn"
                   onClick={() => switchView('login')}
                 >
-                  <Text size="sm" muted>Back to sign in</Text>
+                  <Text size="sm" muted>Back to Sign In</Text>
                 </button>
               </div>
             </form>

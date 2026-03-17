@@ -4,10 +4,10 @@ import { Preview } from './Preview';
 export function HeadingGallery() {
   return (
     <Preview stack>
-      <Heading as="h1">Heading 1 — Page title</Heading>
-      <Heading as="h2">Heading 2 — Section title</Heading>
+      <Heading as="h1">Heading 1 — Page Title</Heading>
+      <Heading as="h2">Heading 2 — Section Title</Heading>
       <Heading as="h3">Heading 3 — Subsection</Heading>
-      <Heading as="h4">Heading 4 — Card title</Heading>
+      <Heading as="h4">Heading 4 — Card Title</Heading>
       <Heading as="h2" muted>
         Heading 2 — Muted
       </Heading>

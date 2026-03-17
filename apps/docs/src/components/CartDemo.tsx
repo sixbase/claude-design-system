@@ -52,10 +52,10 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
 
   if (items.length === 0) {
     return (
-      <div className="ds-cart">
+      <div className="ds-cart ds-layout ds-layout--full">
         <div className="ds-cart__empty">
           <Heading level={3} size="xl">
-            Your cart is empty
+            Your Cart Is Empty
           </Heading>
           <Text size="sm" muted>
             Looks like you haven't added anything yet.
@@ -71,8 +71,9 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
   // ─── Cart with items ──────────────────────────────────
 
   return (
-    <div className="ds-cart">
-      <div className="ds-cart__header">
+    <div>
+      {/* ── Header ─────────────────────────────────────────── */}
+      <div className="ds-cart__header ds-section">
         <Heading level={1} size="2xl">
           Your Cart
         </Heading>
@@ -81,7 +82,8 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
         </Text>
       </div>
 
-      {/* ── Line Items ───────────────────────────────────── */}
+      {/* ── Items + Summary in golden split ─────────────────── */}
+      <div className="ds-layout ds-layout--golden">
       <div className="ds-cart__items">
         {items.map((item) => (
           <div key={item.product.id} className="ds-cart__line-item">
@@ -135,7 +137,7 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
       </div>
 
       {/* ── Summary ──────────────────────────────────────── */}
-      <div className="ds-cart__summary">
+      <div className="ds-cart__summary ds-layout__sticky">
         <Heading level={2} size="lg">
           Order Summary
         </Heading>
@@ -169,6 +171,7 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
         <Button variant="secondary" size="md" fullWidth asChild>
           <a href={`${basePath}/examples/collection`}>Continue Shopping</a>
         </Button>
+      </div>
       </div>
     </div>
   );

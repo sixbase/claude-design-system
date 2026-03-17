@@ -119,26 +119,24 @@ export function SaleDemo({ basePath = '' }: { basePath?: string }) {
             href={`${basePath}/examples/product-detail`}
             className="ds-unstyled-link"
           >
-            <div className="ds-sale__card-wrapper">
-              <div className="ds-sale__card-badge">
-                <Badge variant="destructive" size="sm">Sale</Badge>
-              </div>
-              <ProductCard
-                name={product.name}
-                price={product.price}
-                image={product.image}
-                fluid
-              />
-              {product.compareAtPrice && (
-                <div className="ds-sale__price-override">
-                  <PriceDisplay
-                    price={formatPrice(product.price)}
-                    comparePrice={formatPrice(product.compareAtPrice)}
-                    size="sm"
-                  />
-                </div>
-              )}
-            </div>
+            <ProductCard
+              name={product.name}
+              price={product.price}
+              image={product.image}
+              fluid
+              badge={<Badge variant="destructive" size="sm">Sale</Badge>}
+              renderPrice={
+                product.compareAtPrice
+                  ? (p, c) => (
+                      <PriceDisplay
+                        price={formatPrice(p)}
+                        comparePrice={formatPrice(product.compareAtPrice!)}
+                        size="sm"
+                      />
+                    )
+                  : undefined
+              }
+            />
           </a>
         ))}
       </Grid>

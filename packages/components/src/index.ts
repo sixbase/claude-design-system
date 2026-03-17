@@ -11,6 +11,7 @@ export * from './checkbox';
 // Layout
 export * from './container';
 export * from './grid';
+import './layout-grid/layout-grid.css';
 export * from './card';
 export * from './accordion';
 export * from './modal';

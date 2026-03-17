@@ -36,7 +36,7 @@ export function CardProduct() {
           <Text size="xs" muted>$249</Text>
         </CardBody>
         <CardFooter>
-          <Button size="sm" fullWidth>Add to cart</Button>
+          <Button size="sm" fullWidth>Add to Cart</Button>
         </CardFooter>
       </Card>
     </Preview>

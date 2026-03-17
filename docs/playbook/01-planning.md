@@ -4,6 +4,55 @@
 
 ---
 
+## Rules for This File
+
+- **When adding a new component:** Update the component status table immediately. Include the component name, status, and notes describing its API surface.
+- **When completing a deferred component:** Move it from the "Deferred" table to the appropriate "Built" table and update the count in the section heading.
+- **When adding a new docs page:** Add it to the documentation pages table.
+- **When changing the design mandate:** Add a decisions log entry in `06-decisions-log.md` explaining why.
+
+---
+
+## Design Mandate
+
+This is the aesthetic DNA of the entire system. Every visual decision should trace back to these principles.
+
+### Aesthetic Direction
+
+**Premium, warm, editorial.** High-end ecommerce: luxury goods, considered lifestyle brands. Not clinical SaaS blues and greys.
+
+| Dimension | Direction | Specifics |
+|-----------|-----------|-----------|
+| **Color** | Warm earth tones | Primary palette is `stone` (warm off-white through near-black). Supporting palettes: `brick` (error), `sage` (success), `amber` (warning), `slate` (info). All muted and earthy. |
+| **Typography** | Literary serif | Ancizar Serif. Scholarly authority with everyday readability. Thoughtful and considered, not tech-forward. |
+| **Shape** | Restrained radius | Fibonacci-derived. Not pill buttons, not sharp corners — a refined middle ground. |
+| **Proportion** | Golden ratio (φ) | Every scale decision — type, spacing, radius, shadows, opacity, timing, layout splits — is derived from φ (1.618), its inverse (0.618), and Fibonacci sequences. |
+
+### The Golden Ratio Governs All Proportions
+
+This is not decorative. It is the generative DNA of the system.
+
+- When choosing between candidate values, **prefer the ratio closer to φ**.
+- When defining a new scale, **derive it from φ multiplication**.
+- When evaluating whether a value belongs, **check if it fits the existing φ-derived progression**.
+
+See `03-tokens.md` for the complete mathematical reference. See `06-decisions-log.md` for the full φ analysis with current token values and ideal targets.
+
+### Font
+
+| Iteration | Font | Why Changed |
+|-----------|------|-------------|
+| Default | Inter | Too generic, no personality |
+| v2 | EB Garamond | Too ornate and heavy at small UI sizes |
+| v3 | Source Serif 4 | Warm and readable, but replaced for more character |
+| **Final** | **Ancizar Serif** | Scholarly authority with everyday readability, 9 weights including light (300) |
+
+Ancizar Serif is loaded from Google Fonts. Designed by Universidad Nacional de Colombia — open-source scholarly serif (SIL OFL) with 9 weights from Thin to Black. We load: Light (300), Regular (400), Medium (500), Semibold (600), Bold (700) + italic variants.
+
+**Do not change the font without a decisions log entry and a full audit of every component for visual regressions.**
+
+---
+
 ## Origin Story
 
 This design system was started from an empty GitHub repository with one directive: build something that meets the standards of large engineering organizations — Apple, Meta, Google. That meant:
@@ -18,143 +67,154 @@ The system is built for an **ecommerce context** — the color palette, typograp
 
 ---
 
-## Design Mandate
-
-### Aesthetic Direction
-Premium, warm, editorial. Think high-end ecommerce: luxury goods, considered lifestyle brands. Not clinical SaaS blues and greys.
-
-#### The Golden Ratio (φ ≈ 1.618) governs all proportions
-
-Every scale decision in this system — type sizes, spacing, radius, layout splits, aspect ratios, animation timing — should be guided by the golden ratio. This is not a rigid rule but the governing spirit: when choosing between candidate values, prefer the ratio closer to φ. When defining a new scale, derive it from φ multiplication.
-
-See [06-decisions-log.md](./06-decisions-log.md) for the full φ analysis with current token values and ideal targets.
-
-- **Color:** Warm earth tones. The primary palette (`stone`) is a warm off-white through near-black, not a cold grey. Supporting palettes (brick, sage, amber, slate) are muted and earthy.
-- **Typography:** Literary serif. The brand voice is thoughtful and considered, not tech-forward.
-- **Shape:** Restrained corner radius. Not pill buttons, not sharp corners — a refined middle ground.
-
-### Font Journey
-
-| Iteration | Font | Why Changed |
-|-----------|------|-------------|
-| Default | Inter | Too generic, no personality |
-| v2 | EB Garamond | Too ornate and heavy at small UI sizes |
-| v3 | Source Serif 4 | Warm and readable, but replaced for more character |
-| **Final** | **Ancizar Serif** | Scholarly authority with everyday readability, 9 weights including light (300) |
-
-Ancizar Serif is loaded from Google Fonts. Designed by Universidad Nacional de Colombia, it's an open-source scholarly serif (SIL OFL) with 9 weights from Thin to Black. We load Light (300), Regular (400), Medium (500), Semibold (600), and Bold (700) plus italic variants.
-
----
-
 ## Scope: What's in v1
 
-The build strategy was **primitives-first**: establish the token system and foundational components before anything ecommerce-specific. This means v1 is mostly infrastructure with just enough UI to prove the system works.
+The build strategy was **primitives-first**: establish the token system and foundational components before anything ecommerce-specific.
 
-### Packages built
-| Package | What it contains |
-|---------|-----------------|
-| `@ds/tokens` | CSS variables, TypeScript exports, JSON source of truth |
-| `@ds/primitives` | Radix UI wrappers, shared TypeScript types |
-| `@ds/components` | Styled, accessible components |
+### Packages
 
-### Components built (18 total)
+| Package | What It Contains | Depends On |
+|---------|-----------------|------------|
+| `@ds/tokens` | CSS variables, TypeScript exports, JSON source of truth | Nothing |
+| `@ds/primitives` | Radix UI wrappers, shared TypeScript types | `@ds/tokens` |
+| `@ds/components` | Styled, accessible components | `@ds/tokens`, `@ds/primitives` |
+
+**Build order:** tokens → primitives → components. Always. See `05-workflows.md`.
+
+### Components Built (18 total)
+
+**When adding a component, update this table and the docs pages table below.**
 
 #### Foundation (v1)
+
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Button | ✅ Complete | 4 variants, 3 sizes, loading, icon-only, asChild, leading/trailing icons |
+| Button | ✅ Complete | 4 variants (primary, secondary, ghost, destructive), 3 sizes, loading, icon-only, asChild, leading/trailing icons |
 | Input | ✅ Complete | Label, hint, error, leading/trailing adornments, sm/md/lg sizes |
-| Typography | ✅ Complete | Heading (h1–h4), Text, Caption, Code |
-| ColorSwatch | ✅ Complete | Docs utility — not a user-facing component |
-| Badge | ✅ Complete | 6 variants, 2 sizes |
-| Card | ✅ Complete | 3 variants, interactive mode (hover lift + image zoom) |
-| Select | ✅ Complete | 3 sizes, groups, separators, hint/error, Radix UI |
+| Typography | ✅ Complete | Heading (h1–h4), Text, Caption, Code. Always use these — never raw HTML tags. |
+| ColorSwatch | ✅ Complete | Docs utility only — not a user-facing component |
+| Badge | ✅ Complete | 6 variants (default, secondary, success, warning, destructive, outline), 2 sizes. Uses solid primitives for contrast — not `color-mix` with transparent. |
+| Card | ✅ Complete | 3 variants (default, bordered, ghost), interactive mode (hover lift + image zoom) |
+| Select | ✅ Complete | 3 sizes, groups, separators, hint/error, Radix UI. Portal content needs explicit `font-family`. |
 | Checkbox | ✅ Complete | Indeterminate state, 2 sizes, hint/error, Radix UI |
 
-#### Ecommerce components (v1.x)
+#### Ecommerce Components (v1.x)
+
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Modal | ✅ Complete | Compound API (Trigger, Content, Header, Body, Footer, Close), Radix Dialog |
-| Accordion | ✅ Complete | Radix primitive, single/multiple mode, 3 sizes |
+| Modal | ✅ Complete | Compound API (Trigger, Content, Header, Body, Footer, Close), Radix Dialog. Portal content needs explicit `font-family`. |
+| Accordion | ✅ Complete | Radix primitive, single/multiple mode, 3 sizes, inner-only dividers (no top/bottom borders) |
 | Breadcrumb | ✅ Complete | CSS-based responsive collapse, maxItems truncation |
 | QuantitySelector | ✅ Complete | Controlled stepper, min/max bounds, 3 sizes |
 | ImageGallery | ✅ Complete | Main + thumbnails, keyboard nav, aspect ratio control |
-| ProductCard | ✅ Complete | Composed from Card + Badge + image, price formatting |
+| ProductCard | ✅ Complete | Composed from Card + Badge + image. `renderPrice` prop for custom pricing, `badge` prop for overlays, `hoverImage` prop for hover swap, `fluid` variant for grid contexts. |
 | StarRating | ✅ Complete | SVG stars (full/half/empty), review count, 3 sizes |
-| StockIndicator | ✅ Complete | 3 statuses (in-stock/low-stock/out-of-stock), pulse animation |
+| StockIndicator | ✅ Complete | 3 statuses (in-stock/low-stock/out-of-stock), pulse animation with `prefers-reduced-motion` |
 | Carousel | ✅ Complete | Scroll-snap, responsive slide sizes (sm/md/lg), gap variants |
 | FeatureBlock | ✅ Complete | Image + text grid, `reverse` prop for alternating layouts |
 
-### Documentation pages (18 components + 4 foundation + 1 example)
-| Page | URL |
-|------|-----|
-| Introduction | `/` |
-| Getting Started | `/getting-started` |
-| Colors | `/tokens/colors` |
-| Typography | `/tokens/typography` |
-| Spacing | `/tokens/spacing` |
-| Accordion | `/components/accordion` |
-| Badge | `/components/badge` |
-| Breadcrumb | `/components/breadcrumb` |
-| Button | `/components/button` |
-| Card | `/components/card` |
-| Carousel | `/components/carousel` |
-| Checkbox | `/components/checkbox` |
-| Color Swatch | `/components/color-swatch` |
-| Feature Block | `/components/feature-block` |
-| Image Gallery | `/components/image-gallery` |
-| Input | `/components/input` |
-| Modal | `/components/modal` |
-| Product Card | `/components/product-card` |
-| Quantity Selector | `/components/quantity-selector` |
-| Select | `/components/select` |
-| Star Rating | `/components/star-rating` |
-| Stock Indicator | `/components/stock-indicator` |
-| Typography | `/components/typography` |
-| Product Detail Page | `/examples/product-detail` |
+#### Layout Utilities
+
+| Utility | Status | Notes |
+|---------|--------|-------|
+| Layout Grid | ✅ Complete | `.ds-page-container`, `.ds-layout`, `.ds-section`, column split modifiers. See `09-layout-grid.md`. |
+
+### Documentation Pages
+
+| Page | URL | Type |
+|------|-----|------|
+| Introduction | `/` | Foundation |
+| Getting Started | `/getting-started` | Foundation |
+| Colors | `/tokens/colors` | Token reference |
+| Typography | `/tokens/typography` | Token reference |
+| Spacing | `/tokens/spacing` | Token reference |
+| Accordion | `/components/accordion` | Component |
+| Badge | `/components/badge` | Component |
+| Breadcrumb | `/components/breadcrumb` | Component |
+| Button | `/components/button` | Component |
+| Card | `/components/card` | Component |
+| Carousel | `/components/carousel` | Component |
+| Checkbox | `/components/checkbox` | Component |
+| Color Swatch | `/components/color-swatch` | Component |
+| Feature Block | `/components/feature-block` | Component |
+| Image Gallery | `/components/image-gallery` | Component |
+| Input | `/components/input` | Component |
+| Modal | `/components/modal` | Component |
+| Product Card | `/components/product-card` | Component |
+| Quantity Selector | `/components/quantity-selector` | Component |
+| Select | `/components/select` | Component |
+| Star Rating | `/components/star-rating` | Component |
+| Stock Indicator | `/components/stock-indicator` | Component |
+| Typography | `/components/typography` | Component |
+| Product Detail Page | `/examples/product-detail` | Example page |
+| Homepage | `/examples/homepage` | Example page |
+| Collection | `/examples/collection` | Example page |
+| Cart | `/examples/cart` | Example page |
+
+### Example Pages (4 total)
+
+| Page | Layout | Key Patterns |
+|------|--------|-------------|
+| Homepage | Full-width sections, centered flex | Hero with `Button asChild → <a>`, Carousel with ProductCard, FeatureBlock alternating, Newsletter form |
+| Collection | Breadcrumb + header/sort + product grid | Responsive grid (2→3→4 col), Select sort, ProductCard with `fluid` |
+| Product Detail | Golden split (7+5) | ImageGallery + sticky details, Accordion FAQ, Carousel lifestyle, FeatureBlock |
+| Cart | Golden split (7+5) | Line items grid, sticky order summary, QuantitySelector inline, empty state |
 
 ---
 
 ## Scope: What's Deferred
 
-### Remaining ecommerce component priority
+| Priority | Component | Why Ecommerce Needs It | Blocked By |
+|----------|-----------|------------------------|------------|
+| P1 | Toast | Add-to-cart confirmation, error notifications | Nothing — ready to build |
+| P2 | Pagination | Product listing navigation | Nothing — ready to build |
+| P2 | Skeleton | Loading state for product grids | Nothing — ready to build |
+| P3 | Tabs | Product detail: description / reviews / specs | Nothing — ready to build |
 
-| Priority | Component | Why ecommerce needs it |
-|----------|-----------|------------------------|
-| P1 | Toast | Add-to-cart confirmation, error notifications |
-| P2 | Pagination | Product listing navigation |
-| P2 | Skeleton | Loading state for product grids |
-| P3 | Tabs | Product detail: description / reviews / specs |
+See `08-page-templates.md` Token Gap Report for additional component and feature gaps identified during page template design.
 
 ---
 
 ## Why Two Apps (Docs + Storybook)?
 
-A common question: why maintain both an Astro docs site and a Storybook?
-
-**They serve different audiences:**
+**They serve different audiences. Do not merge them.**
 
 | | Storybook | Astro Docs |
 |--|-----------|------------|
-| **Who uses it** | Component engineers | Consumers of the design system |
-| **What they need** | Isolated rendering, controls, interaction testing | Usage examples, copy-paste code, prop tables |
-| **Who runs it** | Locally during development | Deployed publicly |
-| **Key job** | Visual regression baseline (Chromatic) | Documentation |
+| **Audience** | Component engineers | Consumers of the design system |
+| **Need** | Isolated rendering, controls, interaction testing | Usage examples, copy-paste code, prop tables |
+| **Runs** | Locally during development (`:6006`) | Deployed publicly (`:4321`) |
+| **Key job** | Visual regression baseline (Chromatic) | Source of truth for consumers |
 
-Storybook is a **development tool** that happens to be useful for demos. The docs site is the **source of truth for consumers**. Conflating the two leads to a docs experience that's either too technical or a Storybook that's cluttered with explanatory prose. Keep them separate.
+Storybook is a **development tool**. The docs site is the **consumer reference**. Conflating them leads to docs that are too technical or a Storybook cluttered with prose.
+
+**Parity rule:** Every feature visible in Storybook must have a live preview in the docs. A docs section with only a heading and code snippet (no `<Gallery client:load />`) is a gap. See `04-components.md` for the full docs page checklist.
 
 ---
 
 ## Infrastructure Decisions
 
 ### CI/CD from day one
-GitHub Actions were set up before any components were built:
-- `ci.yml` — runs lint, typecheck, and tests on every PR and push to main
-- `chromatic.yml` — visual regression on every PR (requires Chromatic project token in repo secrets)
-- `release.yml` — Changesets-powered versioning and publish on merge to main
 
-### Testing from day one
-Every component was written with its test file in parallel. This forced good a11y habits — if `axe` fails, the PR fails.
+Set up before any components were built:
 
-### Documentation from day one
-Every component got a docs page the same session it was built. "I'll document it later" never happens.
+| Workflow | Trigger | What It Does |
+|----------|---------|--------------|
+| `ci.yml` | Every PR + push to main | Lint, typecheck, tests (including axe a11y) |
+| `chromatic.yml` | Every PR | Visual regression screenshots via Storybook |
+| `release.yml` | Merge to main | Changesets version bump + npm publish |
+
+### Branch protection on `main`
+
+Direct pushes blocked. Every change requires a PR that:
+1. Passes CI (lint + typecheck + all tests including axe)
+2. Gets 1 approving review
+3. Stale reviews dismissed on new commits
+
+**No code reaches main without passing lint, typecheck, tests, AND review.**
+
+### Three "from day one" disciplines
+
+1. **CI from day one** — GitHub Actions before any components
+2. **Testing from day one** — every component ships with its test file. If axe fails, the PR fails.
+3. **Documentation from day one** — every component gets a docs page in the same session. "I'll document it later" never happens.

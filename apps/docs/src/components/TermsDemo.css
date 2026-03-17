@@ -5,8 +5,8 @@
 
 .ds-legal-content {
   max-width: var(--size-content-md);
-  margin: 0 auto;
-  padding: var(--spacing-phi-13) 0 var(--spacing-phi-34);
+  margin: 0;
+  padding: 0 0 var(--spacing-phi-34);
 }
 
 /* ─── Header ────────────────────────────────────────────── */

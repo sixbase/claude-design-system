@@ -1,7 +1,110 @@
 # 06 — Decisions Log
 
 > Every significant decision made during this build, with context and rationale.
-> Add new entries at the bottom as decisions are made.
+
+---
+
+## Rules for This File
+
+1. **Add a new entry every time** we choose between options, change a previous decision, or establish a convention. This is not optional.
+2. **Add entries at the bottom.** Chronological order. Newest last.
+3. **Use the exact format below.** Every entry needs all 6 fields. No shortcuts.
+4. **When a decision is superseded:** Change the old entry's status to `Superseded by [New Decision Name]`. Add the new entry at the bottom. Do not delete the old entry — the history of why we changed is valuable.
+5. **When a decision came from a bug:** Link to the relevant section in `07-lessons-learned.md`.
+6. **"Active" means enforced.** If Claude sees an active decision being violated in code, flag it.
+
+### Entry Format
+
+```
+### [Decision Title]
+
+**Date/Phase:** [when — date or build phase]
+**Context:** [what problem or question we were facing]
+**Options considered:** [what we evaluated — list all, including rejected]
+**Decision:** [what we chose]
+**Rationale:** [why — be specific enough that someone can judge if the rationale still holds]
+**Status:** [Active / Superseded by X / Revisited — see notes]
+```
+
+---
+
+## Quick Reference Index
+
+Use this to find decisions by topic without scrolling 1300+ lines.
+
+### Architecture & Tooling
+
+| Decision | Status |
+|----------|--------|
+| Framework: React over Vue/Svelte | Active |
+| Package Manager: pnpm + Turborepo | Active |
+| Token Architecture: 3-Tier | Active |
+| Package Bundler: tsup | Active |
+| Documentation: Two Apps (Storybook + Astro) | Active |
+| Primitive Components: Radix UI | Active |
+| CSS Strategy: Plain CSS + BEM + `ds-` prefix | Active |
+| package.json exports: `types` first | Active |
+| tsup output: `.mjs` ESM, `.js` CJS | Active |
+
+### Design & Tokens
+
+| Decision | Status |
+|----------|--------|
+| Color Palette: Named palettes (`stone`, `brick`, etc.) | Active |
+| Font: Ancizar Serif (after Inter → EB Garamond → Source Serif 4) | Active |
+| Font-Family Token Rename: `serif`/`mono` → `body`/`code` | Active |
+| Golden Ratio: φ governs all proportions | Active |
+| Semantic Color Pairs: `primary` + `primary-foreground` | Active |
+| φ-Derived Opacity Scale | Active |
+| φ-Derived Transition Timing | Active |
+| Fibonacci Border Radius | Active |
+| Fibonacci Shadow Blur | Active |
+| φ-Derived Control Heights | Active |
+| Composite `--color-overlay` token | Active |
+| Disabled State: `var(--opacity-medium)` not `0.5` | Active |
+
+### Components & Patterns
+
+| Decision | Status |
+|----------|--------|
+| Accordion: inner-only dividers (no outer borders) | Active |
+| Accordion: `bordered` variant with panel wrapper | Active |
+| Accordion: checkbox trigger variant | Active |
+| Badge: solid primitive colors (not `color-mix` with transparent) | Active |
+| Button loading: `aria-busy` + disabled interaction | Active |
+| CookieConsent: compound component with i18n labels | Active |
+| No Overrides Rule: block components never target primitive internals | Active |
+| Optical Text Centering: `text-box-trim` | Active |
+| Optimal Reading Width: 65ch | Active |
+| ProductCard: `renderPrice`, `badge`, `hoverImage` props | Active |
+| ProductCard: `fluid` variant for grid contexts | Active |
+| StarRating: SVG clipPath half-fill | Active |
+| Deprecated `clip` → `clip-path` in sr-only | Active |
+
+### Layout & Pages
+
+| Decision | Status |
+|----------|--------|
+| Layout Grid: 12-col, 1200px, `--spacing-6` gutters, `--spacing-16` rhythm | Active |
+| PDP Grid Split: Golden (7+5) over Wide+Narrow (8+4) | Active |
+| Prose Content: Left-aligned, not centered | Active |
+| Page-Level Spacing: phi for sections, standard for internals | **Superseded** by Layout Grid System |
+
+### Code Quality & Docs
+
+| Decision | Status |
+|----------|--------|
+| Gallery Inline Styles → `demo-utilities.css` shared classes | Active |
+| ViewportIndicator: inline styles → CSS + semantic tokens | Active |
+| Shared Results Header pattern | Active |
+| Token Compliance Audit: docs site inline styles → CSS classes | Active |
+| Docs parity: every Storybook story needs live preview in docs | Active |
+
+---
+
+## Entries
+
+*Newest entries at the bottom. Do not reorder.*
 
 ---
 
@@ -1250,4 +1353,72 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 3. Convention: phi for section-level gaps, standard for component internals — clear rule, best of both
 **Decision:** Option 3. Updated Cart to use phi tokens for major section gaps (`spacing-phi-13` mobile, `spacing-phi-21` desktop). Component-internal spacing stays on standard scale.
 **Rationale:** Phi spacing creates the "designed, not default" feeling at page level. Standard 4px grid keeps component internals predictable. The rule "never mix scales within the same component" prevents confusion.
+**Status:** Superseded by Layout Grid System (section rhythm now uses `--spacing-16` / 64px standard scale for consistency across all pages)
+
+---
+
+### Layout Grid System
+
+**Date/Phase:** 2026-03-16
+**Context:** Components looked good in isolation but page previews had inconsistent column widths, gutters, and section spacing because there was no standardized layout system. Each page rolled its own grid with different approaches: PDP used `1.618fr 1fr`, Cart used the same, Collection relied on the Grid component alone, and Homepage used flexbox. Section spacing varied between phi-34 (68px), phi-21 (42px), and phi-13 (26px) across pages.
+**Options considered:**
+1. CSS Grid with fixed columns — rigid but predictable
+2. Flexbox-based layout — flexible but harder to enforce consistent column ratios
+3. 12-column CSS Grid with golden ratio splits and consistent gutter/section tokens — best of both
+**Decision:** Option 3. 12-column CSS Grid inside a 1200px max-width container, with column split utilities (halves, golden 7+5, reverse golden, thirds, quarters, wide+narrow 8+4, full). Gutters use `--spacing-6` (24px), section rhythm uses `--spacing-16` (64px). No full-bleed sections. All multi-column layouts collapse to single column below 768px.
+**Rationale:** 12 columns divide cleanly into halves (6+6), thirds (4+4+4), quarters (3+3+3+3), and approximate the golden ratio (7/12 ≈ 0.583). Using existing spacing tokens for gutters and section rhythm ensures the layout system inherits the same proportional DNA as the rest of the design system. Single container width eliminates inconsistency. The grid is implemented as CSS utility classes in `packages/components/src/layout-grid/layout-grid.css`, separate from individual components, so any page can reference it.
 **Status:** Active
+
+---
+
+### Prose Content Alignment: Left-Aligned, Not Centered
+
+**Date/Phase:** 2026-03-16
+**Context:** Long-form prose pages (Terms, Privacy, About, FAQ) used `.ds-legal-content` with `max-width: var(--size-content-md)` (~768px) and `margin: 0 auto`, centering the narrow prose column inside the 1200px page container. This caused body text to be visually indented from the header and footer edges — a misalignment visible when drawing vertical lines from the logo down through the content.
+**Options considered:**
+1. Left-align the prose column (`margin: 0`) — keeps readable line length, aligns with header
+2. Keep centered — common pattern for legal pages, but breaks visual alignment with header/footer
+3. Remove max-width entirely — aligns edges but creates uncomfortably long lines (~120+ chars)
+**Decision:** Option 1. Changed `margin: 0 auto` to `margin: 0` on `.ds-legal-content`. Applied to all prose pages using this class.
+**Rationale:** In a design system where header, body, and footer share a 1200px/48px container, centered narrow columns create a visual disconnect. Left-aligning the prose column preserves the readable ~768px measure while maintaining edge alignment with the rest of the page. The right side simply has open space — which is fine and actually gives the content room to breathe.
+**Status:** Active
+
+---
+
+### ProductCard API Refinement: renderPrice, badge, and hoverImage Props
+
+**Date/Phase:** 2026-03-16
+**Context:** ProductCard had a rigid API that forced consumers to use brittle CSS overrides for common ecommerce patterns. The SaleDemo page hid the default price via `display: none` and positioned a badge overlay using a wrapping div — a pattern that breaks accessibility, couples to internal class names, and is invisible to maintainers. The component also lacked support for secondary hover images, a standard ecommerce product grid pattern.
+**Options considered:**
+1. `renderPrice` render prop vs `children` slot for price customization — render prop preserves the component's structured API while giving full control over price display; children slot would require callers to reimplement name + price layout
+2. Built-in badge slot vs external wrapper — slot keeps the positioning logic inside the component; external wrapper duplicates positioning code across every consumer
+3. Secondary `hoverImage` prop vs image array — single prop is simpler and covers the dominant use case (two images); an array would add complexity for a rare need
+**Decision:** Added three new props: `renderPrice?: (price, currency) => ReactNode` for custom price rendering, `badge?: ReactNode` for positioned image overlays, `hoverImage?: string` for hover image swap. Also tightened CardBody padding (removed asymmetric right padding, reduced top spacing) and added `font-weight: medium` to price for better hierarchy.
+**Rationale:** Render prop pattern is the standard React approach for slot customization — it passes the raw price/currency values so consumers can format however they want while the component retains layout ownership. Badge slot eliminates the wrapper-div-with-absolute-positioning pattern that was duplicated in SaleDemo. Hover image uses CSS opacity transitions with `prefers-reduced-motion` support. These changes removed the `display: none` CSS hack from SaleDemo entirely.
+**Status:** Active
+
+---
+
+### PDP Grid Split: Golden (7+5) over Wide+Narrow (8+4)
+
+**Date/Phase:** 2026-03-16
+**Context:** The PDP page needed a two-column layout (gallery + details). Two grid splits were candidates: golden (7+5, ratio ≈ 0.583) and wide+narrow (8+4, ratio ≈ 0.667). A toggle was added temporarily so both could be compared side-by-side in the browser.
+**Options considered:**
+1. Golden 7+5 — gallery gets 58% of space, details get 42%
+2. Wide+narrow 8+4 — gallery gets 67% of space, details get 33%
+**Decision:** Golden (7+5). Toggle removed, `ds-layout--golden` hardcoded on the PDP.
+**Rationale:** The 7+5 split gives the details column enough breathing room for options (size selector, color picker, quantity), the Add to Bag button, and the accordion — without feeling cramped. The 8+4 split pushed the details column too narrow at common viewport widths.
+**Status:** Active
+
+---
+
+### Token Compliance Audit: Docs Site Inline Styles → Shared CSS Classes
+
+**Date/Phase:** 2026-03-16
+**Context:** Full audit of the monorepo revealed the component library (`packages/components/`) had 100% token compliance across all 25 component CSS files. However, the documentation site (`apps/docs/`) had ~10 categories of non-compliance: hardcoded `max-width` values in CSS, inline styles in gallery components, duplicate utility functions, and missing CSS classes for repeated layout patterns.
+**Options considered:**
+1. Leave docs site as-is (it's "just demos") — rejected because the docs site is the reference example of how to use the system
+2. Fix inline styles by adding CSS classes to each gallery component's own file — rejected because the patterns repeat across many files
+3. Create shared utility classes in `demo-utilities.css` and replace inline styles — chosen
+**Decision:** Created 6 shared gallery utility classes (`.ds-gallery-stack`, `.ds-gallery-stack--lg`, `.ds-gallery-row`, `.ds-gallery-row--lg`, `.ds-gallery-constrained`, `.ds-gallery-constrained--md`) in `demo-utilities.css`. Replaced hardcoded `max-width: 480px` → `var(--size-modal-md)` in HomepageDemo.css, `max-width: 800px` → `var(--size-content-md)` in base.css. Replaced inline styles in 7 gallery components with shared classes. Deduplicated `makePlaceholder` in ImageGalleryGallery.tsx.
+**Rationale:** The docs site should exemplify the same token discipline as the component library. Shared utility classes eliminate repeated inline flex/gap/maxWidth patterns. Acceptable exceptions: CookieConsentGallery's `BannerContainer` minHeight (containment hack for fixed-position component), ProductCardGallery's `renderPrice` inline styles (render prop demo showing consumer-facing API — all values use tokens), and placeholder hex colors (content data, not styling).

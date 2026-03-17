@@ -2,7 +2,13 @@
 .ds-breadcrumb {
   min-width: 0;
   overflow: hidden;
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+  .ds-breadcrumb {
+    margin-bottom: var(--spacing-6);
+  }
 }
 
 .ds-breadcrumb__list {

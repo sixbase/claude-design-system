@@ -85,10 +85,10 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       categories,
       onAccept,
       onReject,
-      heading = 'We use cookies',
+      heading = 'We Use Cookies',
       description = 'We use cookies to improve your experience and understand how our site is used. You can manage your preferences anytime.',
       learnMoreHref,
-      learnMoreLabel = 'Learn more',
+      learnMoreLabel = 'Learn More',
       acceptLabel = 'Accept All',
       rejectLabel = 'Decline All',
       preferencesLabel = 'Manage Preferences',
@@ -265,7 +265,7 @@ export const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
                         )}
                         {category.learnMoreHref && (
                           <a href={category.learnMoreHref} className="ds-cookie-consent__link ds-cookie-consent__category-link">
-                            Learn more
+                            Learn More
                           </a>
                         )}
                       </AccordionContent>

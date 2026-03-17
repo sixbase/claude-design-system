@@ -20,7 +20,7 @@ export function CarouselDefault() {
 
 export function CarouselSizes() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+    <div className="ds-gallery-stack--lg">
       <div>
         <p className="ds-demo-section-label">Small</p>
         <Carousel>

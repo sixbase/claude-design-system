@@ -8,7 +8,6 @@ import {
   StarRating, StockIndicator, Text,
 } from '@ds/components';
 import type { ColorOption } from '@ds/components';
-import { ViewportIndicator } from './ViewportIndicator';
 import { makePlaceholder } from '../lib/placeholder';
 import './PDPDemo.css';
 
@@ -59,13 +58,11 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
 
   return (
     <>
-      <ViewportIndicator />
+      {/* ── Breadcrumb ─────────────────────────────────────── */}
+      <Breadcrumb items={breadcrumbItems} maxItems={3} />
 
-      <div className="ds-pdp">
-        <div className="ds-pdp__breadcrumb">
-          <Breadcrumb items={breadcrumbItems} maxItems={3} />
-        </div>
-
+      {/* ── Product: gallery + details ─────────────────────── */}
+      <div className="ds-pdp ds-layout ds-layout--golden ds-section">
         <div className="ds-pdp__gallery">
           <ImageGallery
             images={galleryImages}
@@ -74,7 +71,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
           />
         </div>
 
-        <div className="ds-pdp__details">
+        <div className="ds-pdp__details ds-layout__sticky">
           {/* ── Header: title, price, rating ── */}
           <div className="ds-pdp__header">
             <Heading as="h1" size="2xl" weight="normal" className="ds-pdp__title">
@@ -175,7 +172,7 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
       </div>
 
       {/* ── Lifestyle ── */}
-      <section className="ds-pdp__lifestyle">
+      <section className="ds-section">
         <div className="ds-pdp__section-header">
           <Heading as="h2">In the Wild</Heading>
           <Text muted>See it in action</Text>
@@ -190,27 +187,30 @@ export function PDPDemo({ basePath = '' }: { basePath?: string }) {
       </section>
 
       {/* ── Feature blocks ── */}
-      <FeatureBlock
-        className="ds-pdp__feature-section"
-        title="Engineered for Everyday Protection"
-        description="Woven from 600D aramid fiber — the same material used in aerospace and body armor — this case delivers military-grade impact resistance at just 0.65mm thin. The precision-cut design wraps your device without adding bulk, while the raised camera lip keeps your lenses safe on any surface."
-        image={<img src={makePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" className="ds-demo-cover-image" />}
-      />
+      <div className="ds-section">
+        <FeatureBlock
+          title="Engineered for Everyday Protection"
+          description="Woven from 600D aramid fiber — the same material used in aerospace and body armor — this case delivers military-grade impact resistance at just 0.65mm thin. The precision-cut design wraps your device without adding bulk, while the raised camera lip keeps your lenses safe on any surface."
+          image={<img src={makePlaceholder('Engineered Protection', '#C8C1B6', '#4E473D')} alt="Aramid fiber weave close-up" className="ds-demo-cover-image" />}
+        />
+      </div>
 
-      <FeatureBlock
-        className="ds-pdp__feature-section"
-        reverse
-        title="Seamless MagSafe Integration"
-        description="Precision-aligned magnets ensure a perfect snap every time. Charge wirelessly, attach your favorite accessories, and never worry about compatibility. The ultra-thin profile means zero interference with MagSafe's full magnetic strength."
-        image={<img src={makePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" className="ds-demo-cover-image" />}
-      />
+      <div className="ds-section">
+        <FeatureBlock
+          reverse
+          title="Seamless MagSafe Integration"
+          description="Precision-aligned magnets ensure a perfect snap every time. Charge wirelessly, attach your favorite accessories, and never worry about compatibility. The ultra-thin profile means zero interference with MagSafe's full magnetic strength."
+          image={<img src={makePlaceholder('MagSafe Ready', '#B3AC9F', '#413A31')} alt="MagSafe alignment magnets" className="ds-demo-cover-image" />}
+        />
+      </div>
 
-      <FeatureBlock
-        className="ds-pdp__feature-section"
-        title="12 Grams of Confidence"
-        description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
-        image={<img src={makePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" className="ds-demo-cover-image" />}
-      />
+      <div className="ds-section">
+        <FeatureBlock
+          title="12 Grams of Confidence"
+          description="At just 12 grams, you'll forget it's there — until you need it. The minimal footprint preserves the feel of your device while adding a layer of protection that stands up to everyday drops, scratches, and pocket wear."
+          image={<img src={makePlaceholder('Featherlight', '#A9A295', '#342F27')} alt="Case on precision scale" className="ds-demo-cover-image" />}
+        />
+      </div>
 
       <CookieConsent
         categories={[

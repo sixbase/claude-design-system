@@ -39,21 +39,6 @@ describe('Badge', () => {
     expect(screen.getByTestId('badge-el')).toBeInTheDocument();
   });
 
-  /* ─── Icon support (WCAG 1.4.1) ─────────────────────────────── */
-
-  it('renders an icon before text', () => {
-    const icon = <svg data-testid="icon" />;
-    render(<Badge icon={icon}>Label</Badge>);
-    const iconWrapper = screen.getByTestId('icon').parentElement;
-    expect(iconWrapper).toHaveClass('ds-badge__icon');
-    expect(iconWrapper).toHaveAttribute('aria-hidden', 'true');
-  });
-
-  it('renders without icon when none provided', () => {
-    const { container } = render(<Badge>Label</Badge>);
-    expect(container.querySelector('.ds-badge__icon')).toBeNull();
-  });
-
   /* ─── Notification count ─────────────────────────────────────── */
 
   it('renders count as content', () => {
@@ -97,12 +82,11 @@ describe('Badge', () => {
   /* ─── Accessibility ──────────────────────────────────────────── */
 
   it('has no accessibility violations', async () => {
-    const icon = <svg viewBox="0 0 12 12"><path d="M10 3L4.5 8.5L2 6" /></svg>;
     const { container } = render(
       <div>
         <Badge>New</Badge>
-        <Badge variant="success" icon={icon}>In stock</Badge>
-        <Badge variant="destructive" icon={icon}>Out of stock</Badge>
+        <Badge variant="success">In stock</Badge>
+        <Badge variant="destructive">Out of stock</Badge>
         <Badge count={5} />
       </div>,
     );

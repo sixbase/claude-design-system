@@ -3,7 +3,7 @@
 }
 
 .ds-header__inner {
-  max-width: var(--size-content-xl);
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@
 
 @media (min-width: 1024px) {
   .ds-header__inner {
-    padding: var(--spacing-4) var(--spacing-16);
+    padding: var(--spacing-4) var(--spacing-12);
   }
 }
 

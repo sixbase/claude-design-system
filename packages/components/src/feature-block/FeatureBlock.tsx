@@ -34,7 +34,7 @@ export const FeatureBlock = forwardRef<HTMLDivElement, FeatureBlockProps>(
         <div className="ds-feature-block__image">{image}</div>
         <div className="ds-feature-block__text">
           <Heading as="h2" size="xl" weight="normal" className="ds-feature-block__title">{title}</Heading>
-          <Text size="sm" muted>{description}</Text>
+          <Text size="base" muted>{description}</Text>
         </div>
       </div>
     );
