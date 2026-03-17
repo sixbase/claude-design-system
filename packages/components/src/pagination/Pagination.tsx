@@ -169,18 +169,14 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
         {/* Desktop: full page numbers */}
         <div className="ds-pagination__desktop">
           {/* Previous button */}
-          {isSSR ? (
+          {isSSR && !isFirstPage ? (
             <Button
               asChild
               variant="secondary"
               size={size}
-              disabled={isFirstPage}
               aria-label="Go to previous page"
             >
-              <a
-                href={isFirstPage ? undefined : getPageUrl(currentPage - 1)}
-                aria-disabled={isFirstPage || undefined}
-              >
+              <a href={getPageUrl(currentPage - 1)}>
                 <ChevronLeft />
                 <span className="ds-pagination__prev-label">Previous</span>
               </a>
@@ -190,7 +186,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
               variant="secondary"
               size={size}
               disabled={isFirstPage}
-              onClick={() => onPageChange?.(currentPage - 1)}
+              onClick={!isSSR ? () => onPageChange?.(currentPage - 1) : undefined}
               aria-label="Go to previous page"
             >
               <ChevronLeft />
@@ -250,18 +246,14 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
           </div>
 
           {/* Next button */}
-          {isSSR ? (
+          {isSSR && !isLastPage ? (
             <Button
               asChild
               variant="secondary"
               size={size}
-              disabled={isLastPage}
               aria-label="Go to next page"
             >
-              <a
-                href={isLastPage ? undefined : getPageUrl(currentPage + 1)}
-                aria-disabled={isLastPage || undefined}
-              >
+              <a href={getPageUrl(currentPage + 1)}>
                 <span className="ds-pagination__next-label">Next</span>
                 <ChevronRight />
               </a>
@@ -271,7 +263,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
               variant="secondary"
               size={size}
               disabled={isLastPage}
-              onClick={() => onPageChange?.(currentPage + 1)}
+              onClick={!isSSR ? () => onPageChange?.(currentPage + 1) : undefined}
               aria-label="Go to next page"
             >
               <span className="ds-pagination__next-label">Next</span>
@@ -282,18 +274,14 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
         {/* Mobile: simplified Previous / Page X of Y / Next */}
         <div className="ds-pagination__mobile">
-          {isSSR ? (
+          {isSSR && !isFirstPage ? (
             <Button
               asChild
               variant="secondary"
               size={size}
-              disabled={isFirstPage}
               aria-label="Go to previous page"
             >
-              <a
-                href={isFirstPage ? undefined : getPageUrl(currentPage - 1)}
-                aria-disabled={isFirstPage || undefined}
-              >
+              <a href={getPageUrl(currentPage - 1)}>
                 <ChevronLeft />
                 Previous
               </a>
@@ -303,7 +291,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
               variant="secondary"
               size={size}
               disabled={isFirstPage}
-              onClick={() => onPageChange?.(currentPage - 1)}
+              onClick={!isSSR ? () => onPageChange?.(currentPage - 1) : undefined}
               aria-label="Go to previous page"
             >
               <ChevronLeft />
@@ -315,18 +303,14 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
             Page {currentPage} of {totalPages}
           </Text>
 
-          {isSSR ? (
+          {isSSR && !isLastPage ? (
             <Button
               asChild
               variant="secondary"
               size={size}
-              disabled={isLastPage}
               aria-label="Go to next page"
             >
-              <a
-                href={isLastPage ? undefined : getPageUrl(currentPage + 1)}
-                aria-disabled={isLastPage || undefined}
-              >
+              <a href={getPageUrl(currentPage + 1)}>
                 Next
                 <ChevronRight />
               </a>
@@ -336,7 +320,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
               variant="secondary"
               size={size}
               disabled={isLastPage}
-              onClick={() => onPageChange?.(currentPage + 1)}
+              onClick={!isSSR ? () => onPageChange?.(currentPage + 1) : undefined}
               aria-label="Go to next page"
             >
               Next
