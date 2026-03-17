@@ -1,0 +1,161 @@
+/* ─── Table: Component Tokens ─────────────────────────────── */
+
+.ds-table {
+  --table-border-color: var(--color-border);
+  --table-header-bg: var(--color-background-subtle);
+  --table-header-weight: var(--font-weight-semibold);
+  --table-stripe-bg: var(--color-background-subtle);
+  --table-cell-padding-sm: var(--spacing-2) var(--spacing-3);
+  --table-cell-padding-md: var(--spacing-3) var(--spacing-4);
+  --table-font-size-sm: var(--font-size-sm);
+  --table-font-size-md: var(--font-size-base);
+}
+
+/* ─── Scroll Wrapper ──────────────────────────────────────── */
+
+.ds-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  /* CSS-only scroll shadow indicators */
+  background:
+    linear-gradient(to right, var(--color-background) 30%, transparent),
+    linear-gradient(to left, var(--color-background) 30%, transparent),
+    linear-gradient(to right, var(--color-border), transparent),
+    linear-gradient(to left, var(--color-border), transparent);
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.ds-table-wrapper:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Base Table ──────────────────────────────────────────── */
+
+.ds-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-family: var(--font-family-body);
+  color: var(--color-foreground);
+}
+
+/* ─── Header ──────────────────────────────────────────────── */
+
+.ds-table__header {
+  background-color: var(--table-header-bg);
+}
+
+/* ─── Head Cell ───────────────────────────────────────────── */
+
+.ds-table__head {
+  font-weight: var(--table-header-weight);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--table-border-color);
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+.ds-table__head--sorted {
+  color: var(--color-primary);
+}
+
+.ds-table__sort-icon {
+  display: inline-block;
+  margin-left: var(--spacing-1);
+  font-size: var(--font-size-xs);
+}
+
+/* ─── Body Row ────────────────────────────────────────────── */
+
+.ds-table__row {
+  border-bottom: 1px solid var(--table-border-color);
+  transition: background-color var(--transition-fast);
+}
+
+.ds-table__body .ds-table__row:last-child {
+  border-bottom: none;
+}
+
+.ds-table__body .ds-table__row:hover {
+  background-color: var(--color-background-subtle);
+}
+
+/* ─── Cell ────────────────────────────────────────────────── */
+
+.ds-table__cell {
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+  vertical-align: top;
+}
+
+.ds-table__cell--empty {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+}
+
+/* ─── Variant: Striped ────────────────────────────────────── */
+
+.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) {
+  background-color: var(--table-stripe-bg);
+}
+
+.ds-table--striped .ds-table__body .ds-table__row:hover {
+  background-color: var(--color-background-subtle);
+}
+
+/* ─── Variant: Default (row borders) ─────────────────────── */
+
+.ds-table--default .ds-table__body .ds-table__row {
+  border-bottom: 1px solid var(--table-border-color);
+}
+
+/* ─── Size: sm ────────────────────────────────────────────── */
+
+.ds-table--sm .ds-table__head,
+.ds-table--sm .ds-table__cell {
+  padding: var(--table-cell-padding-sm);
+  font-size: var(--table-font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* ─── Size: md ────────────────────────────────────────────── */
+
+.ds-table--md .ds-table__head,
+.ds-table--md .ds-table__cell {
+  padding: var(--table-cell-padding-md);
+  font-size: var(--table-font-size-md);
+  line-height: var(--line-height-normal);
+}
+
+/* ─── Sticky Header ───────────────────────────────────────── */
+
+.ds-table--sticky-header .ds-table__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+  background-color: var(--table-header-bg);
+}
+
+/* ─── text-box-trim Fallback ──────────────────────────────── */
+
+@supports not (text-box-trim: both) {
+  .ds-table__head,
+  .ds-table__cell {
+    transform: translateY(0.05em);
+  }
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-table__row {
+    transition: none;
+  }
+}

@@ -1,0 +1,167 @@
+/* ─── CartLineItem component tokens ──────────────────────── */
+.ds-cart-line-item {
+  --cart-line-item-image-size: var(--spacing-20);
+  --cart-line-item-gap: var(--spacing-3);
+  --cart-line-item-padding: var(--spacing-4);
+  --cart-line-item-radius: var(--radius-sm);
+  --cart-line-item-transition: color var(--transition-fast),
+    background-color var(--transition-fast);
+
+  /* Base styles */
+  display: grid;
+  grid-template-columns: var(--cart-line-item-image-size) 1fr auto auto auto;
+  gap: var(--cart-line-item-gap);
+  padding: var(--cart-line-item-padding) 0;
+  border-bottom: 1px solid var(--color-border);
+  align-items: center;
+}
+
+/* Inner-only dividers — no border on last item */
+.ds-cart-line-item:last-child {
+  border-bottom: none;
+}
+
+/* ─── Image ──────────────────────────────────────────────── */
+.ds-cart-line-item__image-wrapper {
+  width: var(--cart-line-item-image-size);
+  flex-shrink: 0;
+}
+
+.ds-cart-line-item__image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--cart-line-item-radius);
+  background-color: var(--color-background-subtle);
+  display: block;
+}
+
+.ds-cart-line-item__placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--cart-line-item-radius);
+  background-color: var(--color-background-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-foreground-muted);
+}
+
+/* ─── Info ────────────────────────────────────────────────── */
+.ds-cart-line-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.ds-cart-line-item__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ds-cart-line-item__link {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--cart-line-item-transition);
+}
+
+.ds-cart-line-item__link:hover .ds-cart-line-item__name {
+  color: var(--color-primary);
+}
+
+.ds-cart-line-item__link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-xs);
+}
+
+.ds-cart-line-item__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+
+/* Unit price — visible on mobile, hidden on desktop (shown in price column) */
+.ds-cart-line-item__unit-price {
+  display: block;
+}
+
+/* ─── Quantity ───────────────────────────────────────────── */
+.ds-cart-line-item__quantity {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Price ──────────────────────────────────────────────── */
+.ds-cart-line-item__price {
+  display: none;
+  text-align: right;
+  min-width: var(--spacing-16);
+}
+
+/* ─── Remove ─────────────────────────────────────────────── */
+.ds-cart-line-item__remove {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Responsive: mobile (< 640px) ──────────────────────── */
+/* Mobile: 2-column grid — image + stacked info */
+@media (max-width: 639px) {
+  .ds-cart-line-item {
+    grid-template-columns: var(--cart-line-item-image-size) 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: start;
+  }
+
+  /* Info spans remaining columns on first row */
+  .ds-cart-line-item__info {
+    grid-column: 2 / -1;
+  }
+
+  /* Quantity + remove on second row below info */
+  .ds-cart-line-item__quantity {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .ds-cart-line-item__remove {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+  }
+
+  /* Price column hidden on mobile — unit price in info is visible */
+  .ds-cart-line-item__price {
+    display: none;
+  }
+}
+
+/* ─── Responsive: desktop (>= 640px) ────────────────────── */
+/* @breakpoint-sm = 640px */
+@media (min-width: 640px) {
+  .ds-cart-line-item {
+    --cart-line-item-image-size: var(--spacing-24);
+    grid-template-columns: var(--cart-line-item-image-size) 1fr auto auto auto;
+    align-items: center;
+  }
+
+  /* Hide unit price in info on desktop — price column shows line total */
+  .ds-cart-line-item__unit-price {
+    display: none;
+  }
+
+  .ds-cart-line-item__price {
+    display: block;
+  }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-cart-line-item__link {
+    transition: none;
+  }
+}

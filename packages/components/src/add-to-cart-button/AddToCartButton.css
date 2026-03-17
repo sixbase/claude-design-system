@@ -1,0 +1,55 @@
+/* ─── AddToCartButton component tokens ──────────────────── */
+.ds-add-to-cart {
+  --add-to-cart-success-bg: var(--color-success);
+  --add-to-cart-success-fg: var(--color-primary-foreground);
+  --add-to-cart-success-border: var(--color-success);
+  --add-to-cart-transition: background-color var(--transition-slow),
+    border-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+/* ─── Success state ────────────────────────────────────── */
+.ds-add-to-cart--success {
+  background-color: var(--add-to-cart-success-bg);
+  border-color: var(--add-to-cart-success-border);
+  color: var(--add-to-cart-success-fg);
+  transition: var(--add-to-cart-transition);
+  pointer-events: none;
+}
+
+.ds-add-to-cart--success:hover:not(:disabled) {
+  background-color: var(--add-to-cart-success-bg);
+  border-color: var(--add-to-cart-success-border);
+}
+
+/* ─── Sold out state ───────────────────────────────────── */
+.ds-add-to-cart--sold-out {
+  opacity: var(--opacity-medium);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Icon in success state ────────────────────────────── */
+.ds-add-to-cart__icon {
+  flex-shrink: 0;
+}
+
+/* ─── Live region — visually hidden ────────────────────── */
+.ds-add-to-cart__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-add-to-cart--success {
+    transition: none;
+  }
+}

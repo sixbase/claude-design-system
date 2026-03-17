@@ -1,0 +1,120 @@
+/* ─── Pagination component tokens ────────────────────────── */
+.ds-pagination {
+  --pagination-gap: var(--spacing-1);
+  --pagination-page-size: var(--size-control-md);
+  --pagination-radius: var(--radius-md);
+  --pagination-font-weight: var(--font-weight-medium);
+
+  font-family: var(--font-family-body);
+}
+
+/* ─── Layout ─────────────────────────────────────────────── */
+.ds-pagination__desktop {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.ds-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: var(--pagination-gap);
+}
+
+/* ─── Current page indicator ─────────────────────────────── */
+.ds-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-body);
+  font-weight: var(--pagination-font-weight);
+  border-radius: var(--pagination-radius);
+  user-select: none;
+
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+.ds-pagination__page--current {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+/* Current page sizes — match button icon-only dimensions */
+.ds-pagination__page--sm {
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+  font-size: var(--font-size-sm);
+}
+
+.ds-pagination__page--md {
+  width: var(--size-control-md);
+  height: var(--size-control-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ─── Ellipsis ───────────────────────────────────────────── */
+.ds-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-control-md);
+  height: var(--size-control-md);
+  color: var(--color-foreground-muted);
+  user-select: none;
+}
+
+.ds-pagination--sm .ds-pagination__ellipsis {
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+}
+
+/* ─── Page info text (mobile) ────────────────────────────── */
+.ds-pagination__info {
+  color: var(--color-foreground-subtle);
+  white-space: nowrap;
+  text-align: center;
+  flex: 1;
+}
+
+/* ─── Mobile layout ──────────────────────────────────────── */
+.ds-pagination__mobile {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+/* ─── Responsive: mobile < 768px, desktop ≥ 768px ─────── */
+/* @breakpoint-md = 768px — CSS custom properties cannot be used in @media */
+@media (max-width: 767px) {
+  .ds-pagination__desktop {
+    display: none;
+  }
+
+  .ds-pagination__mobile {
+    display: flex;
+  }
+}
+
+/* ─── Prev/Next label hiding on small screens ──────────── */
+/* At slightly larger mobile widths, labels are visible in mobile layout.
+   Desktop labels hide below md breakpoint with the whole desktop container. */
+.ds-pagination__prev-label,
+.ds-pagination__next-label {
+  display: inline;
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-pagination__page {
+    transform: translateY(0.05em);
+  }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pagination__page {
+    transition: none;
+  }
+}

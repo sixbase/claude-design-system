@@ -409,7 +409,10 @@ transition: background-color 100ms cubic-bezier(0.4, 0, 0.2, 1);
 | `--size-control-lg` | 55px | Fibonacci | Large buttons, inputs, selects |
 | `--size-checkbox-sm` | 13px | Fibonacci | Small checkbox |
 | `--size-checkbox-md` | 21px | Fibonacci (13 × φ ≈ 21) | Default checkbox |
-| `--size-icon` | 16px | Base font size | Standard icon dimension |
+| `--size-icon` | 16px | Base font size | Standard icon dimension (legacy, prefer sized variants) |
+| `--size-icon-sm` | 16px | 4px grid | Small icon (inline, dense UI) |
+| `--size-icon-md` | 20px | 4px grid | Default icon (buttons, nav) |
+| `--size-icon-lg` | 24px | 4px grid | Large icon (standalone, hero) |
 
 Note: 34→42→55 approximates √φ step ratio (42/34=1.235, 55/42=1.310, avg≈1.272=√φ).
 

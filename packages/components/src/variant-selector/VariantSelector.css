@@ -1,0 +1,185 @@
+/* ─── VariantSelector component tokens ───────────────────── */
+.ds-variant-selector {
+  --variant-selector-gap: var(--spacing-6);
+  --variant-selector-group-gap: var(--spacing-3);
+  --variant-selector-option-radius: var(--radius-md);
+  --variant-selector-option-font-weight: var(--font-weight-medium);
+  --variant-selector-transition: color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--variant-selector-gap);
+  font-family: var(--font-family-body);
+}
+
+/* ─── Size: sm ───────────────────────────────────────────── */
+.ds-variant-selector--sm {
+  --variant-selector-gap: var(--spacing-4);
+  --variant-selector-group-gap: var(--spacing-2);
+}
+
+/* ─── Option group ───────────────────────────────────────── */
+.ds-variant-selector__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--variant-selector-group-gap);
+}
+
+/* ─── Label ──────────────────────────────────────────────── */
+.ds-variant-selector__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-foreground);
+}
+
+.ds-variant-selector__selected-value {
+  font-weight: var(--font-weight-normal);
+  text-transform: none;
+  letter-spacing: var(--letter-spacing-normal);
+  color: var(--color-foreground-secondary);
+}
+
+/* ─── Button group ───────────────────────────────────────── */
+.ds-variant-selector__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+/* ─── Button option ──────────────────────────────────────── */
+.ds-variant-selector__option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--size-control-sm);
+  min-width: var(--size-control-sm);
+  padding: 0 var(--spacing-3);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--variant-selector-option-font-weight);
+  line-height: var(--line-height-none);
+  color: var(--color-foreground);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--variant-selector-option-radius);
+  cursor: pointer;
+  transition: var(--variant-selector-transition);
+  white-space: nowrap;
+  user-select: none;
+  outline: none;
+  position: relative;
+
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+/* ─── Label text — truncation for long labels ────────────── */
+.ds-variant-selector__option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 12ch;
+}
+
+/* ─── Size: md (default) ─────────────────────────────────── */
+.ds-variant-selector--md .ds-variant-selector__option {
+  height: var(--size-control-md);
+  padding: 0 var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
+
+.ds-variant-selector--md .ds-variant-selector__option-label {
+  max-width: 16ch;
+}
+
+/* ─── Interactive states ─────────────────────────────────── */
+.ds-variant-selector__option:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+  border-color: var(--color-border-strong);
+}
+
+.ds-variant-selector__option:active:not(:disabled) {
+  background-color: var(--color-secondary-active);
+  transform: scale(0.98);
+}
+
+/* ─── Focus ──────────────────────────────────────────────── */
+.ds-variant-selector__option:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ─── Selected state ─────────────────────────────────────── */
+.ds-variant-selector__option--selected {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+}
+
+.ds-variant-selector__option--selected:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.ds-variant-selector__option--selected:focus-visible {
+  box-shadow: var(--shadow-sm), var(--focus-ring);
+}
+
+/* ─── Unavailable state (out of stock but browsable) ─────── */
+.ds-variant-selector__option--unavailable {
+  opacity: var(--opacity-medium);
+}
+
+.ds-variant-selector__option--unavailable .ds-variant-selector__option-label {
+  text-decoration: line-through;
+}
+
+/* ─── Disabled state ─────────────────────────────────────── */
+.ds-variant-selector__option:disabled {
+  opacity: var(--opacity-medium);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Horizontal scroll for many options ─────────────────── */
+.ds-variant-selector__buttons--scrollable {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--spacing-8)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--spacing-8)),
+    transparent 100%
+  );
+}
+
+.ds-variant-selector__buttons--scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Optical centering fallback ─────────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-variant-selector__option {
+    transform: translateY(0.05em);
+  }
+  .ds-variant-selector__option:active:not(:disabled) {
+    transform: translateY(0.05em) scale(0.98);
+  }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-variant-selector__option:active:not(:disabled) {
+    transform: none;
+  }
+}

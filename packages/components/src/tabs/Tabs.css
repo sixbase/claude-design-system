@@ -1,0 +1,132 @@
+/* ─── Tabs ──────────────────────────────────────────────── */
+
+/* 1. Component tokens */
+.ds-tabs {
+  --tabs-border-color: var(--color-border);
+  --tabs-indicator-color: var(--color-primary);
+  --tabs-content-padding: var(--spacing-6);
+}
+
+/* 2. Base styles */
+.ds-tabs {
+  width: 100%;
+  font-family: var(--font-family-body);
+}
+
+/* ─── List ──────────────────────────────────────────────── */
+.ds-tabs__list {
+  display: flex;
+  border-bottom: 1px solid var(--tabs-border-color);
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+.ds-tabs__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll fade indicators for overflow (mobile) */
+.ds-tabs__list {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--spacing-4),
+    black calc(100% - var(--spacing-4)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--spacing-4),
+    black calc(100% - var(--spacing-4)),
+    transparent 100%
+  );
+}
+
+/* Remove mask when content doesn't overflow */
+.ds-tabs__list:not(:has(.ds-tabs__trigger:last-child:not(:nth-child(-n+1)))) {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+/* ─── Trigger ──────────────────────────────────────────── */
+.ds-tabs__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition-fast), border-color var(--transition-normal);
+  outline: none;
+
+  /* Optical centering */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+/* Hover */
+.ds-tabs__trigger:hover:not([data-disabled]) {
+  color: var(--color-foreground);
+}
+
+/* Active/selected */
+.ds-tabs__trigger[data-state='active'] {
+  color: var(--color-foreground);
+  border-bottom-color: var(--tabs-indicator-color);
+}
+
+/* Focus */
+.ds-tabs__trigger:focus-visible {
+  box-shadow: var(--focus-ring-inset);
+  border-radius: var(--radius-sm);
+}
+
+/* Disabled */
+.ds-tabs__trigger[data-disabled] {
+  opacity: var(--opacity-medium);
+  cursor: not-allowed;
+}
+
+/* Long labels: truncate with ellipsis */
+.ds-tabs__trigger {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Content ──────────────────────────────────────────── */
+.ds-tabs__content {
+  padding-top: var(--tabs-content-padding);
+  outline: none;
+  color: var(--color-foreground);
+  line-height: var(--line-height-relaxed);
+}
+
+.ds-tabs__content:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Optical centering fallback ───────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-tabs__trigger {
+    transform: translateY(0.05em);
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-tabs__trigger {
+    transition: none;
+  }
+}

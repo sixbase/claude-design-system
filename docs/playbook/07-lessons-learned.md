@@ -279,6 +279,6 @@ Component library: 100% compliance. Docs site: accumulated inline styles over ti
 
 **[PENDING DECISION]** Should `tokens.json` be the source of truth for Figma variables? Options: Tokens Studio, native Figma Variables API, custom sync script.
 
-**[PENDING DECISION]** When to add `packages/icons`? Current components accept `ReactNode` — flexible but inconsistent. Candidate sets: Lucide, Radix Icons.
+**[RESOLVED]** Icon component built as library-agnostic `<Icon>` wrapper in `@ds/components`. Accepts SVG children directly — no icon library dependency yet. When a library is chosen (Lucide or Radix Icons), the `name` prop and registry pattern can be added without breaking the existing children API. Added `--size-icon-sm/md/lg` tokens (16/20/24px).
 
 **[RESOLVED]** Deployment: GitHub Pages via Actions. Astro `base: '/claude-design-system'`. Live at `https://sixbase.github.io/claude-design-system/`.

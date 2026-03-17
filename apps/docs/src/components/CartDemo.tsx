@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Heading, Text, Button, QuantitySelector } from '@ds/components';
+import { Heading, Text, Button, CartLineItem } from '@ds/components';
 import { PRODUCTS, formatPrice } from '../data/products';
 import type { Product } from '../data/products';
 import './CartDemo.css';
@@ -86,53 +86,18 @@ export function CartDemo({ basePath = '' }: { basePath?: string }) {
       <div className="ds-layout ds-layout--golden">
       <div className="ds-cart__items">
         {items.map((item) => (
-          <div key={item.product.id} className="ds-cart__line-item">
-            <img
-              src={item.product.image}
-              alt={item.product.name}
-              className="ds-cart__item-image"
-            />
-            <div className="ds-cart__item-details">
-              <Text size="sm" weight="semibold">
-                {item.product.name}
-              </Text>
-              <Text size="sm" muted>
-                {formatPrice(item.product.price)}
-              </Text>
-              <QuantitySelector
-                size="sm"
-                value={item.quantity}
-                min={1}
-                max={10}
-                onChange={(val) => updateQuantity(item.product.id, val)}
-              />
-            </div>
-            <div className="ds-cart__item-actions">
-              <Text size="sm" weight="semibold">
-                {formatPrice(item.product.price * item.quantity)}
-              </Text>
-              <button
-                type="button"
-                className="ds-cart__remove-btn"
-                onClick={() => removeItem(item.product.id)}
-                aria-label={`Remove ${item.product.name}`}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <CartLineItem
+            key={item.product.id}
+            id={item.product.id}
+            name={item.product.name}
+            image={item.product.image}
+            price={item.product.price}
+            compareAtPrice={item.product.compareAtPrice}
+            quantity={item.quantity}
+            maxQuantity={10}
+            onQuantityChange={(val) => updateQuantity(item.product.id, val)}
+            onRemove={() => removeItem(item.product.id)}
+          />
         ))}
       </div>
 

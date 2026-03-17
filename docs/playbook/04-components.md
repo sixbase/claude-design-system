@@ -267,16 +267,20 @@ Browser support: Chrome 133+, Safari 18.2+, Firefox not yet.
 
 ---
 
-## Accordion Divider Convention
+## List Divider Convention
 
-**Inner-only dividers.** No border above first item, no border below last. Dividers only between siblings.
+**Inner-only dividers — the default for all list-style components.** No border above the first item, no border below the last. Dividers only between siblings.
+
+Applies to: Accordion items, cart line items, and any vertical list with dividers.
 
 ```css
-.ds-accordion__item { border-bottom: 1px solid var(--color-border); }
-.ds-accordion__item:last-child { border-bottom: none; }
+.ds-{component}__item { border-bottom: 1px solid var(--color-border); }
+.ds-{component}__item:last-child { border-bottom: none; }
 ```
 
-No `border-top` on first item. The `bordered` variant wraps in a panel with its own border + radius — inner dividers nest cleanly.
+No `border-top` on first item. Use CSS `:last-child`, not JavaScript.
+
+The `bordered` accordion variant wraps in a panel with its own border + radius — inner dividers nest cleanly inside the container border.
 
 ---
 
@@ -473,6 +477,7 @@ Must include:
 |-----------|---------|-------------|
 | Badge | `<span>` | 6 variants, 2 sizes. Solid primitive colors for contrast (not `color-mix`). |
 | ColorSwatch | `<div>` | Docs utility only |
+| Icon | `<svg>` | Library-agnostic SVG wrapper. 3 sizes (sm/md/lg), `currentColor` inheritance, `decorative`/`label` a11y props. |
 | PriceDisplay | `<div>` | `price` + optional `comparePrice` (strikethrough), `size` prop |
 | Typography | `<h1>`–`<h4>`, `<p>` | `asChild` for polymorphism. Semantic level ≠ visual size. |
 | StockIndicator | `<p>` | Status-based color + pulse, `prefers-reduced-motion` |
@@ -488,6 +493,7 @@ Must include:
 | Select | Radix | Compound API, portal (needs explicit `font-family`) |
 | QuantitySelector | `<div>` group | Controlled stepper, `role="group"`, min/max |
 | StarRating | `<div role="img">` | SVG clipPath half-fill, clamped 0–5 |
+| Pagination | `<nav>` | Two modes: SPA (buttons) / SSR (anchor tags). Truncation with ellipsis, responsive desktop/mobile layouts |
 
 ### Tier 3 — Compound (multiple parts)
 
@@ -507,6 +513,9 @@ Must include:
 | Carousel + CarouselSlide | Scroll container | `scroll-snap-type`, responsive `flex-basis` sizes |
 | FeatureBlock | Image + text grid | `reverse` prop, CSS `order` swap at tablet+ |
 | CookieConsent | Accordion + Button | `position: fixed`, controlled/uncontrolled, i18n, `bordered` accordion |
+| Toast | Icon + Text + Button | Provider + `useToast()` hook, portal, auto-dismiss with hover-pause, 4 variants, stacking |
+| CartLineItem | QuantitySelector + PriceDisplay + Button + Badge + Text | Prices in cents, internal `formatPrice`, responsive row↔stack, inner-only dividers |
+| CartDrawer | Drawer + CartLineItem + Button + Heading + Text | Pattern: right-slide cart panel, sticky footer (subtotal + checkout), empty state, `children` slot for footer content, `aria-live` item count |
 
 ---
 

@@ -1,6 +1,6 @@
 /* ─── Cart Layout ────────────────────────────────────────── */
 /* Uses ds-layout ds-layout--golden from layout-grid.css.
-   The cart's own grid is removed; column split comes from the grid system. */
+   Line item styling owned by CartLineItem component. */
 
 /* ─── Header ─────────────────────────────────────────────── */
 
@@ -10,82 +10,11 @@
   gap: var(--spacing-1);
 }
 
-/* ─── Line Items ─────────────────────────────────────────── */
+/* ─── Line Items container ───────────────────────────────── */
 
 .ds-cart__items {
   display: flex;
   flex-direction: column;
-}
-
-.ds-cart__line-item {
-  display: grid;
-  grid-template-columns: var(--spacing-20) 1fr auto;
-  gap: var(--spacing-3);
-  padding: var(--spacing-4) 0;
-  border-bottom: 1px solid var(--color-border);
-  align-items: start;
-}
-
-.ds-cart__line-item:first-child {
-  border-top: 1px solid var(--color-border);
-}
-
-/* @breakpoint-sm = 640px */
-@media (min-width: 640px) {
-  .ds-cart__line-item {
-    grid-template-columns: var(--spacing-24) 1fr auto auto;
-    align-items: center;
-  }
-}
-
-.ds-cart__item-image {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  background-color: var(--color-background-subtle);
-}
-
-.ds-cart__item-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-}
-
-.ds-cart__item-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-2);
-}
-
-/* @breakpoint-sm: row layout for price + remove */
-@media (min-width: 640px) {
-  .ds-cart__item-actions {
-    flex-direction: row;
-    align-items: center;
-    gap: var(--spacing-4);
-  }
-}
-
-.ds-cart__remove-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--spacing-8);
-  height: var(--spacing-8);
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: var(--color-foreground-muted);
-  border-radius: var(--radius-md);
-  transition: color var(--transition-fast), background-color var(--transition-fast);
-  padding: 0;
-}
-
-.ds-cart__remove-btn:hover {
-  color: var(--color-foreground);
-  background-color: var(--color-background-subtle);
 }
 
 /* ─── Summary ────────────────────────────────────────────── */

@@ -81,7 +81,7 @@ The build strategy was **primitives-first**: establish the token system and foun
 
 **Build order:** tokens → primitives → components. Always. See `05-workflows.md`.
 
-### Components Built (18 total)
+### Components Built (22 total)
 
 **When adding a component, update this table and the docs pages table below.**
 
@@ -97,6 +97,8 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Card | ✅ Complete | 3 variants (default, bordered, ghost), interactive mode (hover lift + image zoom) |
 | Select | ✅ Complete | 3 sizes, groups, separators, hint/error, Radix UI. Portal content needs explicit `font-family`. |
 | Checkbox | ✅ Complete | Indeterminate state, 2 sizes, hint/error, Radix UI |
+| Divider | ✅ Complete | Horizontal (`<hr>`) and vertical (`<div role="separator">`), 2 variants (default, subtle), 4 spacing options (none/sm/md/lg) |
+| Icon | ✅ Complete | Library-agnostic SVG wrapper. 3 sizes (sm/md/lg), `currentColor` inheritance, decorative/labelled a11y modes. Unlocks all icon-bearing components. |
 
 #### Ecommerce Components (v1.x)
 
@@ -112,6 +114,11 @@ The build strategy was **primitives-first**: establish the token system and foun
 | StockIndicator | ✅ Complete | 3 statuses (in-stock/low-stock/out-of-stock), pulse animation with `prefers-reduced-motion` |
 | Carousel | ✅ Complete | Scroll-snap, responsive slide sizes (sm/md/lg), gap variants |
 | FeatureBlock | ✅ Complete | Image + text grid, `reverse` prop for alternating layouts |
+| CartLineItem | ✅ Complete | Composed: QuantitySelector + PriceDisplay + Button (ghost) + Badge + Text. Prices in cents, `formatPrice` internal. Responsive: row on desktop, stacked on mobile. Inner-only dividers. |
+| CartDrawer | ✅ Complete | Pattern: Drawer + CartLineItem + Button + Heading + Text. Right-slide cart panel with empty state, sticky footer (subtotal + checkout), `children` slot for footer content (shipping notes). `aria-live` item count. |
+| Drawer | ✅ Complete | Slide-out panel primitive (left/right), Radix Dialog, custom width, full-width on mobile. Unlocks: Cart Drawer, mobile menu, filter sidebar. |
+| Table | ✅ Complete | Compound component (Table.Header/.Body/.Row/.Head/.Cell/.Empty). Variants: default (row borders), striped. Sizes: sm/md. Sticky header, sort indicators, scroll wrapper with CSS-only scroll shadows. |
+| Pagination | ✅ Complete | Two modes: SPA (`onPageChange` → buttons) and SSR/Shopify (`baseUrl` → anchor tags). Truncation with ellipsis, `siblingCount`, 2 sizes (sm/md). Responsive: desktop shows full numbers, mobile shows "Page X of Y". Renders nothing for 1 page. |
 
 #### Layout Utilities
 
@@ -133,18 +140,24 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Breadcrumb | `/components/breadcrumb` | Component |
 | Button | `/components/button` | Component |
 | Card | `/components/card` | Component |
+| Cart Drawer | `/components/cart-drawer` | Component |
+| Cart Line Item | `/components/cart-line-item` | Component |
 | Carousel | `/components/carousel` | Component |
 | Checkbox | `/components/checkbox` | Component |
 | Color Swatch | `/components/color-swatch` | Component |
+| Divider | `/components/divider` | Component |
 | Feature Block | `/components/feature-block` | Component |
+| Icon | `/components/icon` | Component |
 | Image Gallery | `/components/image-gallery` | Component |
 | Input | `/components/input` | Component |
 | Modal | `/components/modal` | Component |
+| Pagination | `/components/pagination` | Component |
 | Product Card | `/components/product-card` | Component |
 | Quantity Selector | `/components/quantity-selector` | Component |
 | Select | `/components/select` | Component |
 | Star Rating | `/components/star-rating` | Component |
 | Stock Indicator | `/components/stock-indicator` | Component |
+| Table | `/components/table` | Component |
 | Typography | `/components/typography` | Component |
 | Product Detail Page | `/examples/product-detail` | Example page |
 | Homepage | `/examples/homepage` | Example page |
@@ -158,7 +171,7 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Homepage | Full-width sections, centered flex | Hero with `Button asChild → <a>`, Carousel with ProductCard, FeatureBlock alternating, Newsletter form |
 | Collection | Breadcrumb + header/sort + product grid | Responsive grid (2→3→4 col), Select sort, ProductCard with `fluid` |
 | Product Detail | Golden split (7+5) | ImageGallery + sticky details, Accordion FAQ, Carousel lifestyle, FeatureBlock |
-| Cart | Golden split (7+5) | Line items grid, sticky order summary, QuantitySelector inline, empty state |
+| Cart | Golden split (7+5) | CartLineItem component, sticky order summary, empty state |
 
 ---
 
@@ -167,7 +180,6 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Priority | Component | Why Ecommerce Needs It | Blocked By |
 |----------|-----------|------------------------|------------|
 | P1 | Toast | Add-to-cart confirmation, error notifications | Nothing — ready to build |
-| P2 | Pagination | Product listing navigation | Nothing — ready to build |
 | P2 | Skeleton | Loading state for product grids | Nothing — ready to build |
 | P3 | Tabs | Product detail: description / reviews / specs | Nothing — ready to build |
 

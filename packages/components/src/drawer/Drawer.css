@@ -1,0 +1,184 @@
+/* ─── Component tokens ─────────────────────────────────── */
+.ds-drawer__panel {
+  --drawer-width: var(--size-content-sm);
+  --drawer-padding: var(--spacing-6);
+  --drawer-close-size: var(--size-control-sm);
+  --drawer-radius: 0;
+}
+
+/* ─── Overlay ──────────────────────────────────────────── */
+.ds-drawer__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay);
+  z-index: var(--z-index-overlay);
+  animation: ds-drawer-overlay-in var(--transition-normal) forwards;
+}
+
+.ds-drawer__overlay[data-state='closed'] {
+  animation: ds-drawer-overlay-out var(--transition-normal) forwards;
+}
+
+@keyframes ds-drawer-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ds-drawer-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Panel ────────────────────────────────────────────── */
+.ds-drawer__panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: var(--z-index-modal);
+  font-family: var(--font-family-body);
+
+  display: flex;
+  flex-direction: column;
+  width: var(--drawer-width);
+  max-width: 100%;
+
+  background-color: var(--color-background-surface);
+  border: none;
+  box-shadow: var(--shadow-2xl);
+}
+
+.ds-drawer__panel:focus-visible {
+  outline: none;
+}
+
+/* ─── Side variants ────────────────────────────────────── */
+.ds-drawer__panel--right {
+  right: 0;
+  border-left: 1px solid var(--color-border);
+  animation: ds-drawer-slide-in-right var(--transition-normal) forwards;
+}
+
+.ds-drawer__panel--right[data-state='closed'] {
+  animation: ds-drawer-slide-out-right var(--transition-normal) forwards;
+}
+
+.ds-drawer__panel--left {
+  left: 0;
+  border-right: 1px solid var(--color-border);
+  animation: ds-drawer-slide-in-left var(--transition-normal) forwards;
+}
+
+.ds-drawer__panel--left[data-state='closed'] {
+  animation: ds-drawer-slide-out-left var(--transition-normal) forwards;
+}
+
+/* ─── Slide animations ─────────────────────────────────── */
+@keyframes ds-drawer-slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes ds-drawer-slide-out-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
+@keyframes ds-drawer-slide-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes ds-drawer-slide-out-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ─── Visually hidden title ────────────────────────────── */
+.ds-drawer__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Close button ─────────────────────────────────────── */
+.ds-drawer__close {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--drawer-close-size);
+  height: var(--drawer-close-size);
+
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-foreground-subtle);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+.ds-drawer__close:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-foreground);
+}
+
+.ds-drawer__close:active {
+  background-color: var(--color-secondary-active);
+  transform: scale(0.98);
+}
+
+.ds-drawer__close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ─── Scrollable body ──────────────────────────────────── */
+.ds-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--drawer-padding);
+  padding-top: calc(var(--drawer-close-size) + var(--spacing-4) + var(--spacing-2));
+}
+
+/* ─── Responsive: full-width on mobile ─────────────────── */
+@media (max-width: 767px) {
+  .ds-drawer__panel {
+    width: 100%;
+  }
+}
+
+/* ─── Optical centering fallback ───────────────────────── */
+@supports not (text-box-trim: both) {
+  .ds-drawer__close {
+    transform: translateY(0.05em);
+  }
+  .ds-drawer__close:active {
+    transform: translateY(0.05em) scale(0.98);
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-drawer__overlay,
+  .ds-drawer__overlay[data-state='closed'],
+  .ds-drawer__panel--right,
+  .ds-drawer__panel--right[data-state='closed'],
+  .ds-drawer__panel--left,
+  .ds-drawer__panel--left[data-state='closed'] {
+    animation: none;
+  }
+}

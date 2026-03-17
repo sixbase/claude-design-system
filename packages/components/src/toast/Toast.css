@@ -1,0 +1,234 @@
+/* ─── Toast container ──────────────────────────────────────── */
+
+.ds-toast-container {
+  position: fixed;
+  z-index: var(--z-index-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  pointer-events: none;
+}
+
+/* ─── Position variants ───────────────────────────────────── */
+
+.ds-toast-container--top-right {
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+}
+
+.ds-toast-container--bottom-right {
+  bottom: var(--spacing-4);
+  right: var(--spacing-4);
+}
+
+.ds-toast-container--bottom-center {
+  bottom: var(--spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ─── Individual toast — component tokens ─────────────────── */
+
+.ds-toast {
+  --toast-radius: var(--radius-md);
+  --toast-shadow: var(--shadow-lg);
+  --toast-padding-x: var(--spacing-4);
+  --toast-padding-y: var(--spacing-3);
+  --toast-gap: var(--spacing-3);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--toast-gap);
+  width: var(--size-modal-sm);
+  max-width: calc(100vw - var(--spacing-8));
+  padding: var(--toast-padding-y) var(--toast-padding-x);
+  border-radius: var(--toast-radius);
+  border: 1px solid transparent;
+  box-shadow: var(--toast-shadow);
+  font-family: var(--font-family-body);
+  pointer-events: auto;
+}
+
+/* ─── Enter animations — side positions ───────────────────── */
+
+.ds-toast--enter {
+  animation: ds-toast-slide-in var(--transition-duration-normal) var(--transition-easing-out) forwards;
+}
+
+.ds-toast--enter-center {
+  animation: ds-toast-slide-in-center var(--transition-duration-normal) var(--transition-easing-out) forwards;
+}
+
+@keyframes ds-toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-toast-slide-in-center {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Exit animations ─────────────────────────────────────── */
+
+.ds-toast--closing {
+  animation: ds-toast-slide-out var(--transition-duration-normal) var(--transition-easing-in) forwards;
+}
+
+.ds-toast--closing-center {
+  animation: ds-toast-slide-out-center var(--transition-duration-normal) var(--transition-easing-in) forwards;
+}
+
+@keyframes ds-toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ds-toast-slide-out-center {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* ─── Variant: default (info) ─────────────────────────────── */
+/*
+ * Light: slate.700 on slate.50 → 8.59:1 ✅ AAA
+ * Dark: slate.300 on 12% slate.400/stone.900 → est. 7.0+:1 ✅ AAA
+ */
+.ds-toast--default {
+  background-color: var(--color-info-subtle);
+  color: var(--color-info-foreground);
+  border-color: var(--color-info);
+}
+
+.ds-toast--default .ds-toast__icon {
+  color: var(--color-info);
+}
+
+/* ─── Variant: success ────────────────────────────────────── */
+/*
+ * Light: sage.700 on sage.50 → 7.72:1 ✅ AAA
+ * Dark: sage.400 on 12% sage.500/stone.900 → 7.01:1 ✅ AAA
+ */
+.ds-toast--success {
+  background-color: var(--color-success-subtle);
+  color: var(--color-success-foreground);
+  border-color: var(--color-success);
+}
+
+.ds-toast--success .ds-toast__icon {
+  color: var(--color-success);
+}
+
+/* ─── Variant: error ──────────────────────────────────────── */
+/*
+ * Light: brick.600 on brick.50 → 6.08:1 ✅ AA
+ * Dark: brick.400 on 12% brick.500/stone.900 → 5.63:1 ✅ AA
+ */
+.ds-toast--error {
+  background-color: var(--color-destructive-subtle);
+  color: var(--color-destructive);
+  border-color: var(--color-destructive);
+}
+
+.ds-toast--error .ds-toast__icon {
+  color: var(--color-destructive);
+}
+
+:is(.dark, [data-theme="dark"]) .ds-toast--error {
+  color: var(--color-destructive-hover);
+}
+
+/* ─── Variant: warning ────────────────────────────────────── */
+/*
+ * Light: amber.700 on amber.50 → 6.44:1 ✅ AA
+ * Dark: amber.400 on 12% amber.500/stone.900 → 7.36:1 ✅ AAA
+ */
+.ds-toast--warning {
+  background-color: var(--color-warning-subtle);
+  color: var(--color-warning-foreground);
+  border-color: var(--color-warning);
+}
+
+.ds-toast--warning .ds-toast__icon {
+  color: var(--color-warning);
+}
+
+/* ─── Toast parts ─────────────────────────────────────────── */
+
+.ds-toast__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin-top: 1px;
+}
+
+.ds-toast__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.ds-toast__title {
+  margin: 0;
+}
+
+.ds-toast__description {
+  margin: 0;
+}
+
+.ds-toast__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ─── Focus visibility ────────────────────────────────────── */
+
+.ds-toast:focus-within {
+  outline: none;
+  box-shadow: var(--toast-shadow), var(--focus-ring);
+}
+
+/* ─── Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-toast--enter,
+  .ds-toast--enter-center {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .ds-toast--closing,
+  .ds-toast--closing-center {
+    animation: none;
+  }
+}

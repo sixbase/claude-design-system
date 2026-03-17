@@ -1496,3 +1496,125 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 **Decision:** Option 2. Created an explicit mapping table in `03-tokens.md` with three categories: Component UI text (Tight) → form labels, input text, table cells, badge text, breadcrumb text, select options; Page content (Default) → body paragraphs, headings, card titles, product names, prices, accordion triggers; Marketing/editorial (Display) → hero headings, campaign text, pull quotes, landing page headlines. Added a decision rule: inside a reusable component → Tight; page content a user reads → Default; text designed to make an impression → Display.
 **Rationale:** Context-based rules are more useful than exhaustive lists because they handle novel situations. The three-category split maps cleanly to the type scales' step ratios: tight's smaller steps suit dense UI, default's moderate steps suit readable content, display's dramatic steps suit visual impact.
 **Status:** Active
+
+---
+
+### Drawer: Flat API vs Compound API
+
+**Date/Phase:** 2026-03-16, component build
+**Context:** Building a generic slide-out panel (Drawer) that will be composed by Cart Drawer, mobile menu, and filter sidebar. Needed to decide between a flat prop API (like the spec) or a compound API (like Modal).
+**Options considered:**
+1. Compound API (`<Drawer>`, `<DrawerContent>`, `<DrawerHeader>`, `<DrawerFooter>`) — mirrors Modal
+2. Flat API (`open`, `onOpenChange`, `side`, `width`, `title`, `children`) — simpler primitive
+**Decision:** Option 2. Flat API. The Drawer is a primitive that composed components will wrap — Cart Drawer will add its own header, line items, footer. A compound API would be redundant since each consumer defines their own internal layout. The `title` prop is rendered as a visually hidden `Dialog.Title` for screen readers.
+**Rationale:** Compound APIs make sense when consumers need flexible section arrangement (like Modal). Drawer consumers always build their own internal layout, so exposing `children` with scrollable padding is sufficient. Width is passed as a CSS custom property `--drawer-width` to keep the style layer clean.
+**Status:** Active
+
+---
+
+### Icon: Library-Agnostic SVG Wrapper
+
+**Date/Phase:** 2026-03-16, component build
+**Context:** Components accepting `ReactNode` for icons (e.g., Button's `leadingIcon`) work but lack standardized sizing, color, and accessibility. Need a systematic Icon primitive before building Toast, Alert, Announcement Bar, and other icon-bearing components. Icon library not yet chosen (Lucide vs Radix Icons).
+**Options considered:**
+1. Pick an icon library now and build the component around it
+2. Build a library-agnostic wrapper that accepts SVG children, add library integration later
+3. Skip the component and keep passing raw SVGs everywhere
+**Decision:** Option 2. Library-agnostic `<Icon>` that wraps an `<svg>` element with standardized props: `size` (sm/md/lg), `decorative` (boolean, default true), `label` (string for non-decorative). Children are SVG path elements. The `name` prop is reserved for a future icon registry.
+**Rationale:** Choosing a library now would couple the entire system to that choice. The wrapper pattern means consumers pass SVG content today (works with any icon set) and can switch to a `name`-based registry later without breaking changes. Sizes (16/20/24px) sit on the 4px grid and align with existing control heights. New tokens `--size-icon-sm/md/lg` added to `tokens.json`.
+**Status:** Active
+
+---
+
+### Table: Compound API with Scroll Wrapper
+
+**Date/Phase:** 2026-03-16, component build
+**Context:** Building a Table component for size charts, product specs, and comparison tables. Needed to decide on API shape and how to handle responsive overflow.
+**Options considered:**
+1. Flat API — single `<Table>` with `columns` and `data` props (data-driven)
+2. Compound API — `Table`, `Table.Header`, `Table.Body`, `Table.Row`, `Table.Head`, `Table.Cell` (composable)
+**Decision:** Option 2. Compound sub-components that map 1:1 to semantic HTML table elements. The wrapper `<div>` with `overflow-x: auto` is built into the root `Table` component (not left to consumers). CSS-only scroll shadow indicators via `background-attachment: local` on the wrapper.
+**Rationale:** Compound API keeps the component simple, composable, and closely aligned with native HTML semantics. Data-driven APIs add complexity (custom cell renderers, column definitions) without clear benefit for the use cases (static spec tables, size charts). The scroll wrapper is built-in because every table needs it at small viewports — making consumers add their own wrapper would be error-prone. Sort indicators are visual-only (`sorted` prop on `Table.Head`) — sort logic is handled externally, keeping the component stateless.
+**Status:** Active
+
+---
+
+### Toast: Custom Portal over Radix Toast
+
+**Date/Phase:** 2026-03-16, component build
+**Context:** Building Toast notification system for transient user feedback (add-to-cart, errors, wishlist). Needed to decide whether to use `@radix-ui/react-toast` or build from scratch.
+**Options considered:**
+1. Use `@radix-ui/react-toast` — provides swipe-to-dismiss, viewport management, keyboard navigation primitives
+2. Build custom using `React.createPortal` — follow established CookieConsent pattern (fixed positioning, slide animation, closing state machine)
+**Decision:** Option 2. Custom portal-based implementation following the CookieConsent pattern. Provider + `useToast()` hook API. Auto-dismiss with pause-on-hover/focus. Animation via CSS keyframes with `onAnimationEnd` + reduced-motion fallback.
+**Rationale:** Radix Toast was not installed and would add a new dependency for a component whose core behavior (fixed positioning, slide animation, timer management) is straightforward and already patterned in CookieConsent. The custom approach reuses the exact closing-state/animation-end/reduced-motion fallback pattern, keeping the codebase consistent. Swipe-to-dismiss (the main Radix value-add) is not required for the current Shopify use cases.
+**Status:** Active
+
+---
+
+### Info Color Tokens: --color-info-subtle and --color-info-foreground
+
+**Date/Phase:** 2026-03-16, token gap
+**Context:** Building Toast with a "default" (info) variant that mirrors Badge's success/warning/destructive color pattern. Only `--color-info` existed — no subtle background or foreground variants.
+**Options considered:**
+1. Add `--color-info-subtle` and `--color-info-foreground` tokens (slate palette, matching the other status colors)
+2. Use neutral colors (`--color-background-surface` + `--color-foreground`) for the default variant, sidestepping the gap
+**Decision:** Option 1. Added `--color-info-subtle: slate.50` (light) / `color-mix(12%)` (dark) and `--color-info-foreground: slate.700` (light) / `slate.300` (dark) to `build-css.mjs`.
+**Rationale:** Consistency. Every other status color (success, warning, destructive) has a `-subtle` and `-foreground` variant. The gap would surface again with any future info-variant component. The 4-line change benefits the entire system.
+**Status:** Active
+
+### CartLineItem: Internal `formatPrice` vs Pre-Formatted Strings
+
+**Date/Phase:** 2026-03-16, CartLineItem build
+**Context:** PriceDisplay accepts pre-formatted strings (`price="$48.00"`), but CartLineItem's spec defines prices in cents (Shopify convention). Two approaches for bridging the gap.
+**Options considered:**
+1. Accept cents in CartLineItem, format internally with a private `formatPrice()` helper, pass formatted strings to PriceDisplay
+2. Accept pre-formatted strings in CartLineItem to match PriceDisplay's API
+**Decision:** Option 1. CartLineItem accepts cents (number), formats internally. The cents convention matches Shopify's `cart.items[n].final_price` and Stripe, avoiding formatting bugs at the consumer level. CartLineItem's `formatPrice` is private — not exported.
+**Rationale:** Ecommerce components should speak the same language as the commerce platform (cents). Formatting is a presentation concern that belongs inside the component, not at the call site.
+**Status:** Active
+
+### CartLineItem: Composition over Inline Markup in CartDemo
+
+**Date/Phase:** 2026-03-16, CartLineItem build
+**Context:** CartDemo previously had inline cart line item markup (image, text, quantity selector, remove button) duplicated in the demo page. The spec called for extracting this into a reusable component.
+**Options considered:**
+1. Keep inline markup in CartDemo, add CartLineItem as a separate component
+2. Refactor CartDemo to compose CartLineItem, removing ~50 lines of inline markup and ~60 lines of now-redundant CSS
+**Decision:** Option 2. CartDemo now imports and composes `CartLineItem`, and CartDemo.css was cleaned of all line-item-level styles (now owned by the component).
+**Rationale:** Components own their styles (CLAUDE.md rule). The inline markup was a composition gap — it would have caused CartDemo and CartLineItem to diverge over time.
+**Status:** Active
+
+### Cart Drawer — Composition Over Inline Rendering
+**Date/Phase:** Phase 5 — Ecommerce Patterns
+**Context:** Building the CartDrawer component (#8). CartLineItem already existed as a standalone component with responsive layouts, quantity controls, price display, and remove actions. The question was whether CartDrawer should compose CartLineItem or render its own inline line item markup.
+**Options considered:**
+1. Build inline line item rendering within CartDrawer (duplicate CartLineItem's work)
+2. Compose CartLineItem directly — pass data through, map callbacks
+**Decision:** Option 2. CartDrawer composes CartLineItem, Drawer, Button, Heading, and Text. It owns only the cart-level layout (header, scrollable items area, sticky footer with subtotal and checkout).
+**Rationale:** Components own their styles (CLAUDE.md rule). CartLineItem already handles responsive grid, price formatting, quantity controls, and remove actions. Duplicating that in CartDrawer would create divergence. The CartDrawer's job is orchestration: open/close state, item list rendering, empty state, and footer (subtotal + checkout flow).
+**Status:** Active
+
+### Cart Drawer — Sticky Footer via position: sticky
+**Date/Phase:** Phase 5 — Ecommerce Patterns
+**Context:** The spec requires a sticky footer (subtotal + checkout) that stays visible when many items cause scrolling. The Drawer wraps all children in a `.ds-drawer__body` div with `overflow-y: auto`.
+**Options considered:**
+1. Modify Drawer to accept a `footer` slot rendered outside the scroll area
+2. Use `position: sticky; bottom: 0` on the footer inside the scroll container
+3. Accept that the footer scrolls with content
+**Decision:** Option 2. The footer uses `position: sticky` with a negative `bottom` offset matching the drawer body's padding. Background matches the surface color to cover items scrolling beneath it.
+**Rationale:** This achieves the sticky effect without modifying the Drawer primitive's API. The Drawer remains generic and reusable. If future patterns need a true fixed footer, we can revisit by adding a footer slot to Drawer.
+**Status:** Active
+
+---
+
+### Pagination: Dual-Mode Rendering (SPA vs SSR)
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Pagination needs to work in both SPA contexts (React state management) and SSR/Shopify contexts (crawlable `<a>` tags for SEO). The component also needs to handle responsive behavior — full page numbers on desktop are too wide for mobile.
+**Options considered:**
+1. Single mode with buttons only — consumers wrap in `<a>` tags themselves
+2. Dual mode via `onPageChange` (buttons) vs `baseUrl` (anchor tags) — component handles the distinction
+3. Always render `<a>` tags, use `onClick` + `preventDefault` for SPA
+**Decision:** Option 2. `onPageChange` prop renders `<button>` elements for SPA mode. `baseUrl` prop renders `<a href="{baseUrl}?page={n}">` for SSR/Shopify. Page 1 links to the bare baseUrl (no `?page=1`). If baseUrl already has query params, appends with `&`.
+**Rationale:** Clean semantic distinction — buttons for JS interaction, links for navigation. SSR mode produces crawlable HTML that search engines can follow. Composing with the existing Button component (ghost variant for page numbers, secondary for prev/next) maintains visual consistency without new styling. Mobile responsive via CSS: desktop shows full page numbers with ellipsis, mobile shows "Previous / Page X of Y / Next".
+**Status:** Active

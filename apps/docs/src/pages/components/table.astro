@@ -1,0 +1,79 @@
+---
+import ComponentPage from '../../layouts/ComponentPage.astro';
+import { TableDefault, TableStriped, TableSmall, TableSorted, TableEmpty } from '../../components/TableGallery';
+---
+
+<ComponentPage
+  title="Table"
+  description="Data display for size charts, product specs, and comparison tables. Responsive with horizontal scroll and CSS-only scroll shadow indicators."
+  installCode="import { Table } from '@ds/components';"
+  props={[
+    {
+      headers: ['Prop', 'Type', 'Default', 'Description'],
+      rows: [
+        ['<code>variant</code>', "<code>'default' | 'striped'</code>", "<code>'default'</code>", 'Row style — borders or alternating backgrounds'],
+        ['<code>size</code>', "<code>'sm' | 'md'</code>", "<code>'md'</code>", 'Cell padding density'],
+        ['<code>stickyHeader</code>', '<code>boolean</code>', '<code>false</code>', 'Sticky header on vertical scroll'],
+      ],
+    },
+    {
+      headers: ['Sub-component', 'Element', 'Description'],
+      rows: [
+        ['<code>Table.Header</code>', '<code>&lt;thead&gt;</code>', 'Table header section'],
+        ['<code>Table.Body</code>', '<code>&lt;tbody&gt;</code>', 'Table body section'],
+        ['<code>Table.Row</code>', '<code>&lt;tr&gt;</code>', 'Table row'],
+        ['<code>Table.Head</code>', '<code>&lt;th&gt;</code>', 'Header cell — auto-applies <code>scope="col"</code>'],
+        ['<code>Table.Cell</code>', '<code>&lt;td&gt;</code>', 'Body cell'],
+        ['<code>Table.Empty</code>', '<code>&lt;tr&gt;</code>', 'Empty state row — requires <code>colSpan</code>'],
+      ],
+    },
+  ]}
+  accessibility={[
+    'Semantic <code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;th scope="col"&gt;</code>, <code>&lt;td&gt;</code>',
+    'Scroll wrapper has <code>role="region"</code> with <code>aria-label</code> and <code>tabindex="0"</code> for keyboard scrolling',
+    'Sort indicator uses <code>aria-sort="ascending"</code> / <code>"descending"</code> on <code>&lt;th&gt;</code>',
+    'Meets WCAG 1.4.3 AA — all text has minimum 4.5:1 contrast',
+    'Focus ring via <code>box-shadow: var(--focus-ring)</code> on scroll wrapper <code>:focus-visible</code>',
+  ]}
+>
+  <h2>Default</h2>
+  <p>Subtle row borders for clean data display. Ideal for product specifications.</p>
+  <TableDefault client:load />
+  <pre><code>{`<Table aria-label="Product specifications">
+  <Table.Header>
+    <Table.Row>
+      <Table.Head>Property</Table.Head>
+      <Table.Head>Value</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Material</Table.Cell>
+      <Table.Cell>100% Organic Cotton</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>`}</code></pre>
+
+  <h2>Striped</h2>
+  <p>Alternating row backgrounds for dense data like size charts.</p>
+  <TableStriped client:load />
+  <pre><code>{`<Table variant="striped" aria-label="Size chart">
+  ...
+</Table>`}</code></pre>
+
+  <h2>Small size</h2>
+  <p>Compact padding for dense data or sidebar tables.</p>
+  <TableSmall client:load />
+  <pre><code>{`<Table size="sm">...</Table>`}</code></pre>
+
+  <h2>Sort indicators</h2>
+  <p>Visual sort direction on header cells. Sort logic is handled externally.</p>
+  <TableSorted client:load />
+  <pre><code>{`<Table.Head sorted="asc">Size</Table.Head>
+<Table.Head sorted="desc">Waist</Table.Head>`}</code></pre>
+
+  <h2>Empty state</h2>
+  <p>Built-in empty row with customizable message.</p>
+  <TableEmpty client:load />
+  <pre><code>{`<Table.Empty colSpan={3} message="No products match your filters" />`}</code></pre>
+</ComponentPage>
