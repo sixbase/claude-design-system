@@ -10,7 +10,7 @@
 2. **All scales derive from the golden ratio (φ).** When adding a new token or scale, derive it from φ, 1/φ, fractional powers of φ, or the Fibonacci sequence. See the math reference below.
 3. **Semantic tokens are what components use.** Components never reference primitives directly except in documented edge cases (see Known Gaps below). If a semantic token doesn't exist for your need, add one — don't reach for the primitive.
 4. **Token renames require a full codebase grep.** CSS variables fail silently. `var(--old-name)` resolves to `initial` with no error. Always `grep -r "old-name" .` before and after renaming.
-5. **Two spacing scales, two scopes.** Standard 4px grid (`--spacing-*`) for component internals. Phi scale (`--spacing-phi-*`) for section-level spacing. Layout grid section rhythm uses `--spacing-16` (64px). Never mix scales within the same component.
+5. **Two spacing scales, two scopes.** Standard 4px grid (`--spacing-*`) is the default for all spacing: component internals, element-to-element gaps, section rhythm, and any "I need some space here" situation. Section rhythm uses `--spacing-16` (64px) via `.ds-section`. Phi scale (`--spacing-phi-*`) is reserved for proportional layout relationships where the mathematical relationship to φ is the actual design intent — sidebar-to-content ratios, aspect ratio approximations, layout split proportions. Never mix scales within the same component. See "Phi vs Standard Spacing" below for detailed rules.
 6. **Never use `color-mix(… %, transparent)` for elements that need WCAG contrast.** The math makes it impossible to reach 3:1 or 4.5:1 at low percentages. Use solid primitive references (typically 50-shade for backgrounds, 600+ for borders/text). See Common Mistakes below.
 7. **Disabled states use `opacity: var(--opacity-medium)`.** Never hardcode `opacity: 0.5`.
 8. **Transitions use shorthand tokens.** Write `var(--transition-fast)`, never raw `100ms cubic-bezier(…)`.
@@ -28,7 +28,7 @@
 | Renaming token without grep | Silent failure — `var(--old-name)` resolves to `initial` | `grep -r "old-name" .` before AND after rename |
 | Hardcoding `opacity: 0.5` for disabled | Doesn't use φ-derived value, inconsistent | `opacity: var(--opacity-medium)` (0.382) |
 | Writing raw duration + easing | Inconsistent timing, not φ-derived | `var(--transition-fast)` / `normal` / `slow` |
-| Using `--spacing-phi-*` inside a component | Mixed scales within one component | Phi scale is for section-level only; components use `--spacing-*` |
+| Using `--spacing-phi-*` for "I need some space" | Phi tokens are for proportional relationships, not general spacing | Use `--spacing-*` for all general spacing; phi only for proportional layout math |
 
 ---
 
@@ -254,9 +254,9 @@ Three scales, each using a different fractional power of φ:
 
 | Scale | CSS Prefix | Step Ratio | Use Case |
 |-------|-----------|-----------|----------|
-| **Tight** | `--font-size-tight-*` | φ^(1/3) ≈ 1.175 | Dense UI: labels, captions, table cells, form hints |
-| **Default** | `--font-size-*` | √φ ≈ 1.272 | Product UI: body text, component text, headings |
-| **Display** | `--font-size-display-*` | φ ≈ 1.618 | Editorial: hero text, campaign headlines, pull quotes |
+| **Tight** | `--font-size-tight-*` | φ^(1/3) ≈ 1.175 | Component UI text (see mapping below) |
+| **Default** | `--font-size-*` | √φ ≈ 1.272 | Page content (see mapping below) |
+| **Display** | `--font-size-display-*` | φ ≈ 1.618 | Marketing / editorial (see mapping below) |
 
 **Default scale** (base 16px, √φ step):
 ```
@@ -278,13 +278,33 @@ display-2xs = 6px    display-xs = 10px   display-sm = 16px
 display-md  = 26px   display-lg = 42px   display-xl = 68px   display-2xl = 110px
 ```
 
+### Type Scale Context Mapping
+
+Use this table to determine which scale applies in a given context. When in doubt, use the Default scale.
+
+| Context | Scale | Examples |
+|---------|-------|----------|
+| **Component UI text** | **Tight** | Form labels, input text, table cells, badge text, caption text, breadcrumb text, select options, checkbox labels, tooltip text |
+| **Page content** | **Default** | Body paragraphs, headings (h1–h4), card titles, product names, prices, accordion triggers, modal titles, navigation links |
+| **Marketing / editorial** | **Display** | Hero headings, campaign text, pull quotes, landing page headlines, promotional banners |
+
+**Decision rule for ambiguous cases:**
+- If the text lives *inside* a reusable component → **Tight**
+- If the text is part of *page content* that a user reads → **Default**
+- If the text is designed to *make an impression* before being read → **Display**
+
+**PDP example:** A product page section heading ("You May Also Like") uses the **Default** scale — it's page content, not component UI. The product card's price text inside the grid uses the **Default** scale too (it's the primary content). The breadcrumb above it uses **Tight** (component UI).
+
 ### Typography
 
 ```
 Font families:   body (Ancizar Serif), code (JetBrains Mono)
                  Named by role, not classification — see 06-decisions-log.md
 Font weights:    normal (400) → medium (500) → semibold (600) → bold (700)
-Line heights:    none (1) → tight (1.25) → snug (1.375) → normal (1.5) → relaxed (1.618=φ) → loose (2)
+Line heights:    none (1) → tight (1.15) → snug (1.382) → normal (1.5) → relaxed (1.618=φ) → loose (2)
+                 φ derivations: tight=1.15 (visual override, see decisions log)
+                                snug=1+1/φ²=1.382, normal=1.5 (conventional, see decisions log)
+                                relaxed=φ=1.618, loose=2×1 (double-space)
 Letter spacing:  tighter → tight → normal → wide → wider
 ```
 
@@ -294,8 +314,8 @@ Letter spacing:  tighter → tight → normal → wide → wider
 
 | Scale | Tokens | Base | Use For |
 |-------|--------|------|---------|
-| **Standard (4px grid)** | `--spacing-0` through `--spacing-24` | 4px | Component internals: padding, element gaps, form spacing |
-| **Phi (Fibonacci × 2)** | `--spacing-phi-1` through `--spacing-phi-89` | 2px | Section-level: page section gaps, layout splits |
+| **Standard (4px grid)** | `--spacing-0` through `--spacing-24` | 4px | Default for everything: component internals, element-to-element gaps, section rhythm |
+| **Phi (Fibonacci × 2)** | `--spacing-phi-1` through `--spacing-phi-89` | 2px | Proportional layout relationships: sidebar-to-content ratios, layout split proportions |
 
 **Standard scale values:**
 ```
@@ -308,6 +328,31 @@ phi-1=2px  phi-2=4px  phi-3=6px  phi-5=10px  phi-8=16px  phi-13=26px  phi-21=42p
 ```
 
 **Layout grid section rhythm:** `--spacing-16` (64px) for gaps between major page sections. See `09-layout-grid.md`.
+
+### Phi vs Standard Spacing — When to Use Which
+
+**Standard scale (`--spacing-*`) is the default for everything.** Use it for:
+- Component internals (padding, margins, gaps between elements)
+- Space between a heading and its following paragraph → `--spacing-3` or `--spacing-4`
+- Space between a form label and its input → `--spacing-1` or `--spacing-2`
+- Space between a breadcrumb and the page heading below it → `--spacing-4` or `--spacing-6`
+- Space between an accordion group and the next content section → `--spacing-6` or `--spacing-8`
+- Section rhythm → `--spacing-16` (64px) via `.ds-section`
+- Any time you're thinking "I need some space here"
+
+**Phi scale (`--spacing-phi-*`) is only for proportional layout relationships.** Use it when:
+- The mathematical relationship to φ is the actual design intent
+- Establishing sidebar-to-content width ratios (e.g., a secondary column sized at `--spacing-phi-*` relative to the primary)
+- Aspect ratio approximations in layout calculations
+- Any case where the Fibonacci progression itself — not just "a spacing value" — drives the decision
+
+**Never use phi scale for:**
+- Section rhythm (use `--spacing-16` / `.ds-section`)
+- Vertical spacing between page sections
+- Component padding or margins
+- Element-to-element gaps
+
+**Test: "Would any standard scale value work just as well here?"** If yes, use the standard scale. Phi is only appropriate when the proportional relationship matters more than the absolute value.
 
 ### Radius
 
@@ -375,9 +420,9 @@ Note: 34→42→55 approximates √φ step ratio (42/34=1.235, 55/42=1.310, avg�
 | `--size-content-sm` | 640px | Constrained dialogs, cookie consent, narrow overlays |
 | `--size-content-md` | 768px | Medium content areas, form containers, settings panels |
 | `--size-content-lg` | 960px | Wide content areas, feature sections |
-| `--size-content-xl` | 1280px | Full-width page container (header, footer) |
+| `--size-content-xl` | 1280px | Full-width shell elements (Header, Footer, Container component) |
 
-**Note:** Page layout uses 1200px container (see `09-layout-grid.md`), not `--size-content-xl` (1280px). The 1200px was chosen for cleaner 12-column grid math.
+**⚠️ Page content max-width: always use `.ds-page-container` (1200px), never `--size-content-xl`.** The `--size-content-xl` token (1280px) is for full-width shell elements (Header, Footer) that may extend slightly wider than page content. The 1200px page container was chosen separately for cleaner 12-column grid math (see `09-layout-grid.md`). These are intentionally different values.
 
 ### Aspect Ratios
 

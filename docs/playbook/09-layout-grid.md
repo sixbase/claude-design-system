@@ -75,7 +75,7 @@ Is one side clearly the "main" content?
 
 Applied to `<main>` in `FullWidthLayout.astro`.
 
-**Why 1200px instead of `--size-content-xl` (1280px)?** 1200px divides more cleanly into 12 columns and provides slightly more generous margins at large viewports. See `06-decisions-log.md` "Layout Grid System."
+**Why 1200px instead of `--size-content-xl` (1280px)?** 1200px divides more cleanly into 12 columns and provides slightly more generous margins at large viewports. `--size-content-xl` (1280px) remains at its current value for full-width shell elements (Header, Footer). **For page content max-width, always use `.ds-page-container` (1200px), never `--size-content-xl`.** See `06-decisions-log.md` "Layout Grid System" and "Container Width Clarification."
 
 ---
 

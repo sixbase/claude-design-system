@@ -9,7 +9,7 @@
 1. **Token discipline.** Every spacing, color, typography, and layout value references a token. No hardcoded `px`, `rem`, `hex`, or raw values. Token gaps are flagged explicitly in the Token Gap Report at the bottom.
 2. **Composition over invention.** Build from existing components and layout primitives. New components are only proposed when nothing existing works — and they're flagged in the Token Gap Report.
 3. **Components own their styles.** Page CSS handles layout composition (grid placement, section spacing, content order) — never component appearance. If a component doesn't look right on a page, fix the component.
-4. **Layout grid system.** All pages use `.ds-page-container` (1200px), `.ds-layout` (12-column), and `.ds-section` (64px rhythm). See `09-layout-grid.md`. *(Note: some specs below reference the older `--spacing-phi-*` section spacing. These should be updated to `--spacing-16` / `.ds-section` when those pages are next modified.)*
+4. **Layout grid system.** All pages use `.ds-page-container` (1200px), `.ds-layout` (12-column), and `.ds-section` (64px rhythm). See `09-layout-grid.md`.
 5. **Responsive breakpoints.** `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px).
 6. **Page shell.** Every page renders inside `FullWidthLayout`: Header → `<main class="ds-page-container">` → Footer.
 7. **Always use `<Heading>` and `<Text>`.** Never raw HTML tags — except inside `.ds-legal-content` where Shopify rich text HTML is styled via CSS class.
@@ -84,7 +84,7 @@ Two gap tiers only (mobile/tablet + desktop). Same token for row-gap and column-
 
 **Default:** Breadcrumb + header + sort + grid + pagination.
 
-**Empty:** Centered empty state — `Heading` h2 lg + `Text` sm muted + `Button` secondary md. Padding `--spacing-phi-34`. Gap `--spacing-4`.
+**Empty:** Centered empty state — `Heading` h2 lg + `Text` sm muted + `Button` secondary md. Padding `--spacing-16` (64px). Gap `--spacing-4`.
 
 **Loading:** Skeleton placeholders (component gap — see Token Gap Report).
 
@@ -118,7 +118,7 @@ Implementation: `SearchDemo.tsx` / `SearchDemo.css`.
 
 - `Input` size `lg`, `type="search"`, `leadingAdornment` = search SVG
 - Visually hidden `<label>`: "Search products" (`ds-sr-only`)
-- Full width, `--spacing-phi-13` (26px) bottom margin
+- Full width, `--spacing-6` (24px) bottom margin
 
 ### Shopify Integration
 
@@ -140,7 +140,7 @@ Implementation: `AccountDemo.tsx` / `AccountDemo.css`.
 - Centered flex column
 - `Card` variant `outlined`, max-width `--size-modal-sm` (400px)
 - Card padding: `--spacing-8` (32px)
-- Page padding: `--spacing-phi-34` (68px) top/bottom
+- Page padding: `--spacing-16` (64px) top/bottom
 
 ### Views
 
@@ -232,7 +232,7 @@ Implementation: `SaleDemo.tsx` / `SaleDemo.css`.
 
 ### Sale Banner
 
-Optional. `background: var(--color-background-subtle)`, `border-radius: var(--radius-lg)`, centered text. `Heading` h1 2xl + `Text` base muted. Bottom margin `--spacing-phi-13`.
+Optional. `background: var(--color-background-subtle)`, `border-radius: var(--radius-lg)`, centered text. `Heading` h1 2xl + `Text` base muted. Bottom margin `--spacing-6` (24px).
 
 ### Sale Pricing
 

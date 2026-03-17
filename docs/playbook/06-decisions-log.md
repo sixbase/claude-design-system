@@ -62,6 +62,11 @@ Use this to find decisions by topic without scrolling 1300+ lines.
 | φ-Derived Control Heights | Active |
 | Composite `--color-overlay` token | Active |
 | Disabled State: `var(--opacity-medium)` not `0.5` | Active |
+| Section Spacing: `--spacing-16` (64px) canonical, not phi-34 | Active |
+| Container Width: `--size-content-xl` (1280px) vs `.ds-page-container` (1200px) | Active |
+| Phi vs Standard Spacing: standard default, phi for proportional math only | Active |
+| Line Height φ Audit: snug→1.382, tight/normal kept | Active |
+| Type Scale Context Mapping: Tight/Default/Display boundaries | Active |
 
 ### Components & Patterns
 
@@ -1422,3 +1427,72 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 3. Create shared utility classes in `demo-utilities.css` and replace inline styles — chosen
 **Decision:** Created 6 shared gallery utility classes (`.ds-gallery-stack`, `.ds-gallery-stack--lg`, `.ds-gallery-row`, `.ds-gallery-row--lg`, `.ds-gallery-constrained`, `.ds-gallery-constrained--md`) in `demo-utilities.css`. Replaced hardcoded `max-width: 480px` → `var(--size-modal-md)` in HomepageDemo.css, `max-width: 800px` → `var(--size-content-md)` in base.css. Replaced inline styles in 7 gallery components with shared classes. Deduplicated `makePlaceholder` in ImageGalleryGallery.tsx.
 **Rationale:** The docs site should exemplify the same token discipline as the component library. Shared utility classes eliminate repeated inline flex/gap/maxWidth patterns. Acceptable exceptions: CookieConsentGallery's `BannerContainer` minHeight (containment hack for fixed-position component), ProductCardGallery's `renderPrice` inline styles (render prop demo showing consumer-facing API — all values use tokens), and placeholder hex colors (content data, not styling).
+
+---
+
+### Section Spacing Consolidation: `--spacing-16` (64px) as Canonical Section Rhythm
+
+**Date/Phase:** 2026-03-16, token ambiguity resolution
+**Context:** Two values competed for "space between major page sections": `--spacing-phi-34` (68px, Fibonacci × 2) from the phi scale and `--spacing-16` (64px) from the standard 4px grid. The layout grid system (`.ds-section`) already used `--spacing-16` and was applied to all 4 example pages, but `08-page-templates.md` still referenced `--spacing-phi-34` in several places (PLP empty state padding, Account page padding, Sale banner margin).
+**Options considered:**
+1. Standardize on `--spacing-phi-34` (68px) — preserves φ derivation but conflicts with the implemented grid system
+2. Standardize on `--spacing-16` (64px) — matches the implemented `.ds-section` class and keeps section rhythm on one consistent scale
+**Decision:** Option 2. `--spacing-16` (64px) via `.ds-section` is the canonical section rhythm. Updated all `--spacing-phi-34` section-level references in `08-page-templates.md` to `--spacing-16`. Updated `--spacing-phi-13` references used as element-to-element gaps to `--spacing-6` (24px, the nearest standard value).
+**Rationale:** The layout grid system is already implemented and tested on all pages. Keeping section rhythm on the standard 4px grid means the entire page structure uses one scale. The 4px difference (68→64) is visually imperceptible but eliminates scale mixing at the page level.
+**Status:** Active
+
+---
+
+### Container Width Clarification: `--size-content-xl` (1280px) vs `.ds-page-container` (1200px)
+
+**Date/Phase:** 2026-03-16, token ambiguity resolution
+**Context:** Two container widths existed: `--size-content-xl` (1280px) used by Header, Footer, and the Container component, and `.ds-page-container` (1200px) used by the layout grid for page content. A developer reaching for `--size-content-xl` for a page max-width would get the wrong value.
+**Options considered:**
+1. Change `--size-content-xl` to 1200px — creates a single value but Header/Footer lose their intentionally wider containment
+2. Keep both values and document the distinction clearly
+**Decision:** Option 2. `--size-content-xl` stays at 1280px for full-width shell elements (Header, Footer). `.ds-page-container` (1200px) is the only correct way to constrain page content. Added explicit warnings in `03-tokens.md` and `09-layout-grid.md`: "For page content max-width, always use `.ds-page-container` (1200px), never `--size-content-xl`."
+**Rationale:** These serve different purposes. The page container at 1200px gives cleaner 12-column grid math. The shell elements at 1280px provide slightly wider containment to frame the narrower content area. Collapsing them to one value would either break the grid math or unnecessarily narrow the header/footer.
+**Status:** Active
+
+---
+
+### Phi vs Standard Spacing: Clear Usage Boundaries
+
+**Date/Phase:** 2026-03-16, token ambiguity resolution
+**Context:** The previous rule "phi for section-level, standard for component-level" left gray areas. Developers didn't know which scale to use for: heading-to-paragraph gaps, form label-to-input spacing, breadcrumb-to-heading gaps, and accordion-to-content gaps. Additionally, section rhythm had already moved to standard scale (`--spacing-16`), making the old "phi for section-level" rule outdated.
+**Options considered:**
+1. Keep the split rule but add extensive examples
+2. Make standard scale the default for everything; restrict phi to proportional layout math only
+**Decision:** Option 2. Standard scale (`--spacing-*`) is the default for all spacing — component internals, element gaps, and section rhythm. Phi scale (`--spacing-phi-*`) is only for proportional layout relationships where the mathematical relationship to φ is the actual design intent (sidebar-to-content ratios, layout split proportions). Added a decision test to the docs: "Would any standard scale value work just as well here? If yes, use standard."
+**Rationale:** The phi scale was being used as "the fancier spacing" when really it should only be used for its mathematical properties. Most spacing decisions are "I need N pixels of space" — the standard 4px grid handles this cleanly. Phi tokens remain available for genuine proportional relationships but are no longer the default for any spacing context.
+**Status:** Active
+
+---
+
+### Line Height φ Audit: `snug` Adjusted, `tight` and `normal` Kept
+
+**Date/Phase:** 2026-03-16, token ambiguity resolution
+**Context:** Only `relaxed` (1.618 = φ) was explicitly φ-derived. Audited all other line heights for potential φ alignment: `tight` (1.15), `snug` (1.375), `normal` (1.5).
+**Options considered for each:**
+- `tight` (1.15): φ-derived would be 1 + (1/φ × 1/φ²) = 1.236. But `tight` was deliberately changed from 1.25 → 1.15 for heading use (see "Tighten --line-height-tight" decision). Reverting to 1.236 would undo a tested visual improvement.
+- `snug` (1.375): φ-derived is 1 + 1/φ² = 1.382. Difference: 0.007 (0.5%). At 16px, that's 0.112px — visually imperceptible. No regression risk.
+- `normal` (1.5): No clean φ derivation exists between snug (1.382) and relaxed (1.618). 1.5 is a well-established web default used by Typography base/lg body text.
+**Decision:**
+- `snug`: Changed from 1.375 → 1.382 (φ-derived: 1 + 1/φ²). Completes φ governance with zero visual impact.
+- `tight`: Kept at 1.15. Documented deviation: optimized for Ancizar Serif heading rendering, overrides theoretical φ value (1.236) for practical reasons.
+- `normal`: Kept at 1.5. Documented as conventional value — no natural φ derivation fills the gap between 1.382 and 1.618.
+**Rationale:** φ governance should be completed wherever it causes no regressions. `snug` is a free win. `tight` and `normal` have stronger practical justifications for their current values than the φ alignment would provide.
+**Status:** Active
+
+---
+
+### Type Scale Context Mapping: Explicit Boundaries for Tight, Default, and Display
+
+**Date/Phase:** 2026-03-16, token ambiguity resolution
+**Context:** Three type scales existed (tight φ^(1/3), default √φ, display φ) but their usage boundaries were described with soft terms ("dense UI," "product UI," "editorial"). A developer building a PDP section heading didn't know which scale to use.
+**Options considered:**
+1. Prescriptive list mapping each component to a scale
+2. Context-based rule with decision tree and examples
+**Decision:** Option 2. Created an explicit mapping table in `03-tokens.md` with three categories: Component UI text (Tight) → form labels, input text, table cells, badge text, breadcrumb text, select options; Page content (Default) → body paragraphs, headings, card titles, product names, prices, accordion triggers; Marketing/editorial (Display) → hero headings, campaign text, pull quotes, landing page headlines. Added a decision rule: inside a reusable component → Tight; page content a user reads → Default; text designed to make an impression → Display.
+**Rationale:** Context-based rules are more useful than exhaustive lists because they handle novel situations. The three-category split maps cleanly to the type scales' step ratios: tight's smaller steps suit dense UI, default's moderate steps suit readable content, display's dramatic steps suit visual impact.
+**Status:** Active
