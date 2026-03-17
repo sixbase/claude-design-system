@@ -128,6 +128,8 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Toast | ✅ Complete | Provider + `useToast()` hook. 4 variants (default, success, warning, destructive), auto-dismiss with hover-pause, stacking, portal-based, slide animation with reduced-motion fallback. |
 | PredictiveSearch | ✅ Complete | WAI-ARIA combobox pattern. `onSearch` + `results`/`loading` props (consumer handles data fetching). Debounced input, keyboard nav via `aria-activedescendant`, recent searches, Skeleton loading state. |
 | SidebarNav | ✅ Complete | Docs site navigation component. Grouped links with active state, collapsible sections. |
+| EmptyState | ✅ Complete | Pattern: centered flex column composing Heading + Text + Button. Icon slot, primary/secondary actions (asChild links), compact variant for constrained contexts (Cart Drawer). |
+| ProgressBar | ✅ Complete | Primitive: native `<progress>` element, custom-styled. 2 sizes (sm/md), success variant (green at 100%). `valueText` for custom screen reader text (e.g., "$12 away from free shipping"). Composes Text for label/value display. |
 
 #### Layout Utilities
 
@@ -165,6 +167,7 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Modal | `/components/modal` | Component |
 | Pagination | `/components/pagination` | Component |
 | Predictive Search | `/components/predictive-search` | Component |
+| Progress Bar | `/components/progress-bar` | Component |
 | Product Card | `/components/product-card` | Component |
 | Quantity Selector | `/components/quantity-selector` | Component |
 | Select | `/components/select` | Component |

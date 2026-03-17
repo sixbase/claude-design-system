@@ -1704,6 +1704,19 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 
 ---
 
+### EmptyState: Component vs Layout Pattern
+
+**Date/Phase:** Phase 4
+**Context:** The spec called EmptyState a "layout pattern, not a heavyweight component." Needed to decide whether to ship it as a documented CSS pattern (like the layout grid) or as a proper component with the 4-file rule.
+**Options considered:**
+1. CSS-only pattern documented in playbook — consumers compose Heading + Text + Button manually
+2. Lightweight component that composes Heading, Text, and Button internally — standard 4-file rule
+**Decision:** Option 2. A proper component with `EmptyState.tsx`, `.css`, `.test.tsx`, `.stories.tsx`, and `index.ts`.
+**Rationale:** Even though EmptyState is structurally simple, a component enforces consistency (centered layout, spacing, heading size, description max-width, icon sizing) across all empty states in the system. Without it, every consumer would write their own centered flex column with slightly different spacing. The `compact` variant handles constrained contexts (Cart Drawer) via component tokens rather than ad-hoc overrides. The `action`/`secondaryAction` prop shape with `{ label, href }` ensures proper link semantics via `Button asChild`.
+**Status:** Active
+
+---
+
 ### Tabs: Radix UI Primitive
 
 **Date/Phase:** Phase 3 — Ecommerce Components

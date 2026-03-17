@@ -46,6 +46,7 @@ export * from './predictive-search';
 export * from './alert';
 export * from './toast';
 export * from './empty-state';
+export * from './progress-bar';
 
 // Navigation
 export * from './pagination';

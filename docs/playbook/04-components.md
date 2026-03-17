@@ -483,6 +483,7 @@ Must include:
 | Skeleton | `<div>` | Loading placeholder. Configurable width/height, circle variant, pulse animation with `prefers-reduced-motion`. |
 | Typography | `<h1>`–`<h4>`, `<p>` | `asChild` for polymorphism. Semantic level ≠ visual size. |
 | StockIndicator | `<p>` | Status-based color + pulse, `prefers-reduced-motion` |
+| ProgressBar | `<progress>` | Native element, custom-styled. 2 sizes (sm/md), success variant at 100%. `valueText` for screen reader context. Composes Text. |
 
 ### Tier 2 — Interactive (has state or events)
 
@@ -524,6 +525,7 @@ Must include:
 | CartDrawer | Drawer + CartLineItem + Button + Heading + Text | Pattern: right-slide cart panel, sticky footer (subtotal + checkout), empty state, `children` slot for footer content, `aria-live` item count |
 | CollectionFilters | Accordion + Checkbox + Button + Badge + Input + Drawer + Text | Faceted navigation, desktop sidebar/mobile drawer, active filter pills, `aria-live` results count |
 | PredictiveSearch | Input + Skeleton + custom combobox | WAI-ARIA combobox, `onSearch` + `results`/`loading` props, debounced, `aria-activedescendant` keyboard nav |
+| EmptyState | Heading + Text + Button | Pattern: centered flex column, icon slot, primary/secondary actions (asChild links), compact variant for constrained contexts |
 
 ---
 

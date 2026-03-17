@@ -1,0 +1,89 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
+import { Heading } from '../typography/Typography';
+import { Text } from '../typography/Typography';
+import { Button } from '../button/Button';
+import './EmptyState.css';
+
+// ─── Types ────────────────────────────────────────────────
+
+export interface EmptyStateAction {
+  /** Button label */
+  label: string;
+  /** Link target */
+  href: string;
+}
+
+export interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
+  /** Optional icon or illustration */
+  icon?: ReactNode;
+  /** Main heading text */
+  heading: string;
+  /** Supporting description */
+  description?: string;
+  /** Primary call to action */
+  action?: EmptyStateAction;
+  /** Secondary call to action */
+  secondaryAction?: EmptyStateAction;
+  /** Compact layout for constrained contexts (e.g. Cart Drawer) */
+  compact?: boolean;
+}
+
+// ─── Component ────────────────────────────────────────────
+
+export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
+  function EmptyState(
+    {
+      icon,
+      heading,
+      description,
+      action,
+      secondaryAction,
+      compact = false,
+      className,
+      ...props
+    },
+    ref,
+  ) {
+    const classes = [
+      'ds-empty-state',
+      compact && 'ds-empty-state--compact',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <div ref={ref} className={classes} {...props}>
+        {icon && <div className="ds-empty-state__icon">{icon}</div>}
+
+        <Heading as="h2" size={compact ? 'xl' : '2xl'} className="ds-empty-state__heading">
+          {heading}
+        </Heading>
+
+        {description && (
+          <Text as="p" size="sm" className="ds-empty-state__description">
+            {description}
+          </Text>
+        )}
+
+        {(action || secondaryAction) && (
+          <div className="ds-empty-state__actions">
+            {action && (
+              <Button asChild variant="primary">
+                <a href={action.href}>{action.label}</a>
+              </Button>
+            )}
+            {secondaryAction && (
+              <Button asChild variant="ghost">
+                <a href={secondaryAction.href}>{secondaryAction.label}</a>
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  },
+);
+
+EmptyState.displayName = 'EmptyState';

@@ -259,7 +259,7 @@ Components, features, and tokens identified as missing during page template desi
 |---|-----------|---------|-------------|----------|
 | 1 | **Pagination** | PLP, Search, Sale need page navigation | ✅ **Resolved** — Dual-mode component built (SPA buttons + SSR anchors) |
 | 2 | **Skeleton** | PLP, Search, Sale need loading states | ✅ **Resolved** — Component built with pulse animation + `prefers-reduced-motion` |
-| 3 | **EmptyState** | PLP empty, Search no-results, Sale no-items | Layout pattern (not component): flex column, centered, composes `Heading` + `Text` + `Button` | Pattern doc |
+| 3 | **EmptyState** | PLP empty, Search no-results, Sale no-items | ✅ **Resolved** — Component built with icon slot, primary/secondary actions, compact variant for constrained contexts |
 
 ### Missing Component Features
 
