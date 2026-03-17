@@ -72,7 +72,7 @@ function NavItemList({
   size: 'sm' | 'md';
 }) {
   return (
-    <ul className="ds-sidebar-nav__list" role="list">
+    <ul className="ds-sidebar-nav__list">
       {items.map((item) => {
         const linkClasses = [
           'ds-sidebar-nav__link',

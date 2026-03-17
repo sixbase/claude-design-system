@@ -34,7 +34,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
   ].filter(Boolean).join(' ');
 
   return (
-    <div className={classes} role="region" aria-label={props['aria-label'] ?? 'Data table'} tabIndex={0}>
+    <div className={classes} role="region" aria-label={props['aria-label'] ?? 'Data table'}>
       <table ref={ref} className={tableClasses} {...props} aria-label={undefined}>
         {children}
       </table>
@@ -176,9 +176,9 @@ interface TableComponent
   Empty: typeof TableEmpty;
 }
 
-(Table as TableComponent).Header = TableHeader;
-(Table as TableComponent).Body = TableBody;
-(Table as TableComponent).Row = TableRow;
-(Table as TableComponent).Head = TableHead;
-(Table as TableComponent).Cell = TableCell;
-(Table as TableComponent).Empty = TableEmpty;
+Table.Header = TableHeader;
+Table.Body = TableBody;
+Table.Row = TableRow;
+Table.Head = TableHead;
+Table.Cell = TableCell;
+Table.Empty = TableEmpty;

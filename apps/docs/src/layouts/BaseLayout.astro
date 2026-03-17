@@ -38,9 +38,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <div class="layout">
       <aside class="sidebar">
         <nav>
-          <a href={`${base}/`} class="sidebar__logo">
-            <img src={`${base}/mason-supply-co-logo.svg`} alt="Mason Supply Co." class="sidebar__logo-img" />
-          </a>
+          <div class="sidebar__header">
+            <a href={`${base}/`} class="sidebar__logo">
+              <img src={`${base}/mason-supply-co-logo.svg`} alt="Mason Supply Co." class="sidebar__logo-img" />
+            </a>
+            <button
+              type="button"
+              class="sidebar__theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <svg class="sidebar__theme-icon sidebar__theme-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <svg class="sidebar__theme-icon sidebar__theme-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+              </svg>
+            </button>
+          </div>
 
           <div class="sidebar__section">
             <p class="sidebar__section-label">Getting Started</p>
@@ -60,6 +75,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <p class="sidebar__section-label">Components</p>
             <a href={`${base}/components/add-to-cart-button`} class="sidebar__link">Add to Cart Button</a>
             <a href={`${base}/components/accordion`} class="sidebar__link">Accordion</a>
+            <a href={`${base}/components/alert`} class="sidebar__link">Alert</a>
             <a href={`${base}/components/badge`} class="sidebar__link">Badge</a>
             <a href={`${base}/components/breadcrumb`} class="sidebar__link">Breadcrumb</a>
             <a href={`${base}/components/button`} class="sidebar__link">Button</a>
@@ -68,6 +84,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <a href={`${base}/components/cart-line-item`} class="sidebar__link">Cart Line Item</a>
             <a href={`${base}/components/carousel`} class="sidebar__link">Carousel</a>
             <a href={`${base}/components/checkbox`} class="sidebar__link">Checkbox</a>
+            <a href={`${base}/components/collection-filters`} class="sidebar__link">Collection Filters</a>
             <a href={`${base}/components/color-picker`} class="sidebar__link">Color Picker</a>
             <a href={`${base}/components/cookie-consent`} class="sidebar__link">Cookie Consent</a>
             <a href={`${base}/components/divider`} class="sidebar__link">Divider</a>
@@ -80,6 +97,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <a href={`${base}/components/input`} class="sidebar__link">Input</a>
             <a href={`${base}/components/modal`} class="sidebar__link">Modal</a>
             <a href={`${base}/components/pagination`} class="sidebar__link">Pagination</a>
+            <a href={`${base}/components/predictive-search`} class="sidebar__link">Predictive Search</a>
             <a href={`${base}/components/price-display`} class="sidebar__link">Price Display</a>
             <a href={`${base}/components/product-card`} class="sidebar__link">Product Card</a>
             <a href={`${base}/components/quantity-selector`} class="sidebar__link">Quantity Selector</a>
@@ -112,5 +130,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <slot />
       </main>
     </div>
+    <script is:inline>
+      document.getElementById('theme-toggle').addEventListener('click', function() {
+        var isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('ds-theme', isDark ? 'dark' : 'light');
+      });
+    </script>
   </body>
 </html>

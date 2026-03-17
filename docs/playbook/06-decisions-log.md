@@ -85,6 +85,25 @@ Use this to find decisions by topic without scrolling 1300+ lines.
 | ProductCard: `fluid` variant for grid contexts | Active |
 | StarRating: SVG clipPath half-fill | Active |
 | Deprecated `clip` → `clip-path` in sr-only | Active |
+| Drawer: Flat API (not compound) | Active |
+| Icon: Library-agnostic SVG wrapper | Active |
+| Table: Compound API with scroll wrapper | Active |
+| Toast: Custom portal over Radix Toast | Active |
+| Info color tokens (`--color-info-subtle`, `--color-info-foreground`) | Active |
+| CartLineItem: Internal `formatPrice` (cents in, formatted out) | Active |
+| CartDrawer: Composition over inline rendering | Active |
+| CartDrawer: Sticky footer via `position: sticky` | Active |
+| Pagination: Dual-mode rendering (SPA vs SSR) | Active |
+| CollectionFilters: Shared panel content for desktop & mobile | Active |
+| CollectionFilters: Active filter pills as dismissible buttons | Active |
+| Alert: Variant-to-ARIA role mapping (alert vs status) | Active |
+| Alert: Solid primitive backgrounds (no color-mix) | Active |
+| PredictiveSearch: Custom combobox (no library) | Active |
+| PredictiveSearch: Data fetching architecture (`onSearch` + `results`) | Active |
+| Tabs: Radix UI primitive | Active |
+| Skeleton: Custom implementation (no library) | Active |
+| AddToCartButton: Status-driven state machine | Active |
+| VariantSelector: Compound option groups with ColorPicker | Active |
 
 ### Layout & Pages
 
@@ -1186,7 +1205,7 @@ Combined with `transform: scale(0.98)` on buttons/selects, `scale(0.92)` on smal
 2. Document the gap with a proposed API and defer building
 **Decision:** Option 2 — documented in the token gap report with proposed `PaginationProps` interface.
 **Rationale:** Page template documentation is a design exercise, not an implementation sprint. The proposed API (currentPage, totalPages, onPageChange, maxVisible) is specific enough to build from without further design decisions. Building it is a separate task that should follow the standard component workflow (4-file rule, tests, stories, docs).
-**Status:** [PENDING DECISION] — prioritize for v1 or defer?
+**Status:** Resolved — Pagination component built (see "Pagination: Dual-Mode Rendering" entry)
 
 ---
 
@@ -1617,4 +1636,112 @@ Also replaced Footer.css hardcoded `1280px` with `var(--size-content-xl)`.
 3. Always render `<a>` tags, use `onClick` + `preventDefault` for SPA
 **Decision:** Option 2. `onPageChange` prop renders `<button>` elements for SPA mode. `baseUrl` prop renders `<a href="{baseUrl}?page={n}">` for SSR/Shopify. Page 1 links to the bare baseUrl (no `?page=1`). If baseUrl already has query params, appends with `&`.
 **Rationale:** Clean semantic distinction — buttons for JS interaction, links for navigation. SSR mode produces crawlable HTML that search engines can follow. Composing with the existing Button component (ghost variant for page numbers, secondary for prev/next) maintains visual consistency without new styling. Mobile responsive via CSS: desktop shows full page numbers with ellipsis, mobile shows "Previous / Page X of Y / Next".
+**Status:** Active
+
+### CollectionFilters: Shared Panel Content for Desktop & Mobile
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Collection Filters needs to work as a sidebar on desktop (≥768px) and a Drawer on mobile (<768px). The filter content (Accordion groups, checkboxes, price range inputs) is identical in both contexts — only the container differs.
+**Options considered:**
+1. Duplicate the filter panel content in both desktop and mobile containers
+2. Extract a shared `FilterPanelContent` internal component rendered in both desktop `<div>` and mobile `<Drawer>`
+3. Use CSS-only responsive hiding with a single DOM tree
+**Decision:** Option 2. A `FilterPanelContent` component encapsulates all filter rendering logic. Desktop renders it in a visible `<div>` (hidden on mobile via CSS). Mobile renders it inside a `<Drawer>` (hidden on desktop via CSS). Both DOM trees exist but only one is visible at any breakpoint.
+**Rationale:** Extracting `FilterPanelContent` avoids code duplication and ensures desktop/mobile parity. CSS visibility toggle is simpler than conditional rendering (which would lose Accordion open state during resize). The slight DOM duplication is acceptable since filter data is lightweight and the Drawer only mounts its portal when opened.
+**Status:** Active
+
+### CollectionFilters: Active Filter Pills as Dismissible Buttons
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Active filters need to be displayed above results for visibility and quick removal. Need to decide the UI pattern and accessibility approach.
+**Options considered:**
+1. Badge components with close buttons — reuse existing Badge
+2. Custom pill buttons with inline dismiss icon — standalone accessible buttons
+3. A removable tag component (new primitive)
+**Decision:** Option 2. Custom `<button>` elements with BEM class `.ds-collection-filters__pill`, each with `aria-label="Remove filter: [label]"`. The dismiss icon is a small ×, `aria-hidden`.
+**Rationale:** Badges are display-only (no click handler in their API). Building a new removable tag primitive is premature — if this pattern repeats (e.g., selected tags in search), we can extract it then. Custom buttons give full control over sizing, theming, and accessibility without extending the Badge API for one use case.
+**Status:** Active
+
+---
+
+### Alert: Variant-to-ARIA Role Mapping
+**Date/Phase:** Phase 4
+**Context:** Alert component needs correct ARIA semantics per variant urgency level.
+**Options considered:** (a) `role="alert"` on all variants, (b) `role="status"` on all variants, (c) split by urgency — assertive for destructive/warning, polite for info/success.
+**Decision:** Option (c) — `role="alert"` for destructive and warning, `role="status"` for info and success.
+**Rationale:** `role="alert"` triggers assertive live region announcements that interrupt screen reader flow. Informational and success messages don't warrant interruption. Warning and destructive messages do — they require immediate attention. This matches WAI-ARIA authoring practices for alert vs status patterns.
+**Status:** Active
+
+---
+
+### Alert: Solid Primitive Backgrounds (No color-mix)
+**Date/Phase:** Phase 4
+**Context:** Alert variant backgrounds need subtle tinted fills. Could use `color-mix(in srgb, var(--color-success) 10%, transparent)` or solid primitive tokens like `--color-sage-50`.
+**Options considered:** (a) `color-mix()` with transparency, (b) solid primitive token references via semantic aliases (`--color-success-subtle`).
+**Decision:** Option (b) — solid semantic tokens pointing to primitive -50 values.
+**Rationale:** `color-mix()` with transparent percentages makes WCAG contrast mathematically impossible to guarantee (see 07-lessons-learned.md). Solid -50 primitives provide reliable, testable contrast against -600/-700 foreground text.
+**Status:** Active
+
+---
+
+### PredictiveSearch: Custom Combobox (No Library)
+
+**Date/Phase:** Phase 4
+**Context:** PredictiveSearch needs an accessible autocomplete dropdown. Radix UI does not provide a Combobox primitive. Options: custom implementation, Downshift library, or Headless UI Combobox.
+**Options considered:** (a) Custom WAI-ARIA combobox implementation, (b) Downshift library, (c) Headless UI Combobox.
+**Decision:** Option (a) — custom implementation following the WAI-ARIA Combobox with Listbox Popup pattern (APG).
+**Rationale:** Avoids a new dependency for a single component. The WAI-ARIA combobox pattern is well-defined and the component scope is narrow enough that a full library is overkill. Consistent with using Radix only where primitives exist. Sets the precedent for combobox accessibility in the system.
+**Status:** Active
+
+---
+
+### PredictiveSearch: Data Fetching Architecture
+
+**Date/Phase:** Phase 4
+**Context:** Should PredictiveSearch handle Shopify API calls internally or accept results from the consumer?
+**Options considered:** (a) Built-in Shopify fetch logic, (b) `onSearch` callback + `results`/`loading` props (controlled results), (c) render prop for full consumer control.
+**Decision:** Option (b) — `onSearch` callback + `results`/`loading` props.
+**Rationale:** Design system components must be store-agnostic. The component handles debouncing, UI state, and accessibility. Data fetching lives in the Shopify theme layer. Same separation as CartDrawer (takes items as props, not fetching them). Adding `loading` as a prop (rather than internal state) gives the consumer full control over the loading UX.
+**Status:** Active
+
+---
+
+### Tabs: Radix UI Primitive
+
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Product detail pages need tabs for description/reviews/specs. Building a tabbed interface component.
+**Options considered:** (a) Custom tabs implementation, (b) Radix UI Tabs primitive.
+**Decision:** Option (b) — `@radix-ui/react-tabs`. Compound API: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`. Thin wrapper adding BEM class names and `forwardRef`.
+**Rationale:** Radix provides correct keyboard navigation (arrow keys, Home/End), `aria-selected` state management, and panel association out of the box. Consistent with using Radix for all compound interactive components (Accordion, Dialog, Select). The wrapper is minimal — BEM classes and CSS, no behavioral changes.
+**Status:** Active
+
+---
+
+### Skeleton: Custom Implementation (No Library)
+
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Loading states needed across PLP, Search, Cart, and PDP pages. No existing skeleton primitive.
+**Options considered:** (a) React-loading-skeleton package, (b) Custom implementation.
+**Decision:** Option (b) — custom `Skeleton` component. Three variants: `text` (with configurable `lines`), `circular`, `rectangular`. CSS `@keyframes` pulse animation with `prefers-reduced-motion` fallback. Renders `aria-hidden="true"`.
+**Rationale:** The component is simple (a styled `<div>` with animation) — a library would add more weight than value. Width/height passed as props and set via inline styles using CSS custom properties. Pulse animation uses `--color-background-subtle` to `--color-border` range for subtle warmth matching the palette.
+**Status:** Active
+
+---
+
+### AddToCartButton: Status-Driven State Machine
+
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** The "Add to Cart" action has 5 states (idle, loading, success, sold-out, pre-order) with different labels, icons, and interactivity. Need to decide if this is a Button variant or a separate composed component.
+**Options considered:** (a) Add states to Button component directly, (b) Separate `AddToCartButton` that composes Button.
+**Decision:** Option (b) — standalone component. Accepts `status` prop driving label, icon, and disabled state. Composes the existing `Button` (primary variant). Auto-resets from `success` → `idle` after a timeout. All labels customizable via `labels` prop for i18n.
+**Rationale:** The state machine logic (auto-reset timer, status-to-label mapping, status-to-icon mapping) doesn't belong in the generic Button. This keeps Button focused on presentation while AddToCartButton handles ecommerce-specific behavior.
+**Status:** Active
+
+---
+
+### VariantSelector: Compound Option Groups with ColorPicker
+
+**Date/Phase:** Phase 3 — Ecommerce Components
+**Context:** Product pages need selectors for size, color, material, and other variant options. Each option type has different UI: color options use swatches, others use pill-style buttons.
+**Options considered:** (a) A single generic toggle group, (b) A `VariantSelector` that renders different UIs per option type.
+**Decision:** Option (b) — `VariantSelector` accepts `options: VariantOption[]` where each option specifies `type: 'color' | 'button'`. Color options delegate to the existing `ColorPicker` component. Button options render `role="radiogroup"` with pill-style buttons supporting `available` (out-of-stock strikethrough) and `disabled` states.
+**Rationale:** Color swatches and text pills are fundamentally different UI patterns — forcing them through a single component would require complex conditional rendering at the call site. Delegating to `ColorPicker` for color options reuses an existing tested component. The `selectedValues` map + `onValueChange` callback keeps the component controlled and composable with cart state management.
 **Status:** Active

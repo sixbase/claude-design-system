@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Button } from '../button';
 import type { ButtonHTMLAttributes } from 'react';
 import './AddToCartButton.css';
@@ -77,7 +77,7 @@ export const AddToCartButton = forwardRef<HTMLButtonElement, AddToCartButtonProp
     },
     ref,
   ) {
-    const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+    const mergedLabels = useMemo(() => ({ ...DEFAULT_LABELS, ...labels }), [labels]);
     const liveRef = useRef<HTMLSpanElement>(null);
     const prevStatusRef = useRef(status);
 

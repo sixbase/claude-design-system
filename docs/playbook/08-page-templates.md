@@ -68,7 +68,7 @@ The canonical grid-based product browsing page. Implementation: `CollectionDemo.
 | Product count | `Text` size `sm`, `muted` | "24 products" |
 | Sort | `Select` + `SelectItem` size `sm` | Newest, Price Low→High, Price High→Low, Best Selling |
 | Product cards | `ProductCard` wrapped in `<a>` | Ghost+interactive variant, `fluid` in grid context |
-| Pagination | **GAP** — no component | See Token Gap Report |
+| Pagination | `Pagination` | Dual-mode: SPA (`onPageChange`) or SSR (`baseUrl`), truncation, responsive |
 
 ### Product Grid
 
@@ -257,8 +257,8 @@ Components, features, and tokens identified as missing during page template desi
 
 | # | Component | Context | Composition | Priority |
 |---|-----------|---------|-------------|----------|
-| 1 | **Pagination** | PLP, Search, Sale need page navigation | `Button` ghost (numbers) + secondary (prev/next) + `Text` (ellipsis) | P2 |
-| 2 | **Skeleton** | PLP, Search, Sale need loading states | Pulsing placeholder, `--color-background-subtle`, `--transition-slow` shimmer | P2 |
+| 1 | **Pagination** | PLP, Search, Sale need page navigation | ✅ **Resolved** — Dual-mode component built (SPA buttons + SSR anchors) |
+| 2 | **Skeleton** | PLP, Search, Sale need loading states | ✅ **Resolved** — Component built with pulse animation + `prefers-reduced-motion` |
 | 3 | **EmptyState** | PLP empty, Search no-results, Sale no-items | Layout pattern (not component): flex column, centered, composes `Heading` + `Text` + `Button` | Pattern doc |
 
 ### Missing Component Features
@@ -279,7 +279,7 @@ Components, features, and tokens identified as missing during page template desi
 | ID | Decision | Options | Status |
 |----|----------|---------|--------|
 | PT-1 | Sale badge variant | `destructive` (reuse) vs. new `sale` variant | **[PENDING]** — recommend `destructive` |
-| PT-2 | Filter bar component | Composition pattern vs. dedicated `FilterBar` | **[PENDING]** |
-| PT-3 | Search autocomplete | Defer vs. dropdown/popover | **[PENDING]** |
-| PT-4 | Skeleton priority | Build now vs. defer to Shopify | **[PENDING]** |
+| PT-2 | Filter bar component | Composition pattern vs. dedicated `FilterBar` | ✅ **Resolved** — `CollectionFilters` component built. Accordion + Checkbox + Drawer composition pattern. Desktop sidebar, mobile drawer. |
+| PT-3 | Search autocomplete | Defer vs. dropdown/popover | ✅ **Resolved** — `PredictiveSearch` component built. Custom WAI-ARIA combobox, consumer-controlled data fetching via `onSearch` + `results`/`loading` props. |
+| PT-4 | Skeleton priority | Build now vs. defer to Shopify | ✅ **Resolved** — Skeleton component built. Pulse animation with `prefers-reduced-motion`. |
 | PT-5 | Customer account type | Classic (password) vs. new (passwordless) | **[PENDING]** |

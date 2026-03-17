@@ -478,7 +478,9 @@ Must include:
 | Badge | `<span>` | 6 variants, 2 sizes. Solid primitive colors for contrast (not `color-mix`). |
 | ColorSwatch | `<div>` | Docs utility only |
 | Icon | `<svg>` | Library-agnostic SVG wrapper. 3 sizes (sm/md/lg), `currentColor` inheritance, `decorative`/`label` a11y props. |
+| Divider | `<hr>` / `<div>` | Horizontal or vertical (`role="separator"`), 2 variants (default, subtle), 4 spacing options |
 | PriceDisplay | `<div>` | `price` + optional `comparePrice` (strikethrough), `size` prop |
+| Skeleton | `<div>` | Loading placeholder. Configurable width/height, circle variant, pulse animation with `prefers-reduced-motion`. |
 | Typography | `<h1>`–`<h4>`, `<p>` | `asChild` for polymorphism. Semantic level ≠ visual size. |
 | StockIndicator | `<p>` | Status-based color + pulse, `prefers-reduced-motion` |
 
@@ -494,12 +496,15 @@ Must include:
 | QuantitySelector | `<div>` group | Controlled stepper, `role="group"`, min/max |
 | StarRating | `<div role="img">` | SVG clipPath half-fill, clamped 0–5 |
 | Pagination | `<nav>` | Two modes: SPA (buttons) / SSR (anchor tags). Truncation with ellipsis, responsive desktop/mobile layouts |
+| AddToCartButton | `<button>` | Composed: Button + Toast integration. Loading state, disabled when out of stock. |
+| VariantSelector | `<div role="radiogroup">` | Option group (size, color, material). Pill-style toggles, disabled/out-of-stock variants. |
 
 ### Tier 3 — Compound (multiple parts)
 
 | Component | Parts | Key Pattern |
 |-----------|-------|-------------|
 | Accordion | Item, Trigger, Content | Radix, single/multiple, inner-only dividers, `bordered` variant |
+| Tabs | TabsList, TabsTrigger, TabsContent | Keyboard nav (arrow keys), `aria-selected`, responsive |
 | Modal | Trigger, Content, Header, Body, Footer, Close | Radix Dialog, focus trap, portal (needs explicit `font-family`) |
 | ImageGallery | Main + thumbnails | `thumbnailPosition`, `aspectRatio`, keyboard nav |
 | Breadcrumb | Nav > List > Items | CSS-based responsive collapse (not JS) |
@@ -513,9 +518,12 @@ Must include:
 | Carousel + CarouselSlide | Scroll container | `scroll-snap-type`, responsive `flex-basis` sizes |
 | FeatureBlock | Image + text grid | `reverse` prop, CSS `order` swap at tablet+ |
 | CookieConsent | Accordion + Button | `position: fixed`, controlled/uncontrolled, i18n, `bordered` accordion |
+| Alert | Icon + Text + Button | 4 variants (info, success, warning, destructive), dismissible, split ARIA roles (alert vs status by urgency), solid semantic backgrounds |
 | Toast | Icon + Text + Button | Provider + `useToast()` hook, portal, auto-dismiss with hover-pause, 4 variants, stacking |
 | CartLineItem | QuantitySelector + PriceDisplay + Button + Badge + Text | Prices in cents, internal `formatPrice`, responsive row↔stack, inner-only dividers |
 | CartDrawer | Drawer + CartLineItem + Button + Heading + Text | Pattern: right-slide cart panel, sticky footer (subtotal + checkout), empty state, `children` slot for footer content, `aria-live` item count |
+| CollectionFilters | Accordion + Checkbox + Button + Badge + Input + Drawer + Text | Faceted navigation, desktop sidebar/mobile drawer, active filter pills, `aria-live` results count |
+| PredictiveSearch | Input + Skeleton + custom combobox | WAI-ARIA combobox, `onSearch` + `results`/`loading` props, debounced, `aria-activedescendant` keyboard nav |
 
 ---
 

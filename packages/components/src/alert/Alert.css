@@ -1,0 +1,93 @@
+/* ─── Component tokens ──────────────────────────────────── */
+
+.ds-alert {
+  --alert-radius: var(--radius-md);
+  --alert-padding-block: var(--spacing-4);
+  --alert-padding-inline: var(--spacing-5);
+  --alert-gap: var(--spacing-3);
+  --alert-border-width: 3px;
+  --alert-bg: var(--color-surface);
+  --alert-fg: var(--color-foreground);
+  --alert-accent: var(--color-border);
+}
+
+/* ─── Base styles ───────────────────────────────────────── */
+
+.ds-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--alert-gap);
+  padding: var(--alert-padding-block) var(--alert-padding-inline);
+  border-radius: var(--alert-radius);
+  border-left: var(--alert-border-width) solid var(--alert-accent);
+  background-color: var(--alert-bg);
+  color: var(--alert-fg);
+  font-family: var(--font-family-body);
+  position: relative;
+}
+
+/* ─── Variants ──────────────────────────────────────────── */
+
+.ds-alert--info {
+  --alert-bg: var(--color-info-subtle);
+  --alert-fg: var(--color-info-foreground);
+  --alert-accent: var(--color-info);
+}
+
+.ds-alert--success {
+  --alert-bg: var(--color-success-subtle);
+  --alert-fg: var(--color-success-foreground);
+  --alert-accent: var(--color-success);
+}
+
+.ds-alert--warning {
+  --alert-bg: var(--color-warning-subtle);
+  --alert-fg: var(--color-warning-foreground);
+  --alert-accent: var(--color-warning);
+}
+
+.ds-alert--destructive {
+  --alert-bg: var(--color-destructive-subtle);
+  --alert-fg: var(--color-destructive-foreground);
+  --alert-accent: var(--color-destructive);
+}
+
+/* ─── Child elements ────────────────────────────────────── */
+
+.ds-alert__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--alert-accent);
+  padding-top: var(--spacing-1);
+}
+
+.ds-alert__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.ds-alert__title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-alert__description {
+  max-width: 65ch;
+}
+
+.ds-alert__dismiss {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--alert-fg);
+}
+
+/* ─── Reduced motion ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-alert {
+    transition: none;
+  }
+}

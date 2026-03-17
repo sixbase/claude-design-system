@@ -81,7 +81,7 @@ The build strategy was **primitives-first**: establish the token system and foun
 
 **Build order:** tokens → primitives → components. Always. See `05-workflows.md`.
 
-### Components Built (22 total)
+### Components Built (31 total)
 
 **When adding a component, update this table and the docs pages table below.**
 
@@ -99,6 +99,7 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Checkbox | ✅ Complete | Indeterminate state, 2 sizes, hint/error, Radix UI |
 | Divider | ✅ Complete | Horizontal (`<hr>`) and vertical (`<div role="separator">`), 2 variants (default, subtle), 4 spacing options (none/sm/md/lg) |
 | Icon | ✅ Complete | Library-agnostic SVG wrapper. 3 sizes (sm/md/lg), `currentColor` inheritance, decorative/labelled a11y modes. Unlocks all icon-bearing components. |
+| Alert | ✅ Complete | 4 variants (info, success, warning, destructive), dismissible, icon override, composes Icon + Text + Button |
 
 #### Ecommerce Components (v1.x)
 
@@ -119,6 +120,14 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Drawer | ✅ Complete | Slide-out panel primitive (left/right), Radix Dialog, custom width, full-width on mobile. Unlocks: Cart Drawer, mobile menu, filter sidebar. |
 | Table | ✅ Complete | Compound component (Table.Header/.Body/.Row/.Head/.Cell/.Empty). Variants: default (row borders), striped. Sizes: sm/md. Sticky header, sort indicators, scroll wrapper with CSS-only scroll shadows. |
 | Pagination | ✅ Complete | Two modes: SPA (`onPageChange` → buttons) and SSR/Shopify (`baseUrl` → anchor tags). Truncation with ellipsis, `siblingCount`, 2 sizes (sm/md). Responsive: desktop shows full numbers, mobile shows "Page X of Y". Renders nothing for 1 page. |
+| CollectionFilters | ✅ Complete | Pattern: Accordion + Checkbox + Button + Badge + Input + Drawer + Text. Faceted navigation with list filters (checkboxes), price range (min/max), boolean filters. Desktop sidebar, mobile drawer. Show more/less for 20+ values. Active filter pills with dismiss. `aria-live` results count. |
+| AddToCartButton | ✅ Complete | Composed: Button + Toast integration. Size/variant selection, loading state, disabled when out of stock. |
+| VariantSelector | ✅ Complete | Option group selector (size, color, material). Pill-style toggles with selection state, disabled/out-of-stock variants. |
+| Tabs | ✅ Complete | Compound component (Tabs, TabsList, TabsTrigger, TabsContent). Keyboard nav (arrow keys), `aria-selected`, responsive. |
+| Skeleton | ✅ Complete | Loading placeholder. Configurable width/height, circle variant, pulse animation with `prefers-reduced-motion`. |
+| Toast | ✅ Complete | Provider + `useToast()` hook. 4 variants (default, success, warning, destructive), auto-dismiss with hover-pause, stacking, portal-based, slide animation with reduced-motion fallback. |
+| PredictiveSearch | ✅ Complete | WAI-ARIA combobox pattern. `onSearch` + `results`/`loading` props (consumer handles data fetching). Debounced input, keyboard nav via `aria-activedescendant`, recent searches, Skeleton loading state. |
+| SidebarNav | ✅ Complete | Docs site navigation component. Grouped links with active state, collapsible sections. |
 
 #### Layout Utilities
 
@@ -144,20 +153,27 @@ The build strategy was **primitives-first**: establish the token system and foun
 | Cart Line Item | `/components/cart-line-item` | Component |
 | Carousel | `/components/carousel` | Component |
 | Checkbox | `/components/checkbox` | Component |
+| Collection Filters | `/components/collection-filters` | Component |
+| Alert | `/components/alert` | Component |
 | Color Swatch | `/components/color-swatch` | Component |
 | Divider | `/components/divider` | Component |
+| Drawer | `/components/drawer` | Component |
 | Feature Block | `/components/feature-block` | Component |
 | Icon | `/components/icon` | Component |
 | Image Gallery | `/components/image-gallery` | Component |
 | Input | `/components/input` | Component |
 | Modal | `/components/modal` | Component |
 | Pagination | `/components/pagination` | Component |
+| Predictive Search | `/components/predictive-search` | Component |
 | Product Card | `/components/product-card` | Component |
 | Quantity Selector | `/components/quantity-selector` | Component |
 | Select | `/components/select` | Component |
+| Skeleton | `/components/skeleton` | Component |
 | Star Rating | `/components/star-rating` | Component |
 | Stock Indicator | `/components/stock-indicator` | Component |
+| Tabs | `/components/tabs` | Component |
 | Table | `/components/table` | Component |
+| Toast | `/components/toast` | Component |
 | Typography | `/components/typography` | Component |
 | Product Detail Page | `/examples/product-detail` | Example page |
 | Homepage | `/examples/homepage` | Example page |
@@ -177,13 +193,12 @@ The build strategy was **primitives-first**: establish the token system and foun
 
 ## Scope: What's Deferred
 
-| Priority | Component | Why Ecommerce Needs It | Blocked By |
-|----------|-----------|------------------------|------------|
-| P1 | Toast | Add-to-cart confirmation, error notifications | Nothing — ready to build |
-| P2 | Skeleton | Loading state for product grids | Nothing — ready to build |
-| P3 | Tabs | Product detail: description / reviews / specs | Nothing — ready to build |
+All previously deferred P1–P3 components have been built:
+- ~~Toast~~ → ✅ Built (Phase 3)
+- ~~Skeleton~~ → ✅ Built (Phase 3)
+- ~~Tabs~~ → ✅ Built (Phase 3)
 
-See `08-page-templates.md` Token Gap Report for additional component and feature gaps identified during page template design.
+No components are currently deferred. See `08-page-templates.md` Token Gap Report for remaining feature gaps identified during page template design.
 
 ---
 

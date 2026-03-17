@@ -100,10 +100,10 @@ describe('Table', () => {
     expect(region).toHaveClass('ds-table-wrapper');
   });
 
-  it('scroll region is keyboard focusable', () => {
+  it('scroll region does not have tabindex on non-interactive wrapper', () => {
     renderTable();
     const region = screen.getByRole('region');
-    expect(region).toHaveAttribute('tabindex', '0');
+    expect(region).not.toHaveAttribute('tabindex');
   });
 
   /* ─── Sort indicator ────────────────────────────────────── */

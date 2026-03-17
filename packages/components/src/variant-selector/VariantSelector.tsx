@@ -2,7 +2,6 @@ import { forwardRef, useCallback } from 'react';
 import type { HTMLAttributes, KeyboardEvent } from 'react';
 import { Heading } from '../typography';
 import { ColorPicker } from '../color-picker';
-import { Button } from '../button';
 import type { ColorOption } from '../color-picker';
 import './VariantSelector.css';
 
@@ -159,7 +158,7 @@ interface ButtonOptionGroupProps {
   size: 'sm' | 'md';
 }
 
-function ButtonOptionGroup({ option, selectedValue, onChange, size }: ButtonOptionGroupProps) {
+function ButtonOptionGroup({ option, selectedValue, onChange, size: _size }: ButtonOptionGroupProps) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
       const enabledValues = option.values.filter((v) => !v.disabled);
@@ -192,6 +191,7 @@ function ButtonOptionGroup({ option, selectedValue, onChange, size }: ButtonOpti
       className="ds-variant-selector__buttons"
       role="radiogroup"
       aria-label={option.name}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       {option.values.map((optionValue) => {

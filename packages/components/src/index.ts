@@ -39,9 +39,13 @@ export * from './cart-line-item';
 export * from './cart-drawer';
 export * from './add-to-cart-button';
 export * from './variant-selector';
+export * from './collection-filters';
+export * from './predictive-search';
 
 // Feedback
+export * from './alert';
 export * from './toast';
+export * from './empty-state';
 
 // Navigation
 export * from './pagination';

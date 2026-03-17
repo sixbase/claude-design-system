@@ -77,6 +77,7 @@ Every lesson produced a rule. This table collects them all so Claude can scan fo
 | jest-axe needs `expect.extend(toHaveNoViolations)` in setup + region rule disabled | [jest-axe-setup](#jest-axe-setup) |
 | When switching fonts, immediately test small dense components (badges, tags, chips) | [font-vertical-centering](#font-vertical-centering) |
 | `text-box-trim: both; text-box-edge: cap alphabetic` for pill components | [font-vertical-centering](#font-vertical-centering) |
+| Combobox: keep focus on input, use `aria-activedescendant` — never move DOM focus to options | [combobox-focus-pattern](#combobox-focus-pattern) |
 
 ---
 
@@ -259,6 +260,18 @@ Component library: 100% compliance. Docs site: accumulated inline styles over ti
 ### Shared doc utilities pay off immediately {#shared-doc-utilities}
 `makePlaceholder()` duplicated in 4 files — 60+ lines. Extracted to shared lib.
 **Rule:** 2+ occurrences in docs → extract to `apps/docs/src/lib/`.
+
+---
+
+### Combobox: aria-activedescendant Focus Pattern {#combobox-focus-pattern}
+
+**What happened:** Built the first combobox in the system (PredictiveSearch). WAI-ARIA combobox pattern requires that DOM focus stays on the input at all times — visual highlighting on options is communicated via `aria-activedescendant` pointing to the active option's `id`. Moving DOM focus to individual `<li>` options breaks the combobox pattern and prevents typing while navigating.
+
+**Also learned:** Safari adds a native clear button to `type="search"` inputs via `::-webkit-search-cancel-button`. When you have a custom clear button, hide the native one with `-webkit-appearance: none`.
+
+**Also learned:** Debounce for a single use case (search input) is trivially implemented with `useEffect` + `setTimeout` — no library needed. The cleanup function clears the timer on query change or unmount.
+
+**Rule:** In combobox/autocomplete components, never move DOM focus to options. Use `aria-activedescendant` on the input to reference the visually highlighted option. Focus only returns to the input on Escape or selection. See WAI-ARIA Combobox APG for the canonical pattern.
 
 ---
 

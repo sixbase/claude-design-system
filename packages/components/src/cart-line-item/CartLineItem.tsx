@@ -62,7 +62,7 @@ function formatPrice(cents: number): string {
 export const CartLineItem = forwardRef<HTMLDivElement, CartLineItemProps>(
   function CartLineItem(
     {
-      id,
+      id: _id,
       name,
       image,
       imageAlt,

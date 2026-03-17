@@ -31,9 +31,15 @@ body {
   background-color: var(--color-background-subtle);
 }
 
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-8);
+}
+
 .sidebar__logo {
   display: block;
-  margin-bottom: var(--spacing-8);
   text-decoration: none;
 }
 
@@ -42,6 +48,40 @@ body {
   width: 160px;
   height: auto;
   color: var(--color-foreground);
+}
+
+/* ─── Theme toggle ────────────────────────────────────────── */
+.sidebar__theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-touch-target, 36px);
+  height: var(--size-touch-target, 36px);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-foreground-subtle);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  padding: 0;
+}
+
+.sidebar__theme-toggle:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-foreground);
+}
+
+.sidebar__theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.sidebar__theme-icon--moon { display: none; }
+.dark .sidebar__theme-icon--sun { display: none; }
+.dark .sidebar__theme-icon--moon { display: block; }
+
+.dark .sidebar__logo-img {
+  filter: invert(1);
 }
 
 .sidebar__section {
