@@ -63,6 +63,11 @@
   width: 100%;
 }
 
+/* ─── Dark mode: surface = subtle, so override highlight ── */
+:is(.dark, [data-theme="dark"]) .ds-skeleton {
+  --skeleton-highlight: var(--color-border);
+}
+
 /* ─── Static (no animation) ─────────────────────────────── */
 .ds-skeleton--static {
   animation: none;
