@@ -111,6 +111,15 @@
   }
 }
 
+/* Touch target floor on mobile (WCAG 2.5.5). */
+@media (max-width: 767px) {
+  .ds-quantity-selector__btn,
+  .ds-quantity-selector__value {
+    min-width: var(--size-touch-target-lg);
+    min-height: var(--size-touch-target-lg);
+  }
+}
+
 /* ─── Reduced motion ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ds-quantity-selector__btn {

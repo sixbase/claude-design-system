@@ -166,7 +166,7 @@
 
 /* ─── Vendor ──────────────────────────────────────────── */
 .ds-product-card__vendor {
-  color: var(--color-foreground-muted);
+  color: var(--color-foreground-subtle);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;

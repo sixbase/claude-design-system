@@ -147,6 +147,13 @@
   pointer-events: none;
 }
 
+/* Touch target floor on mobile (WCAG 2.5.5). */
+@media (max-width: 767px) {
+  .ds-variant-selector__option {
+    min-height: var(--size-touch-target-lg);
+  }
+}
+
 /* ─── Optical centering fallback ─────────────────────────── */
 @supports not (text-box-trim: both) {
   .ds-variant-selector__option {

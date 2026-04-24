@@ -48,11 +48,6 @@ a.ds-breadcrumb__link:hover {
   flex-shrink: 0;
 }
 
-.ds-breadcrumb__ellipsis {
-  color: var(--color-foreground-muted);
-  user-select: none;
-}
-
 .ds-breadcrumb__current {
   color: var(--color-foreground);
   font-weight: var(--font-weight-medium);
@@ -63,32 +58,11 @@ a.ds-breadcrumb__link:hover {
 
 /* ─── Responsive collapse: hide ellipsis on tablet+, hide middle items on mobile ── */
 
-/* Tablet and up: show all items, hide ellipsis */
-@media (min-width: 768px) {
-  .ds-breadcrumb__item--collapsible {
-    display: flex;
-  }
-
-  .ds-breadcrumb__ellipsis,
-  .ds-breadcrumb__separator--after-ellipsis {
-    display: none;
-  }
-}
-
-/* Mobile: hide collapsible middle items, show ellipsis, single-line truncation */
+/* Mobile: single-line truncation on last item. */
 @media (max-width: 767px) {
   .ds-breadcrumb__list {
     flex-wrap: nowrap;
     max-width: 100%;
-  }
-
-  .ds-breadcrumb__item--collapsible {
-    display: none;
-  }
-
-  .ds-breadcrumb__ellipsis,
-  .ds-breadcrumb__separator--after-ellipsis {
-    display: inline;
   }
 
   .ds-breadcrumb__item:last-child {

@@ -55,12 +55,6 @@
   font-size: var(--font-size-sm);
 }
 
-.ds-input-field--lg {
-  height: var(--size-control-lg);
-  padding: 0 var(--spacing-4);
-  font-size: var(--font-size-base);
-}
-
 .ds-input-field::placeholder {
   color: var(--color-foreground-muted);
 }
@@ -92,52 +86,10 @@
   background-color: var(--color-background-subtle);
 }
 
-/* ─── With icons / adornments ──────────────────────────────── */
-.ds-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.ds-input-wrapper .ds-input-field {
-  width: 100%;
-}
-
-.ds-input-wrapper--leading .ds-input-field {
-  padding-left: calc(var(--spacing-3) + var(--size-icon) + var(--spacing-2));
-}
-
-.ds-input-wrapper--trailing .ds-input-field {
-  padding-right: calc(var(--spacing-3) + var(--size-icon) + var(--spacing-2));
-}
-
-.ds-input-adornment {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  color: var(--color-foreground-subtle);
-  pointer-events: none;
-}
-
-.ds-input-adornment--leading {
-  left: var(--spacing-3);
-}
-
-.ds-input-adornment--trailing {
-  right: var(--spacing-3);
-}
-
-/* ─── Helper text / error message ──────────────────────────── */
+/* ─── Helper text ──────────────────────────────────────── */
 .ds-input-hint {
   font-size: var(--font-size-xs);
   color: var(--color-foreground-subtle);
-  line-height: var(--line-height-normal);
-}
-
-.ds-input-error {
-  font-size: var(--font-size-xs);
-  color: var(--color-destructive);
   line-height: var(--line-height-normal);
 }
 
