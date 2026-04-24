@@ -41,14 +41,24 @@
  * Every major page section uses this vertical spacing.
  * --spacing-16 (64px) sits at the upper end of the standard
  * spacing scale, creating clear visual chapter breaks.
+ *
+ * Because Shopify wraps every {% section %} in a
+ * <div class="shopify-section">, we apply the rhythm on the
+ * wrapper via the adjacent-sibling combinator. This gives the
+ * correct gap between consecutive sections without needing a
+ * :last-child reset (which would match unpredictably given
+ * the <link>/<script> siblings Shopify injects).
  */
 
-.ds-section {
-  margin-bottom: var(--spacing-16);     /* 64px — section rhythm */
+.ds-main > .shopify-section + .shopify-section {
+  margin-top: var(--spacing-16);        /* 64px — section rhythm */
 }
 
-.ds-section:last-child {
-  margin-bottom: 0;
+/* Tighten the gap between consecutive feature-block sections to
+   match the reference HomepageDemo (42px via --spacing-phi-21). */
+.ds-main > .shopify-section:has(> .ds-feature-block-section)
+  + .shopify-section:has(> .ds-feature-block-section) {
+  margin-top: var(--spacing-phi-21);
 }
 
 /* ─── 12-Column Layout Grid ──────────────────────────────── */

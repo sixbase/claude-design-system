@@ -33,13 +33,9 @@
   object-fit: cover;
 }
 
-/* When feature-block sections are stacked, tighten the gap from
-   the default 64px (--spacing-16) to the reference 42px
-   (--spacing-phi-21) between adjacent blocks. Matches the docs
-   HomepageDemo layout. */
-.ds-feature-block-section + .ds-feature-block-section {
-  margin-top: calc(-1 * (var(--spacing-16) - var(--spacing-phi-21)));
-}
+/* Adjacent feature-block tightening now handled in layout.css
+   via the .shopify-section wrapper. See .ds-main > .shopify-section:has
+   rule there. */
 
 .ds-feature-block__text {
   display: flex;

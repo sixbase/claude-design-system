@@ -54,3 +54,17 @@ button {
     padding-block: var(--spacing-6);
   }
 }
+
+/* Alias for legacy .visually-hidden references (footer newsletter,
+   etc.). .ds-sr-only is the canonical screen-reader-only utility. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}

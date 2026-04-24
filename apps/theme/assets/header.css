@@ -188,8 +188,13 @@
   display: block;
 }
 
-/* Invert logo in dark mode (SVG loaded as <img> can't use currentColor) */
+/* Invert logo in dark mode (SVG loaded as <img> can't use currentColor).
+   Applies to both the uploaded-logo path and the default wordmark SVG. */
 .dark .ds-header__logo-img {
+  filter: invert(1);
+}
+
+.dark .ds-footer__logo-img {
   filter: invert(1);
 }
 

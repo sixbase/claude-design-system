@@ -3,7 +3,7 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "heading": "Everyday Essentials, Thoughtfully Made",
+        "heading": "Everyday Essentials,\u00a0Thoughtfully Made",
         "body": "Sustainably crafted goods designed to stand the test of time. From canvas totes to ceramic mugs — fewer things, made better.",
         "cta_label": "Shop the Collection",
         "cta_url": "/collections/all",
@@ -15,6 +15,7 @@
       "settings": {
         "heading": "Featured Products",
         "body": "Our most-loved pieces, curated for you.",
+        "collection": "all",
         "layout": "carousel",
         "products_to_show": 6,
         "show_view_all": false
