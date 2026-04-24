@@ -43,8 +43,13 @@
   </head>
 
   <body>
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
     <main id="MainContent" role="main">
       {{ content_for_layout }}
     </main>
+
+    {% section 'footer' %}
   </body>
 </html>
