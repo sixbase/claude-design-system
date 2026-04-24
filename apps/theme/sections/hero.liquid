@@ -1,0 +1,78 @@
+{{ 'hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading = section.settings.heading
+  assign body = section.settings.body
+  assign cta_label = section.settings.cta_label
+  assign cta_url = section.settings.cta_url
+  assign image = section.settings.image
+  assign overlay = section.settings.overlay_opacity
+  assign align = section.settings.text_align
+-%}
+
+<section class="ds-hero ds-hero--align-{{ align }}">
+  {%- if image != blank -%}
+    <div class="ds-hero__media">
+      {% render 'responsive-image',
+        image: image,
+        alt: heading,
+        sizes: '100vw',
+        loading: 'eager',
+        fetchpriority: 'high'
+      %}
+      {%- if overlay > 0 -%}
+        <div class="ds-hero__overlay" data-overlay="{{ overlay }}"></div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="ds-hero__inner ds-page-container">
+    <div class="ds-hero__content">
+      {%- if heading != blank -%}
+        <h1 class="ds-heading ds-heading--4xl ds-hero__heading">{{ heading | escape }}</h1>
+      {%- endif -%}
+
+      {%- if body != blank -%}
+        <p class="ds-text ds-text--lg ds-hero__body">{{ body | escape }}</p>
+      {%- endif -%}
+
+      {%- if cta_label != blank and cta_url != blank -%}
+        <a
+          href="{{ cta_url }}"
+          class="ds-button ds-button--primary ds-button--lg ds-hero__cta"
+        >{{ cta_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build things that last." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Enduring materials, uncompromising craft." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop all" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay strength",
+      "min": 0, "max": 80, "step": 10, "default": 30,
+      "info": "Darkens the image behind the text for readability."
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "start"
+    }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

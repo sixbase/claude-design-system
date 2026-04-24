@@ -228,14 +228,20 @@ Each section that maps to a page type includes the relevant JSON-LD schema inlin
 | Phase | What | Status |
 |-------|------|--------|
 | Scaffold | Strip Dawn, boot with placeholder section + all tokens loaded | ✅ Complete |
-| Header | Port `Header` component → `sections/header.liquid` | Next |
-| Footer | Port `Footer` component → `sections/footer.liquid` | Pending |
-| Product template (PDP) | Port ProductCard, PriceDisplay, VariantSelector, AddToCartButton, StockIndicator, StarRating | Pending |
-| Collection template (PLP) | Port CollectionFilters, ProductCard grid, Pagination | Pending |
-| Cart template + Drawer | Port CartLineItem, CartDrawer, quantity controls | Pending |
-| Home page sections | FeatureBlock, Carousel, hero sections | Pending |
-| SEO structured data | JSON-LD: Product, CollectionPage, BreadcrumbList, Organization, WebSite | Per page |
-| Customer templates | Port Input, Button, Alert for login/register/account flows | Pending |
+| Phase 0 foundations | Port primitives (button, typography, input, badge, select, icon, price-display, breadcrumb) + shared snippets (icon, price, responsive-image, breadcrumb) | ✅ Complete |
+| Header | Port `Header` component → `sections/header.liquid` + announcement bar | ✅ Complete |
+| Footer | Port `Footer` component → `sections/footer.liquid` with newsletter + social | ✅ Complete |
+| Product template (PDP) | Port ImageGallery, VariantSelector, StockIndicator, AddToCartButton, StarRating, QuantitySelector, ColorPicker → `sections/main-product.liquid` | ✅ Complete |
+| Collection template (PLP) | Port ProductCard, CollectionFilters, Pagination → `sections/main-collection.liquid` + snippets | ✅ Complete |
+| Cart template | Port CartLineItem, QuantitySelector → `sections/main-cart.liquid`. Cart drawer deferred to Phase 2. | ✅ Complete |
+| Customer templates | Port Alert + 7 customer sections (login, register, reset, activate, account, addresses, order) | ✅ Complete |
+| Home page sections | hero, featured-collection, feature-block — composed in `templates/index.json` | ✅ Complete |
+| SEO structured data | Per-page JSON-LD (Product, CollectionPage, BreadcrumbList) shipped by each stream. Site-wide `Organization` + `WebSite` in `theme.liquid`. OG tags + Twitter Card. | ✅ Complete |
+| Cart drawer | Port CartDrawer — offer from any page, not just /cart | Phase 2 |
+| Mega menu | Port MegaMenu for multi-level header navigation | Phase 2 |
+| Predictive search | Port PredictiveSearch as a header-triggered overlay | Phase 2 |
+| QA pass | Real browser testing, mobile sanity, checkout flow verification | Pending |
+| Tokens sync automation | Resolve the PENDING DECISION — likely a Turborepo task | Pending |
 
 ---
 

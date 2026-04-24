@@ -301,6 +301,24 @@ Component library: 100% compliance. Docs site: accumulated inline styles over ti
 
 ---
 
+### Token & primitive gaps surfaced by the theme port {#theme-port-token-gaps}
+
+**What happened:** Porting React components to Shopify Liquid forced us to surface classes and tokens that exist in the React world but needed adaptation for Liquid/Shopify constraints. Four gaps surfaced across the Phase 1 streams:
+
+1. **`--radius-xs` is referenced but not defined.** `packages/components/src/cart-line-item/CartLineItem.css` uses `var(--radius-xs)` but `tokens.json` only ships `--radius-sm` (2px) through `--radius-xl` (13px). Stream E substituted `--radius-sm` in the ported theme CSS. The design system's own CartLineItem silently falls back to `initial` in production.
+
+2. **No narrow-container width token.** Customer forms want a ~480–520px centered column. The closest tokens are `--size-modal-sm` (400px), `--size-modal-md` (520px), and `--size-content-sm` (640px). Stream F used `--size-modal-md` as the least-bad choice. Consider adding `--size-form-narrow` or similar.
+
+3. **No primitive for native `<select>`.** The Radix-based `.ds-select-trigger` can't be wired to Shopify's `Shopify.CountryProvinceSelector` because it requires a real `<select>` element. Stream F added a minimal `.ds-native-select` in `customer.css`. If another context needs a native select (mobile sort dropdown, checkout country), promote it to a primitive.
+
+4. **No `.ds-table` primitive.** Order history and order detail pages need a table. Stream F inlined table styles into `customer.css` with permission. If a second consumer appears, promote to a `Table` component (or reuse the existing `packages/components/src/table/`, which exists — Stream F didn't port it because one-off customer tables felt small).
+
+**Rule:** When adding tokens, scan the full codebase (including `packages/components/src/**/*.css`) for references that don't resolve. CSS variables fail silently — `var(--radius-xs)` produces `initial` when undefined, not a runtime error. When porting a component to Liquid and the component's CSS references tokens that don't exist, document the gap in the port's section report and raise a follow-up to fix it at the source (component CSS or tokens.json), not the port.
+
+**Related rule (already enforced):** "After renaming tokens, `grep -r 'old-name' .` — CSS vars fail silently." This extends that: when *adding* token names to component CSS, verify they exist in `tokens.json` first.
+
+---
+
 ### Shopify CLI transient SSL errors {#shopify-cli-ssl}
 
 **What happened:** Occasional `SSL alert number 20 (bad record mac)` errors when the CLI calls `admin/api/.../graphql.json`. Error is not reproducible — retrying the same command succeeded immediately. Suspect environmental (VPN interference, flaky connection, or TLS stack issue in Node's https module).

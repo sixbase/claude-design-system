@@ -1,0 +1,62 @@
+{{ 'feature-block.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign title = section.settings.title
+  assign description = section.settings.description
+  assign image = section.settings.image
+  assign reverse = section.settings.reverse
+  assign cta_label = section.settings.cta_label
+  assign cta_url = section.settings.cta_url
+  assign block_class = 'ds-feature-block'
+  if reverse
+    assign block_class = block_class | append: ' ds-feature-block--reverse'
+  endif
+-%}
+
+<section class="ds-section">
+  <div class="ds-page-container">
+    <div class="{{ block_class }}">
+      <div class="ds-feature-block__image">
+        {%- if image != blank -%}
+          {% render 'responsive-image',
+            image: image,
+            alt: title,
+            sizes: '(min-width: 768px) 50vw, 100vw'
+          %}
+        {%- endif -%}
+      </div>
+
+      <div class="ds-feature-block__text">
+        {%- if title != blank -%}
+          <h2 class="ds-heading ds-heading--xl ds-feature-block__title">{{ title | escape }}</h2>
+        {%- endif -%}
+
+        {%- if description != blank -%}
+          <p class="ds-text ds-text--base">{{ description | escape }}</p>
+        {%- endif -%}
+
+        {%- if cta_label != blank and cta_url != blank -%}
+          <a
+            href="{{ cta_url }}"
+            class="ds-button ds-button--secondary ds-button--md"
+          >{{ cta_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Feature block",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Our craft" },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "cta_label", "label": "Button label" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "checkbox", "id": "reverse", "label": "Swap image and text positions", "default": false }
+  ],
+  "presets": [{ "name": "Feature block" }]
+}
+{% endschema %}
