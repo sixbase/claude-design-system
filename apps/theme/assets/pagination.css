@@ -77,6 +77,11 @@
   height: var(--size-control-sm);
 }
 
+/* Default (md) pagination size — base sizing already on .ds-pagination. */
+.ds-pagination--md {
+  gap: var(--spacing-2);
+}
+
 /* ─── Page info text (mobile) ────────────────────────── */
 .ds-pagination__info {
   color: var(--color-foreground-subtle);

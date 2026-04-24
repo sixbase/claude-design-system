@@ -19,18 +19,15 @@
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
-    {% if page_description %}
-      <meta name="description" content="{{ page_description | escape }}">
-    {% endif %}
+    {%- assign effective_description = page_description | default: shop.description | default: shop.name -%}
+    <meta name="description" content="{{ effective_description | escape }}">
 
     {%- comment -%} Open Graph + Twitter Card {%- endcomment -%}
     <meta property="og:site_name" content="{{ shop.name }}">
     <meta property="og:url" content="{{ canonical_url }}">
     <meta property="og:title" content="{{ page_title | escape }}">
     <meta property="og:type" content="{% if template.name == 'product' %}product{% elsif template.name == 'article' %}article{% else %}website{% endif %}">
-    {%- if page_description -%}
-      <meta property="og:description" content="{{ page_description | escape }}">
-    {%- endif -%}
+    <meta property="og:description" content="{{ effective_description | escape }}">
     <meta property="og:locale" content="{{ request.locale.iso_code }}">
     {%- if template.name == 'product' and product.featured_media -%}
       <meta property="og:image" content="{{ product.featured_media | image_url: width: 1200 }}">
@@ -42,6 +39,8 @@
       <meta property="og:image:height" content="{{ 1200 | divided_by: settings.share_image.aspect_ratio | round }}">
     {%- elsif settings.logo -%}
       <meta property="og:image" content="{{ settings.logo | image_url: width: 1200 }}">
+    {%- else -%}
+      <meta property="og:image" content="{{ 'mason-supply-co-logo.svg' | asset_url }}">
     {%- endif -%}
     <meta name="twitter:card" content="summary_large_image">
 

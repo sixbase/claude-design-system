@@ -34,7 +34,7 @@
 }
 
 .ds-header__inner {
-  max-width: 1200px;
+  max-width: var(--size-container-max);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -122,8 +122,8 @@
   align-items: center;
   justify-content: center;
   /* WCAG 2.5.5 target size: 44px on touch/mobile, 36px on desktop. */
-  width: 44px;
-  height: 44px;
+  width: var(--size-touch-target-lg);
+  height: var(--size-touch-target-lg);
   border: none;
   background: none;
   cursor: pointer;
@@ -143,6 +143,15 @@
     width: var(--size-touch-target, 36px);
     height: var(--size-touch-target, 36px);
   }
+}
+
+/* Namespace hooks for each icon-button kind. Layout + size come
+   from .ds-header__icon-btn; these markers let consumers scope
+   additional style (e.g. color accents) to a specific button. */
+.ds-header__cart,
+.ds-header__search,
+.ds-header__theme-toggle {
+  position: relative;
 }
 
 .ds-header__icon-btn:hover {

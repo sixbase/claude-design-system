@@ -31,6 +31,14 @@
   max-width: var(--size-modal-md);
 }
 
+/* Touch-target hit-area floor on mobile — WCAG 2.5.5. */
+@media (max-width: 767px) {
+  .ds-newsletter__form .ds-button,
+  .ds-newsletter__form .ds-input-field {
+    min-height: var(--size-touch-target-lg);
+  }
+}
+
 .ds-newsletter__input-wrap {
   width: 100%;
 }

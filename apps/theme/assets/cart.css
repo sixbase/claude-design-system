@@ -8,6 +8,12 @@
  * Everything stacks on mobile.
  */
 
+/* Scrollable list wrapper — allows horizontal scroll on narrow
+   viewports if a cart row overflows its container. */
+.ds-cart__items-wrapper {
+  overflow-x: auto;
+}
+
 .ds-cart {
   padding-block: var(--spacing-10) var(--spacing-16);
 }

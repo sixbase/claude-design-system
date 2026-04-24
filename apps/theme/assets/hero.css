@@ -66,3 +66,7 @@
 .ds-hero--has-image .ds-hero__body {
   color: inherit;
 }
+
+.ds-hero__cta {
+  margin-top: var(--spacing-2);
+}

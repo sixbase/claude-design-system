@@ -76,6 +76,12 @@
   --size-content-lg: 960px;
   --size-content-xl: 1280px;
   --size-touch-target: 36px;
+  --size-touch-target-lg: 44px;
+  --size-container-max: 1200px;
+  --border-width-sm: 1px;
+  --border-width-md: 1.5px;
+  --border-width-lg: 2px;
+  --border-width-xl: 3px;
   --size-modal-sm: 400px;
   --size-modal-md: 520px;
   --size-modal-lg: 680px;
@@ -175,7 +181,7 @@
   --color-background-subtle:    #F2F0EB;
   --color-background-surface:   #FFFFFF;
   --color-foreground:           #131010;
-  --color-foreground-subtle:    #847D73;
+  --color-foreground-subtle:    #6E675E;
   --color-foreground-muted:     #A59E94;
   --color-foreground-secondary: #675F56;
   --color-border:               #E3DED6;
@@ -257,13 +263,8 @@ button, input, select, textarea {
   outline-offset: 2px;
 }
 
-/* ─── Reduced motion ────────────────────────────────── */
-/* Respect OS-level "reduce motion" accessibility setting */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+/* Reduced motion is handled per-component — every component CSS file
+   (button, accordion, carousel, drawer, modal, etc.) ships its own
+   `@media (prefers-reduced-motion: reduce)` block that disables its
+   own animations and transitions. No global `!important` override
+   needed. Search: `grep -l "prefers-reduced-motion" apps/theme/assets`. */

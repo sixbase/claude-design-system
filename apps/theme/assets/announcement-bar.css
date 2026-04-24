@@ -15,7 +15,7 @@
 
 .ds-announcement-bar__inner {
   position: relative;
-  max-width: 1200px;
+  max-width: var(--size-container-max);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -66,13 +66,14 @@
 .ds-announcement-bar__dismiss {
   position: absolute;
   top: 50%;
-  right: var(--spacing-2);
+  right: var(--spacing-1);
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--spacing-6);
-  height: var(--spacing-6);
+  /* WCAG 2.5.5 touch target — 44px hit area with 24px icon visually centered. */
+  width: var(--size-touch-target-lg);
+  height: var(--size-touch-target-lg);
   border: none;
   background: none;
   color: var(--color-primary-foreground);

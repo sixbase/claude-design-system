@@ -1,6 +1,17 @@
 /* ─── CartLineItem component tokens ──────────────────────── */
 /* Ported from packages/components/src/cart-line-item/CartLineItem.css */
 
+/* Wraps the product image so the whole image is a clickable anchor. */
+.ds-cart-line-item__image-link {
+  display: block;
+}
+
+/* Property "view" link inside a cart row (e.g., engraving notes). */
+.ds-cart-line-item__property-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .ds-cart-line-item {
   --cart-line-item-image-size: var(--spacing-20);
   --cart-line-item-gap: var(--spacing-3);

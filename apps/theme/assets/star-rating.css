@@ -24,6 +24,16 @@
   fill: var(--color-border);
 }
 
+/* Rendered state markers set by the Liquid template based on the
+   rating value for each position. Visual fill is driven by the
+   __star-fill width; the modifiers are namespace hooks for scoped
+   styling (e.g., hover, animation). */
+.ds-star-rating__star--full,
+.ds-star-rating__star--half,
+.ds-star-rating__star--empty {
+  position: relative;
+}
+
 .ds-star-rating__count {
   color: var(--color-foreground-subtle);
 }

@@ -87,6 +87,7 @@
 .ds-product-card {
   --card-radius: var(--radius-md);
   --card-padding: var(--spacing-3);
+  --card-image-ratio: 4 / 5;
   --product-card-width: 100%;
 
   width: var(--product-card-width);

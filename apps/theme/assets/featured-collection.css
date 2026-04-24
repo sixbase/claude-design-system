@@ -1,5 +1,9 @@
 /* ─── Featured collection section ────────────────────────── */
 
+.ds-featured-collection {
+  display: block;
+}
+
 .ds-featured-collection__header {
   display: flex;
   flex-direction: column;

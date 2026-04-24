@@ -11,7 +11,7 @@
 }
 
 .ds-footer__inner {
-  max-width: 1200px;
+  max-width: var(--size-container-max);
   margin: 0 auto;
   padding: var(--spacing-12) var(--spacing-4) var(--spacing-8);
 }
@@ -90,6 +90,13 @@
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
   margin: 0 0 var(--spacing-3) 0;
+}
+
+/* Link-column wrapper. Uses column flex so heading and list stack
+   with consistent internal rhythm; width is driven by the grid. */
+.ds-footer__column {
+  display: flex;
+  flex-direction: column;
 }
 
 .ds-footer__links {
