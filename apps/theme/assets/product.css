@@ -1,0 +1,196 @@
+/* ─── Product section — layout only ─────────────────────── */
+/*
+ * Section-scoped composition styles for the product template.
+ * Component-level styles (variant, stock, gallery, etc.) live in
+ * their own CSS files. This file only handles how those components
+ * are arranged on the page.
+ */
+
+.ds-product {
+  padding-block: var(--spacing-16);
+}
+
+/* ─── Breadcrumb rhythm ──────────────────────────────────── */
+.ds-product__breadcrumb {
+  margin-bottom: var(--spacing-8);
+}
+
+/* ─── Gallery column ─────────────────────────────────────── */
+.ds-product__gallery {
+  /* 7/12 column handled by .ds-layout--golden parent */
+}
+
+/* ─── Details column ─────────────────────────────────────── */
+.ds-product__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+/* Desktop sticky details column */
+@media (min-width: 1024px) {
+  .ds-product__details {
+    position: sticky;
+    top: var(--spacing-6);
+    align-self: start;
+  }
+}
+
+/* ─── Header block (vendor, title, rating) ───────────────── */
+.ds-product__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-product__vendor {
+  color: var(--color-foreground-subtle);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.ds-product__title {
+  color: var(--color-foreground);
+}
+
+.ds-product__rating {
+  margin-top: var(--spacing-1);
+}
+
+/* ─── Price + stock row ──────────────────────────────────── */
+.ds-product__price-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+/* ─── SKU line ───────────────────────────────────────────── */
+.ds-product__sku {
+  color: var(--color-foreground-subtle);
+}
+
+/* ─── Form region ────────────────────────────────────────── */
+.ds-product__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  margin: 0;
+}
+
+.ds-product__form-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-product__form-row-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-foreground);
+}
+
+.ds-product__actions {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.ds-product__actions > .ds-add-to-cart {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Description ────────────────────────────────────────── */
+.ds-product__description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  color: var(--color-foreground-secondary);
+}
+
+/* ─── Specifications (accordion) ─────────────────────────── */
+.ds-product__specs {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-6);
+}
+
+.ds-product__specs-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  cursor: pointer;
+  list-style: none;
+  padding: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-foreground);
+}
+
+.ds-product__specs-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ds-product__specs-summary::after {
+  content: '';
+  width: var(--size-icon);
+  height: var(--size-icon);
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center / contain no-repeat;
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.ds-product__specs[open] .ds-product__specs-summary::after {
+  transform: rotate(180deg);
+}
+
+.ds-product__specs-body {
+  padding-top: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  color: var(--color-foreground-secondary);
+}
+
+.ds-product__specs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-2) var(--spacing-4);
+}
+
+.ds-product__specs-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding-block: var(--spacing-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ds-product__specs-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-foreground-subtle);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.ds-product__specs-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-foreground);
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-product__specs-summary::after {
+    transition: none;
+  }
+}

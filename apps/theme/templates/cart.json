@@ -1,10 +1,10 @@
 {
   "sections": {
     "main": {
-      "type": "main-placeholder",
+      "type": "main-cart",
       "settings": {
-        "heading": "Cart",
-        "body": "Cart template placeholder."
+        "show_cart_note": true,
+        "show_vendor": true
       }
     }
   },

@@ -1,0 +1,257 @@
+{%- comment -%}
+  Render collection filters (faceted navigation + active pills).
+
+  Mirrors the CollectionFilters component in
+  packages/components/src/collection-filters/CollectionFilters.tsx.
+
+  Uses Shopify's `collection.filters` drop for values. Filter state is
+  expressed via URL parameters (`filter.v.option.*`, `filter.v.price.gte`),
+  so the snippet is fully SSR — no JS required for the core interactions.
+  Mobile uses a <details>-driven drawer for MVP (per port plan).
+
+  Accepts:
+    context      'desktop' | 'mobile' | 'both' (default 'both') —
+                 controls which visibility wrappers render.
+
+  Usage:
+    {% render 'collection-filters' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign cf_context = context | default: 'both'
+  assign active_count = 0
+  for filter in collection.filters
+    assign active_count = active_count | plus: filter.active_values.size
+    if filter.type == 'price_range'
+      if filter.min_value.value != blank or filter.max_value.value != blank
+        assign active_count = active_count | plus: 1
+      endif
+    endif
+  endfor
+  assign results_count = collection.products_count
+-%}
+
+<div class="ds-collection-filters">
+  {%- comment -%} SR-only results count announcement {%- endcomment -%}
+  <div class="ds-sr-only" aria-live="polite" aria-atomic="true">
+    {{ results_count }} {% if results_count == 1 %}product{% else %}products{% endif %}
+  </div>
+
+  {%- comment -%} Active filter pills — dismiss via link to filter.url_to_remove {%- endcomment -%}
+  {%- if active_count > 0 -%}
+    <div class="ds-collection-filters__active-pills" aria-label="Active filters" role="group">
+      {%- for filter in collection.filters -%}
+        {%- for value in filter.active_values -%}
+          <a
+            href="{{ value.url_to_remove }}"
+            class="ds-collection-filters__pill"
+            aria-label="Remove filter: {{ filter.label | escape }}: {{ value.label | escape }}"
+          >
+            <span class="ds-collection-filters__pill-text">
+              {{ filter.label | escape }}: {{ value.label | escape }}
+            </span>
+            <svg
+              class="ds-collection-filters__pill-icon"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M9 3L3 9M3 3l6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </a>
+        {%- endfor -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+            <a
+              href="{{ filter.url_to_remove }}"
+              class="ds-collection-filters__pill"
+              aria-label="Remove price filter"
+            >
+              <span class="ds-collection-filters__pill-text">
+                {{ filter.label | escape }}:
+                {%- if filter.min_value.value != blank %} {{ filter.min_value.value | money }}{% endif -%}
+                –
+                {%- if filter.max_value.value != blank %} {{ filter.max_value.value | money }}{% endif -%}
+              </span>
+              <svg
+                class="ds-collection-filters__pill-icon"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M9 3L3 9M3 3l6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      <a
+        href="{{ collection.url }}"
+        class="ds-button ds-button--ghost ds-button--sm"
+        aria-label="Clear all filters"
+      >
+        Clear all
+      </a>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Shared panel markup — rendered into desktop sidebar and mobile drawer {%- endcomment -%}
+  {%- capture filter_panel -%}
+    <form method="get" class="ds-collection-filters__panel">
+      {%- comment -%} Preserve sort + other non-filter params across filter submissions {%- endcomment -%}
+      {%- if current_tags -%}
+        {%- for tag in current_tags -%}
+          <input type="hidden" name="constraint" value="{{ tag | escape }}">
+        {%- endfor -%}
+      {%- endif -%}
+      {%- if collection.sort_by != blank -%}
+        <input type="hidden" name="sort_by" value="{{ collection.sort_by | escape }}">
+      {%- endif -%}
+
+      {%- if active_count > 0 -%}
+        <div class="ds-collection-filters__clear-row">
+          <span class="ds-text ds-text--sm ds-collection-filters__active-label">
+            {{ active_count }} active {% if active_count == 1 %}filter{% else %}filters{% endif %}
+          </span>
+          <a
+            href="{{ collection.url }}"
+            class="ds-button ds-button--ghost ds-button--sm"
+            aria-label="Clear all filters"
+          >
+            Clear all
+          </a>
+        </div>
+      {%- endif -%}
+
+      {%- for filter in collection.filters -%}
+        <details
+          class="ds-collection-filters__group"
+          {% if forloop.index0 < 3 %}open{% endif %}
+        >
+          <summary class="ds-collection-filters__group-summary">
+            <span>{{ filter.label | escape }}</span>
+            <span class="ds-collection-filters__group-chevron">
+              {% render 'icon', name: 'chevron-down', size: 'sm' %}
+            </span>
+          </summary>
+
+          <div class="ds-collection-filters__group-content">
+            {%- case filter.type -%}
+              {%- when 'list', 'boolean' -%}
+                <div class="ds-collection-filters__value-list" role="group" aria-label="{{ filter.label | escape }}">
+                  {%- for value in filter.values -%}
+                    <div class="ds-collection-filters__value-row">
+                      <label class="ds-collection-filters__checkbox-label">
+                        <input
+                          type="checkbox"
+                          class="ds-collection-filters__checkbox-input"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          {% if value.active %}checked{% endif %}
+                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          data-filter-auto-submit
+                        >
+                        <span>{{ value.label | escape }}</span>
+                      </label>
+                      {%- if value.count != blank -%}
+                        <span
+                          class="ds-collection-filters__value-count"
+                          aria-label="{{ value.count }} products"
+                        >({{ value.count }})</span>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+
+              {%- when 'price_range' -%}
+                <div class="ds-collection-filters__price-range">
+                  <div class="ds-collection-filters__price-inputs">
+                    <div class="ds-input-root">
+                      <label class="ds-input-label" for="PriceMin-{{ cf_context }}">Min</label>
+                      <input
+                        type="number"
+                        id="PriceMin-{{ cf_context }}"
+                        class="ds-input-field ds-input-field--sm"
+                        name="{{ filter.min_value.param_name }}"
+                        value="{{ filter.min_value.value }}"
+                        placeholder="{{ 0 | money_without_currency }}"
+                        min="0"
+                        inputmode="decimal"
+                        aria-label="Minimum price for {{ filter.label | escape }}"
+                      >
+                    </div>
+                    <span class="ds-collection-filters__price-separator" aria-hidden="true">–</span>
+                    <div class="ds-input-root">
+                      <label class="ds-input-label" for="PriceMax-{{ cf_context }}">Max</label>
+                      <input
+                        type="number"
+                        id="PriceMax-{{ cf_context }}"
+                        class="ds-input-field ds-input-field--sm"
+                        name="{{ filter.max_value.param_name }}"
+                        value="{{ filter.max_value.value }}"
+                        placeholder="{{ filter.range_max | money_without_currency }}"
+                        min="0"
+                        inputmode="decimal"
+                        aria-label="Maximum price for {{ filter.label | escape }}"
+                      >
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    class="ds-button ds-button--secondary ds-button--sm ds-collection-filters__price-apply"
+                  >
+                    Apply
+                  </button>
+                </div>
+            {%- endcase -%}
+          </div>
+        </details>
+      {%- endfor -%}
+
+      {%- comment -%} No-JS fallback: always offer an explicit submit {%- endcomment -%}
+      <noscript>
+        <button type="submit" class="ds-button ds-button--primary ds-button--sm">
+          Apply filters
+        </button>
+      </noscript>
+    </form>
+  {%- endcapture -%}
+
+  <script>
+    (function () {
+      document.querySelectorAll('[data-filter-auto-submit]').forEach(function (el) {
+        el.addEventListener('change', function () {
+          if (el.form) el.form.submit();
+        });
+      });
+    })();
+  </script>
+
+  {%- if cf_context == 'desktop' or cf_context == 'both' -%}
+    <div class="ds-collection-filters__desktop">
+      {{ filter_panel }}
+    </div>
+  {%- endif -%}
+
+  {%- if cf_context == 'mobile' or cf_context == 'both' -%}
+    <div class="ds-collection-filters__mobile">
+      <details class="ds-collection-filters__mobile-drawer">
+        <summary class="ds-button ds-button--secondary ds-button--sm ds-collection-filters__mobile-trigger">
+          Filters
+          {%- if active_count > 0 -%}
+            <span class="ds-badge ds-badge--sm ds-badge--default ds-collection-filters__mobile-badge">
+              {{ active_count }}
+            </span>
+          {%- endif -%}
+        </summary>
+        <div class="ds-collection-filters__mobile-panel">
+          {{ filter_panel }}
+        </div>
+      </details>
+    </div>
+  {%- endif -%}
+</div>

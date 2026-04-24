@@ -1,12 +1,6 @@
 {
   "sections": {
-    "main": {
-      "type": "main-placeholder",
-      "settings": {
-        "heading": "Collection",
-        "body": "Collection template placeholder."
-      }
-    }
+    "main": { "type": "main-collection", "settings": {} }
   },
   "order": ["main"]
 }

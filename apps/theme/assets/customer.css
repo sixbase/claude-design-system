@@ -1,0 +1,402 @@
+/* ─── Customer (account) page layout ─────────────────────
+   Shared layout + form spacing for the 7 customer templates:
+   login, register, reset password, activate, account, addresses, order.
+
+   Design intent:
+   - Narrow centered column for auth/identity forms.
+   - Wider column for the logged-in account views (order list, addresses, order detail).
+   - Consistent vertical rhythm between header, forms, meta, and alerts.
+
+   Spacing uses the component-internal 4px grid (--spacing-*).
+   Section-level margin (.ds-section) handles outer page rhythm.
+*/
+
+/* ─── Page wrappers ──────────────────────────────────────── */
+
+.ds-customer {
+  padding-block: var(--spacing-12);
+}
+
+/* Narrow, centered form column (login, register, reset, activate).
+   --size-modal-md (520px) is the closest existing token to a ~480px
+   auth-form width. See token gap note in the port PR. */
+.ds-customer--narrow > .ds-customer__inner {
+  max-width: var(--size-modal-md);
+  margin-inline: auto;
+}
+
+/* Wider column for account dashboards (orders list, addresses, order detail).
+   --size-content-md (768px) keeps tables and address grids readable
+   without spanning the full 1200px page grid. */
+.ds-customer--wide > .ds-customer__inner {
+  max-width: var(--size-content-md);
+  margin-inline: auto;
+}
+
+/* ─── Page header block ──────────────────────────────────── */
+
+.ds-customer__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-8);
+}
+
+.ds-customer__title {
+  /* Component inherits .ds-heading font-family and optical centering. */
+}
+
+.ds-customer__subtitle {
+  color: var(--color-foreground-muted);
+}
+
+/* ─── Alerts stack above the form ────────────────────────── */
+
+.ds-customer__alerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+}
+
+/* ─── Native <select> styling ─────────────────────────────
+   The design-system Select is a Radix-portal component — it can't render
+   inside Shopify's CountryProvinceSelector, which requires a native
+   <select>. This is a narrow, theme-only fallback that matches input
+   visuals so country/province pickers are consistent with the rest of
+   the form. Token-only. Flag as a gap if a primitive native-select
+   pattern lands later. */
+
+.ds-native-select {
+  --input-border-color: var(--color-border);
+  --input-bg: var(--color-background-surface);
+  --input-radius: var(--radius-md);
+
+  width: 100%;
+  padding: 0 var(--spacing-3);
+  color: var(--color-foreground);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  font-family: var(--font-family-body);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.ds-native-select--md {
+  height: var(--size-control-md);
+  font-size: var(--font-size-sm);
+}
+
+.ds-native-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.ds-native-select:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-border-strong);
+}
+
+.ds-native-select:disabled {
+  opacity: var(--opacity-medium);
+  cursor: not-allowed;
+  background-color: var(--color-background-subtle);
+}
+
+/* ─── Form stack ─────────────────────────────────────────── */
+
+.ds-customer__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* Side-by-side field pair (e.g. first name + last name, city + zip). */
+.ds-customer__field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+@media (max-width: 767px) {
+  .ds-customer__field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Row for checkbox + helper link (remember-me, default-address). */
+.ds-customer__checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Actions row — usually a primary submit full-width; secondary link beneath. */
+.ds-customer__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-2);
+}
+
+/* ─── Secondary links (Back to login, Forgot password, etc.) ─ */
+
+.ds-customer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  justify-content: space-between;
+  margin-top: var(--spacing-6);
+}
+
+.ds-customer__link {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  transition: color var(--transition-fast);
+}
+
+.ds-customer__link:hover {
+  color: var(--color-primary);
+}
+
+.ds-customer__link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Account dashboard blocks ───────────────────────────── */
+
+.ds-customer__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-10);
+}
+
+.ds-customer__block-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+/* ─── Definition list for customer details / order meta ──── */
+
+.ds-customer__dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-2) var(--spacing-6);
+  margin: 0;
+}
+
+.ds-customer__dl dt {
+  color: var(--color-foreground-muted);
+  font-size: var(--font-size-sm);
+}
+
+.ds-customer__dl dd {
+  margin: 0;
+  color: var(--color-foreground);
+  font-size: var(--font-size-sm);
+}
+
+/* ─── Order history / address list table ─────────────────── */
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family-body);
+  color: var(--color-foreground);
+  font-size: var(--font-size-sm);
+}
+
+.ds-table caption {
+  /* Visible captions use .ds-heading; screen-reader captions use .ds-sr-only. */
+  text-align: left;
+  margin-bottom: var(--spacing-3);
+}
+
+.ds-table th,
+.ds-table td {
+  padding: var(--spacing-3) var(--spacing-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+
+  /* Optical centering for fixed-height table cells. */
+  text-box-trim: both;
+  text-box-edge: cap alphabetic;
+}
+
+.ds-table th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-foreground-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  border-bottom-color: var(--color-border-strong);
+}
+
+.ds-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ds-table__numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive: allow horizontal scroll on narrow viewports. */
+.ds-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Address cards (addresses page) ──────────────────────── */
+
+.ds-customer__address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-6);
+}
+
+@media (max-width: 767px) {
+  .ds-customer__address-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ds-customer__address-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background-surface);
+}
+
+.ds-customer__address-card--default {
+  border-color: var(--color-primary);
+}
+
+.ds-customer__address-card__body {
+  color: var(--color-foreground);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  font-style: normal;
+  margin: 0;
+}
+
+.ds-customer__address-card__actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-2);
+}
+
+/* ─── Address form panel (new / edit) ─────────────────────── */
+
+.ds-customer__panel {
+  padding: var(--spacing-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background-surface);
+  margin-bottom: var(--spacing-8);
+}
+
+/* ─── Order detail meta block ─────────────────────────────── */
+
+.ds-customer__order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4) var(--spacing-8);
+  padding: var(--spacing-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background-subtle);
+  margin-bottom: var(--spacing-6);
+}
+
+.ds-customer__order-meta__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.ds-customer__order-meta__label {
+  color: var(--color-foreground-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.ds-customer__order-meta__value {
+  color: var(--color-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ─── Order line-item image in table cell ─────────────────── */
+
+.ds-customer__line-item {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+}
+
+.ds-customer__line-item__image {
+  width: var(--size-control-lg);
+  height: var(--size-control-lg);
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background-color: var(--color-background-subtle);
+}
+
+.ds-customer__line-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+/* ─── Pagination nav ─────────────────────────────────────── */
+
+.ds-customer__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-6);
+}
+
+.ds-customer__pagination__spacer {
+  flex: 1;
+}
+
+/* ─── Empty state (no orders / no addresses) ──────────────── */
+
+.ds-customer__empty {
+  padding: var(--spacing-8);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--color-foreground-muted);
+  background-color: var(--color-background-subtle);
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-customer__link {
+    transition: none;
+  }
+}

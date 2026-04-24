@@ -1,8 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "main-placeholder",
-      "settings": { "heading": "Register", "body": "Register placeholder." }
+      "type": "main-register",
+      "settings": {}
     }
   },
   "order": ["main"]

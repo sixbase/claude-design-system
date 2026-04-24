@@ -1,0 +1,136 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'alert.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading_text = section.settings.heading
+  if heading_text == blank
+    assign heading_text = 'Create account'
+  endif
+-%}
+
+<section class="ds-page-container ds-section ds-customer ds-customer--narrow" aria-labelledby="CustomerRegisterTitle">
+  <div class="ds-customer__inner">
+    <header class="ds-customer__header">
+      <h1 id="CustomerRegisterTitle" class="ds-heading ds-heading--2xl ds-customer__title">
+        {{ heading_text }}
+      </h1>
+      <p class="ds-text ds-text--sm ds-customer__subtitle">
+        Save your addresses, track orders, and check out faster.
+      </p>
+    </header>
+
+    {%- form 'create_customer', class: 'ds-customer__form', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="ds-customer__alerts">
+          <div class="ds-alert ds-alert--destructive" role="alert">
+            <div class="ds-alert__content">
+              <p class="ds-text ds-text--sm ds-alert__title">
+                We couldn't create your account.
+              </p>
+              <ul class="ds-text ds-text--sm ds-alert__description">
+                {%- for field in form.errors -%}
+                  <li>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="ds-customer__field-row">
+        <div class="ds-input-root">
+          <label for="CustomerRegisterFirstName" class="ds-input-label ds-input-label--required">
+            First name
+          </label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="CustomerRegisterFirstName"
+            class="ds-input-field ds-input-field--md"
+            autocomplete="given-name"
+            value="{% if form.first_name %}{{ form.first_name }}{% endif %}"
+            required
+          >
+        </div>
+
+        <div class="ds-input-root">
+          <label for="CustomerRegisterLastName" class="ds-input-label ds-input-label--required">
+            Last name
+          </label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="CustomerRegisterLastName"
+            class="ds-input-field ds-input-field--md"
+            autocomplete="family-name"
+            value="{% if form.last_name %}{{ form.last_name }}{% endif %}"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="ds-input-root">
+        <label for="CustomerRegisterEmail" class="ds-input-label ds-input-label--required">
+          Email
+        </label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="CustomerRegisterEmail"
+          class="ds-input-field ds-input-field--md"
+          autocomplete="email"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          value="{% if form.email %}{{ form.email }}{% endif %}"
+          required
+        >
+      </div>
+
+      <div class="ds-input-root">
+        <label for="CustomerRegisterPassword" class="ds-input-label ds-input-label--required">
+          Password
+        </label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="CustomerRegisterPassword"
+          class="ds-input-field ds-input-field--md"
+          autocomplete="new-password"
+          minlength="5"
+          required
+        >
+        <span class="ds-input-hint">
+          At least 5 characters.
+        </span>
+      </div>
+
+      <div class="ds-customer__actions">
+        <button type="submit" class="ds-button ds-button--primary ds-button--md ds-button--full-width">
+          Create account
+        </button>
+      </div>
+
+      <div class="ds-customer__meta">
+        <a class="ds-text ds-text--sm ds-customer__link" href="{{ routes.account_login_url }}">
+          Already have an account? Sign in
+        </a>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Register",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Create account"
+    }
+  ],
+  "presets": [{ "name": "Register" }]
+}
+{% endschema %}

@@ -1,8 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "main-placeholder",
-      "settings": { "heading": "Addresses", "body": "Addresses placeholder." }
+      "type": "main-addresses",
+      "settings": {}
     }
   },
   "order": ["main"]

@@ -1,0 +1,198 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'alert.css' | asset_url | stylesheet_tag }}
+
+<section class="ds-page-container ds-section ds-customer ds-customer--wide" aria-labelledby="CustomerOrderTitle">
+  <div class="ds-customer__inner">
+    <header class="ds-customer__header">
+      <h1 id="CustomerOrderTitle" class="ds-heading ds-heading--2xl ds-customer__title">
+        Order {{ order.name }}
+      </h1>
+      <p class="ds-text ds-text--sm ds-customer__subtitle">
+        Placed {{ order.created_at | date: format: 'month_day_year' }}
+        {%- if order.cancelled -%}
+          &middot; <span>Cancelled on {{ order.cancelled_at | date: format: 'month_day_year' }}</span>
+        {%- endif -%}
+      </p>
+    </header>
+
+    {%- if order.cancelled -%}
+      <div class="ds-customer__alerts">
+        <div class="ds-alert ds-alert--warning" role="status">
+          <div class="ds-alert__content">
+            <p class="ds-text ds-text--sm ds-alert__title">Order cancelled</p>
+            {%- if order.cancel_reason_label -%}
+              <p class="ds-text ds-text--sm ds-alert__description">
+                Reason: {{ order.cancel_reason_label }}
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="ds-customer__order-meta" aria-label="Order summary">
+      <div class="ds-customer__order-meta__item">
+        <span class="ds-customer__order-meta__label">Payment</span>
+        <span class="ds-customer__order-meta__value">
+          <span class="ds-badge ds-badge--sm ds-badge--{% if order.financial_status == 'paid' %}success{% elsif order.financial_status == 'refunded' or order.financial_status == 'voided' %}outline{% else %}warning{% endif %}">
+            {{ order.financial_status_label }}
+          </span>
+        </span>
+      </div>
+      <div class="ds-customer__order-meta__item">
+        <span class="ds-customer__order-meta__label">Fulfillment</span>
+        <span class="ds-customer__order-meta__value">
+          <span class="ds-badge ds-badge--sm ds-badge--{% if order.fulfillment_status == 'fulfilled' %}success{% else %}outline{% endif %}">
+            {{ order.fulfillment_status_label | default: 'Unfulfilled' }}
+          </span>
+        </span>
+      </div>
+      {%- if order.shipping_address -%}
+        <div class="ds-customer__order-meta__item">
+          <span class="ds-customer__order-meta__label">Shipping to</span>
+          <span class="ds-customer__order-meta__value">
+            {{ order.shipping_address.city }}, {{ order.shipping_address.province_code }}
+          </span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ds-customer__block">
+      <div class="ds-customer__block-header">
+        <h2 class="ds-heading ds-heading--xl">Items</h2>
+      </div>
+
+      <div class="ds-table-scroll">
+        <table class="ds-table">
+          <caption class="ds-sr-only">Items in order {{ order.name }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col" class="ds-table__numeric">Price</th>
+              <th scope="col" class="ds-table__numeric">Qty</th>
+              <th scope="col" class="ds-table__numeric">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for line_item in order.line_items -%}
+              <tr>
+                <td>
+                  <div class="ds-customer__line-item">
+                    {%- if line_item.image -%}
+                      <img
+                        class="ds-customer__line-item__image"
+                        src="{{ line_item.image | image_url: width: 110 }}"
+                        srcset="{{ line_item.image | image_url: width: 110 }} 110w, {{ line_item.image | image_url: width: 220 }} 220w"
+                        sizes="55px"
+                        alt="{{ line_item.title | escape }}"
+                        width="55"
+                        height="55"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
+                    <div class="ds-customer__line-item__body">
+                      {%- if line_item.url -%}
+                        <a class="ds-customer__link" href="{{ line_item.url }}">{{ line_item.product.title }}</a>
+                      {%- else -%}
+                        <span>{{ line_item.product.title }}</span>
+                      {%- endif -%}
+                      {%- if line_item.variant.title and line_item.variant.title != 'Default Title' -%}
+                        <span class="ds-text ds-text--sm ds-text--muted">{{ line_item.variant.title }}</span>
+                      {%- endif -%}
+                      {%- if line_item.sku != blank -%}
+                        <span class="ds-text ds-text--sm ds-text--muted">SKU: {{ line_item.sku }}</span>
+                      {%- endif -%}
+                      {%- if line_item.fulfillment -%}
+                        <span class="ds-text ds-text--sm ds-text--muted">
+                          Fulfilled {{ line_item.fulfillment.created_at | date: format: 'month_day_year' }}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </td>
+                <td class="ds-table__numeric">{{ line_item.final_price | money }}</td>
+                <td class="ds-table__numeric">{{ line_item.quantity }}</td>
+                <td class="ds-table__numeric">{{ line_item.final_line_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="3" class="ds-table__numeric">Subtotal</th>
+              <td class="ds-table__numeric">{{ order.subtotal_price | money }}</td>
+            </tr>
+            {%- for discount_application in order.discount_applications -%}
+              <tr>
+                <th scope="row" colspan="3" class="ds-table__numeric">
+                  Discount ({{ discount_application.title }})
+                </th>
+                <td class="ds-table__numeric">
+                  &minus;{{ discount_application.total_allocated_amount | money }}
+                </td>
+              </tr>
+            {%- endfor -%}
+            {%- for shipping_method in order.shipping_methods -%}
+              <tr>
+                <th scope="row" colspan="3" class="ds-table__numeric">
+                  Shipping ({{ shipping_method.title }})
+                </th>
+                <td class="ds-table__numeric">{{ shipping_method.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            {%- for tax_line in order.tax_lines -%}
+              <tr>
+                <th scope="row" colspan="3" class="ds-table__numeric">
+                  Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
+                </th>
+                <td class="ds-table__numeric">{{ tax_line.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            <tr>
+              <th scope="row" colspan="3" class="ds-table__numeric">Total</th>
+              <td class="ds-table__numeric">
+                <strong>{{ order.total_price | money_with_currency }}</strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    {%- if order.shipping_address or order.billing_address -%}
+      <div class="ds-customer__block">
+        <div class="ds-customer__address-grid">
+          {%- if order.shipping_address -%}
+            <article class="ds-customer__address-card">
+              <h2 class="ds-heading ds-heading--xl">Shipping address</h2>
+              <address class="ds-customer__address-card__body">
+                {{ order.shipping_address | format_address }}
+              </address>
+            </article>
+          {%- endif -%}
+          {%- if order.billing_address -%}
+            <article class="ds-customer__address-card">
+              <h2 class="ds-heading ds-heading--xl">Billing address</h2>
+              <address class="ds-customer__address-card__body">
+                {{ order.billing_address | format_address }}
+              </address>
+            </article>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="ds-customer__actions">
+      <a class="ds-text ds-text--sm ds-customer__link" href="{{ routes.account_url }}">
+        Back to account
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Order",
+  "settings": [],
+  "presets": [{ "name": "Order" }]
+}
+{% endschema %}

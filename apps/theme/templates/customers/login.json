@@ -1,8 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "main-placeholder",
-      "settings": { "heading": "Login", "body": "Login placeholder." }
+      "type": "main-login",
+      "settings": {}
     }
   },
   "order": ["main"]

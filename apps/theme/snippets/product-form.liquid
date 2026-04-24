@@ -1,0 +1,238 @@
+{%- comment -%}
+  Product form — variant selector + quantity + add-to-cart.
+
+  Mirrors the composition of VariantSelector, QuantitySelector, and
+  AddToCartButton React components. Reusable for the main PDP as well
+  as future quick-view modals.
+
+  Accepts:
+    product   Shopify product object, required
+    section   section object — used to read show_* toggles
+
+  Usage:
+    {% render 'product-form', product: product, section: section %}
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign is_sold_out = false
+  unless current_variant.available
+    assign is_sold_out = true
+  endunless
+
+  assign button_status = 'idle'
+  if is_sold_out
+    assign button_status = 'sold-out'
+  endif
+  assign button_label = 'Add to Bag'
+  if is_sold_out
+    assign button_label = 'Sold Out'
+  endif
+-%}
+
+<form
+  action="{{ routes.cart_add_url }}"
+  method="post"
+  enctype="multipart/form-data"
+  class="ds-product__form"
+  role="form"
+  aria-label="Add to cart"
+  data-product-form
+>
+  <input type="hidden" name="form_type" value="product">
+  <input type="hidden" name="utf8" value="✓">
+  <input
+    type="hidden"
+    name="id"
+    value="{{ current_variant.id }}"
+    data-variant-id-input
+  >
+
+  {%- if product.has_only_default_variant == false and product.options_with_values.size > 0 -%}
+    <div
+      class="ds-variant-selector ds-variant-selector--md"
+      data-variant-selector
+    >
+      {%- for option in product.options_with_values -%}
+        {%- assign option_name = option.name -%}
+        {%- assign option_index0 = forloop.index0 -%}
+        {%- assign selected_option_value = current_variant.options[option_index0] -%}
+        {%- assign option_id = 'product-option-' | append: section.id | append: '-' | append: option_index0 -%}
+
+        <div class="ds-variant-selector__group" data-option-name="{{ option_name | escape }}">
+          <span
+            class="ds-heading ds-heading--xl ds-variant-selector__label"
+            id="{{ option_id }}"
+          >
+            {{ option_name }}
+            <span class="ds-variant-selector__selected-value" data-selected-label>
+              : {{ selected_option_value }}
+            </span>
+          </span>
+
+          <div
+            class="ds-variant-selector__buttons"
+            role="radiogroup"
+            aria-labelledby="{{ option_id }}"
+          >
+            {%- for value in option.values -%}
+              {%- assign is_selected = false -%}
+              {%- if value == selected_option_value -%}
+                {%- assign is_selected = true -%}
+              {%- endif -%}
+
+              {%- comment -%} Find a variant that matches this option value to get its URL {%- endcomment -%}
+              {%- assign matching_variant = null -%}
+              {%- for v in product.variants -%}
+                {%- if v.options[option_index0] == value -%}
+                  {%- assign matching_variant = v -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- assign is_unavailable = false -%}
+              {%- if matching_variant and matching_variant.available == false -%}
+                {%- assign is_unavailable = true -%}
+              {%- endif -%}
+
+              {%- assign option_classes = 'ds-variant-selector__option' -%}
+              {%- if is_selected -%}
+                {%- assign option_classes = option_classes | append: ' ds-variant-selector__option--selected' -%}
+              {%- endif -%}
+              {%- if is_unavailable -%}
+                {%- assign option_classes = option_classes | append: ' ds-variant-selector__option--unavailable' -%}
+              {%- endif -%}
+
+              {%- assign aria_label = value -%}
+              {%- if is_unavailable -%}
+                {%- assign aria_label = value | append: ' (out of stock)' -%}
+              {%- endif -%}
+
+              <a
+                href="{{ matching_variant.url | default: product.url }}"
+                class="{{ option_classes }}"
+                role="radio"
+                aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
+                aria-label="{{ aria_label | escape }}"
+                data-option-value="{{ value | escape }}"
+                data-option-index="{{ option_index0 }}"
+              >
+                <span class="ds-variant-selector__option-label">{{ value }}</span>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="ds-product__form-row">
+    <label
+      for="Quantity-{{ section.id }}"
+      class="ds-product__form-row-label"
+    >
+      Quantity
+    </label>
+    <div
+      class="ds-quantity-selector ds-quantity-selector--md"
+      role="group"
+      aria-label="Quantity"
+    >
+      <button
+        type="button"
+        class="ds-quantity-selector__btn"
+        aria-label="Decrease quantity"
+        data-quantity-decrement
+      >
+        {% render 'icon', name: 'minus', size: 'sm' %}
+      </button>
+      <input
+        id="Quantity-{{ section.id }}"
+        type="number"
+        name="quantity"
+        min="1"
+        step="1"
+        value="1"
+        class="ds-quantity-selector__value"
+        data-quantity-input
+      >
+      <button
+        type="button"
+        class="ds-quantity-selector__btn"
+        aria-label="Increase quantity"
+        data-quantity-increment
+      >
+        {% render 'icon', name: 'plus', size: 'sm' %}
+      </button>
+    </div>
+  </div>
+
+  <div class="ds-product__actions">
+    <button
+      type="submit"
+      class="ds-button ds-button--primary ds-button--lg ds-button--full-width ds-add-to-cart ds-add-to-cart--{{ button_status }}"
+      {% if is_sold_out %}
+        aria-disabled="true"
+        disabled
+      {% endif %}
+      data-add-to-cart-button
+    >
+      {{ button_label }}
+    </button>
+    <span
+      class="ds-add-to-cart__live"
+      aria-live="polite"
+      aria-atomic="true"
+      data-add-to-cart-live
+    ></span>
+  </div>
+</form>
+
+<script>
+  (function () {
+    var form = document.querySelector('[data-product-form]');
+    if (!form) return;
+
+    var qtyInput = form.querySelector('[data-quantity-input]');
+    var decBtn = form.querySelector('[data-quantity-decrement]');
+    var incBtn = form.querySelector('[data-quantity-increment]');
+    var submitBtn = form.querySelector('[data-add-to-cart-button]');
+    var liveRegion = form.querySelector('[data-add-to-cart-live]');
+
+    function clampQuantity() {
+      var min = parseInt(qtyInput.min, 10) || 1;
+      var max = qtyInput.max ? parseInt(qtyInput.max, 10) : Infinity;
+      var current = parseInt(qtyInput.value, 10) || min;
+      if (current < min) current = min;
+      if (current > max) current = max;
+      qtyInput.value = current;
+    }
+
+    if (decBtn) {
+      decBtn.addEventListener('click', function () {
+        var current = parseInt(qtyInput.value, 10) || 1;
+        qtyInput.value = current - 1;
+        clampQuantity();
+      });
+    }
+    if (incBtn) {
+      incBtn.addEventListener('click', function () {
+        var current = parseInt(qtyInput.value, 10) || 1;
+        qtyInput.value = current + 1;
+        clampQuantity();
+      });
+    }
+    if (qtyInput) {
+      qtyInput.addEventListener('change', clampQuantity);
+    }
+
+    if (submitBtn) {
+      form.addEventListener('submit', function () {
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.classList.remove('ds-add-to-cart--idle');
+        submitBtn.classList.add('ds-add-to-cart--loading', 'ds-button--loading');
+        if (liveRegion) liveRegion.textContent = 'Adding…';
+      });
+    }
+  })();
+</script>
