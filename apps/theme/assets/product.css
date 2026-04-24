@@ -7,12 +7,9 @@
  */
 
 .ds-product {
-  padding-block: var(--spacing-16);
-}
-
-/* ─── Breadcrumb rhythm ──────────────────────────────────── */
-.ds-product__breadcrumb {
-  margin-bottom: var(--spacing-8);
+  /* Section rhythm supplied by the .shopify-section wrapper
+     (see .ds-main > .shopify-section + rule in layout.css).
+     Breadcrumb owns its own bottom margin — no wrapper needed. */
 }
 
 /* ─── Gallery column ─────────────────────────────────────── */
@@ -53,9 +50,6 @@
   color: var(--color-foreground);
 }
 
-.ds-product__rating {
-  margin-top: var(--spacing-1);
-}
 
 /* ─── Price + stock row ──────────────────────────────────── */
 .ds-product__price-row {
@@ -101,6 +95,16 @@
   flex-direction: column;
   gap: var(--spacing-3);
   color: var(--color-foreground-secondary);
+}
+
+/* Token-governed paragraph rhythm inside the Liquid-rendered
+   product.description HTML. */
+.ds-product__description p {
+  margin: 0;
+}
+
+.ds-product__description p + p {
+  margin-top: var(--spacing-3);
 }
 
 /* ─── Specifications (accordion) ─────────────────────────── */
