@@ -166,10 +166,10 @@
     </div>
   </div>
 
-  <div class="ds-product__form-submit">
+  <div>
     <button
       type="submit"
-      class="ds-button ds-button--primary ds-button--lg ds-button--full-width ds-add-to-cart ds-add-to-cart--{{ button_status }}"
+      class="ds-button ds-button--primary ds-button--lg ds-button--full-width ds-add-to-cart{% if is_sold_out %} ds-add-to-cart--sold-out{% endif %}"
       {% if is_sold_out %}
         aria-disabled="true"
         disabled
