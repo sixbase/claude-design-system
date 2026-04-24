@@ -14,6 +14,12 @@
 html {
   -webkit-text-size-adjust: 100%;
   font-family: var(--font-family-body);
+  /* Always show vertical scrollbar so layout doesn't jump when
+     navigating between tall (home) and short (catalog, contact)
+     templates. scrollbar-gutter: stable is the modern version;
+     overflow-y: scroll is the universal fallback and wins. */
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
 }
 
 body {
