@@ -3,9 +3,10 @@
 .ds-featured-collection__header {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3);
+  align-items: center;
+  gap: var(--spacing-2);
+  text-align: center;
   margin-bottom: var(--spacing-8);
-  max-width: 65ch;
 }
 
 .ds-featured-collection__grid {

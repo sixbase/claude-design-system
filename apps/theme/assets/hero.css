@@ -1,26 +1,28 @@
 /* ─── Hero section ───────────────────────────────────────── */
+/*
+ * Matches apps/docs/src/components/HomepageDemo.css .ds-homepage__hero —
+ * a contained card centered inside the page container. Not full-bleed.
+ */
 
 .ds-hero {
-  position: relative;
-  min-height: 60vh;
   display: flex;
-  align-items: flex-end;
-  color: var(--color-foreground);
-  overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: var(--spacing-12) var(--spacing-4);
   background-color: var(--color-background-subtle);
-}
-
-/* When a background image is set, text and overlays lean darker —
-   flip the foreground to primary-foreground for contrast. */
-.ds-hero--has-image {
-  color: var(--color-primary-foreground);
-  background-color: var(--color-primary);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
 }
 
 .ds-hero__media {
   position: absolute;
   inset: 0;
   z-index: 0;
+  border-radius: inherit;
 }
 
 .ds-hero__media img {
@@ -33,6 +35,7 @@
   position: absolute;
   inset: 0;
   background-color: var(--color-primary);
+  border-radius: inherit;
 }
 
 .ds-hero__overlay[data-overlay="10"]  { opacity: 0.1; }
@@ -44,47 +47,22 @@
 .ds-hero__overlay[data-overlay="70"]  { opacity: 0.7; }
 .ds-hero__overlay[data-overlay="80"]  { opacity: 0.8; }
 
-.ds-hero__inner {
+.ds-hero__content {
   position: relative;
   z-index: 1;
-  padding-block: var(--spacing-20);
-  width: 100%;
-}
-
-.ds-hero__content {
-  max-width: 48ch;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
+  align-items: center;
+  gap: var(--spacing-4);
+  max-width: var(--size-content-sm);
 }
 
-.ds-hero--align-center .ds-hero__inner {
-  text-align: center;
+/* When a background image is set, flip foreground for contrast */
+.ds-hero--has-image {
+  color: var(--color-primary-foreground);
 }
 
-.ds-hero--align-center .ds-hero__content {
-  margin-inline: auto;
-}
-
-.ds-hero__heading,
-.ds-hero__body {
+.ds-hero--has-image .ds-hero__heading,
+.ds-hero--has-image .ds-hero__body {
   color: inherit;
-}
-
-.ds-hero__cta {
-  align-self: flex-start;
-}
-
-.ds-hero--align-center .ds-hero__cta {
-  align-self: center;
-}
-
-@media (min-width: 1024px) {
-  .ds-hero {
-    min-height: 72vh;
-  }
-
-  .ds-hero__inner {
-    padding-block: var(--spacing-24);
-  }
 }
