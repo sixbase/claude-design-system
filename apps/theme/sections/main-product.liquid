@@ -188,7 +188,7 @@
         {% render 'price',
           price: current_variant.price,
           compare_at_price: current_variant.compare_at_price,
-          size: 'lg'
+          size: 'md'
         %}
       </div>
 
@@ -330,7 +330,7 @@
     "url": {{ shop.url | append: product.url | json }},
     "offers": {
       "@type": "Offer",
-      "price": {{ current_variant.price | money_without_currency | remove: ',' | json }},
+      "price": {{ current_variant.price | divided_by: 100.0 | json }},
       "priceCurrency": {{ cart.currency.iso_code | json }},
       "availability": "{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
       "url": {{ shop.url | append: product.url | json }},
