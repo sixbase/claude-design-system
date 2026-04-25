@@ -226,10 +226,57 @@
     }
 
     if (submitBtn) {
-      form.addEventListener('submit', function () {
+      form.addEventListener('submit', function (e) {
+        /* Guard: cartDrawer script must be initialized. If not
+           (e.g. JS loaded partially) fall back to native submit. */
+        if (!window.cartDrawer) {
+          submitBtn.setAttribute('aria-busy', 'true');
+          submitBtn.classList.add('ds-button--loading');
+          if (liveRegion) liveRegion.textContent = 'Adding…';
+          return;
+        }
+
+        e.preventDefault();
         submitBtn.setAttribute('aria-busy', 'true');
         submitBtn.classList.add('ds-button--loading');
         if (liveRegion) liveRegion.textContent = 'Adding…';
+
+        /* Optimistic UI: open the drawer immediately with a
+           skeleton. The AJAX below runs in parallel; when it
+           lands, refresh() swaps the skeleton for real content.
+           Users see the reveal animation in ~0ms instead of
+           waiting 300–700ms for the network roundtrip. */
+        window.cartDrawer.openWithSkeleton();
+
+        var formData = new FormData(form);
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData,
+        })
+          .then(function (r) {
+            if (!r.ok) return r.json().then(function (err) { throw err; });
+            return r.json();
+          })
+          .then(function () { return fetch('/cart.js').then(function (r) { return r.json(); }); })
+          .then(function (cart) {
+            return window.cartDrawer.refresh().then(function () {
+              window.cartDrawer.updateHeaderBadge(cart.item_count);
+              if (liveRegion) liveRegion.textContent = 'Added to bag';
+            });
+          })
+          .catch(function (err) {
+            /* Close the drawer (hiding the skeleton) and surface
+               the error on the PDP via the live region. */
+            window.cartDrawer.close();
+            var msg = (err && err.description) || 'Could not add to bag';
+            if (liveRegion) liveRegion.textContent = msg;
+          })
+          .finally(function () {
+            submitBtn.removeAttribute('aria-busy');
+            submitBtn.classList.remove('ds-button--loading');
+          });
       });
     }
   })();

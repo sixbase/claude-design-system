@@ -1,0 +1,512 @@
+{%- comment -%}
+  Cart drawer — global section rendered once in theme.liquid.
+
+  Mirrors the React CartDrawer component. Opens from the right edge.
+  Triggered by:
+    • [data-cart-drawer-trigger] clicks (header cart icon)
+    • `cart:open` custom event (dispatched after AJAX add-to-cart)
+
+  Progressive enhancement:
+    • Without JS the cart icon is a real link to /cart (header sets the
+      href) and the product form posts to /cart/add → navigates to /cart.
+    • With JS we intercept both, re-render the drawer via Shopify's
+      Section Rendering API, and open the panel.
+{%- endcomment -%}
+
+{%- liquid
+  assign item_count = cart.item_count
+  assign is_empty = false
+  if item_count == 0
+    assign is_empty = true
+  endif
+  assign drawer_title = 'Your Bag'
+  if item_count > 0
+    assign drawer_title = 'Your Bag (' | append: item_count | append: ')'
+  endif
+-%}
+
+{%- comment -%}
+  Skeleton template — mounted into the drawer root when add-to-cart
+  fires. Mirrors the populated drawer's overlay + panel structure so
+  close/overlay-click/escape/animation all work identically. Swapped
+  out by refreshDrawer() once /cart/add.js + Section Rendering API
+  return.
+{%- endcomment -%}
+<template id="cart-drawer-skeleton">
+  <div class="ds-drawer__overlay" data-cart-drawer-overlay></div>
+  <div
+    class="ds-drawer__panel ds-drawer__panel--right ds-cart-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Shopping cart"
+    data-cart-drawer-panel
+    tabindex="-1"
+  >
+    <button
+      type="button"
+      class="ds-drawer__close"
+      aria-label="Close"
+      data-cart-drawer-close
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M12 4L4 12M4 4l8 8"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+    <div class="ds-drawer__body">
+      <div class="ds-cart-drawer__content">
+        <div class="ds-cart-drawer__header">
+          <h2 class="ds-heading ds-heading--xl">Your Bag</h2>
+        </div>
+
+        <div
+          class="ds-cart-drawer__items"
+          aria-busy="true"
+          aria-label="Loading cart"
+        >
+          <div class="ds-cart-drawer__skeleton-row">
+            <div class="ds-skeleton ds-skeleton--rectangular ds-cart-drawer__skeleton-image"></div>
+            <div class="ds-cart-drawer__skeleton-info">
+              <div class="ds-skeleton ds-skeleton--text" style="width: 70%"></div>
+              <div class="ds-skeleton ds-skeleton--text" style="width: 40%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-cart-drawer__footer">
+          <div class="ds-cart-drawer__subtotal">
+            <span class="ds-text ds-text--base ds-text--medium">Subtotal</span>
+            <div class="ds-skeleton ds-skeleton--text" style="width: 60px"></div>
+          </div>
+          <button
+            type="button"
+            class="ds-button ds-button--primary ds-button--lg ds-button--full-width"
+            disabled
+            aria-busy="true"
+          >
+            Checkout
+          </button>
+          <button
+            type="button"
+            class="ds-button ds-button--ghost ds-button--md ds-button--full-width"
+            data-cart-drawer-close
+          >
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div
+  class="ds-drawer__root"
+  data-cart-drawer-root
+  hidden
+>
+  <div class="ds-drawer__overlay" data-cart-drawer-overlay></div>
+
+  <div
+    class="ds-drawer__panel ds-drawer__panel--right ds-cart-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cart-drawer-title"
+    data-cart-drawer-panel
+    tabindex="-1"
+  >
+    <button
+      type="button"
+      class="ds-drawer__close"
+      aria-label="Close"
+      data-cart-drawer-close
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M12 4L4 12M4 4l8 8"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+
+    <div class="ds-drawer__body">
+      <div class="ds-cart-drawer__content">
+        <div class="ds-cart-drawer__header">
+          <h2
+            id="cart-drawer-title"
+            class="ds-heading ds-heading--xl"
+            data-cart-drawer-title-live
+          >
+            {{- drawer_title -}}
+          </h2>
+        </div>
+
+        {%- if is_empty -%}
+          <div class="ds-cart-drawer__empty">
+            <span class="ds-text ds-text--base ds-text--muted">
+              Your bag is empty
+            </span>
+            <button
+              type="button"
+              class="ds-button ds-button--secondary ds-button--md"
+              data-cart-drawer-close
+            >
+              Continue Shopping
+            </button>
+          </div>
+        {%- else -%}
+          <form
+            action="{{ routes.cart_url }}"
+            method="post"
+            novalidate
+            class="ds-cart-drawer__items"
+            data-cart-drawer-form
+          >
+            {%- for line_item in cart.items -%}
+              {% render 'cart-line-item',
+                line_item: line_item,
+                show_vendor: false
+              %}
+            {%- endfor -%}
+          </form>
+
+          <div class="ds-cart-drawer__footer">
+            <div class="ds-cart-drawer__subtotal">
+              <span class="ds-text ds-text--base ds-text--medium">Subtotal</span>
+              <span class="ds-text ds-text--base ds-text--semibold" data-cart-drawer-subtotal>
+                {{- cart.total_price | money -}}
+              </span>
+            </div>
+            <a
+              href="/checkout"
+              class="ds-button ds-button--primary ds-button--lg ds-button--full-width"
+            >
+              Checkout
+            </a>
+            <button
+              type="button"
+              class="ds-button ds-button--ghost ds-button--md ds-button--full-width"
+              data-cart-drawer-close
+            >
+              Continue Shopping
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Live region for item count announcements {%- endcomment -%}
+    <div aria-live="polite" class="ds-drawer__title">
+      {%- if item_count > 0 -%}
+        {{ item_count }} {% if item_count == 1 %}item{% else %}items{% endif %} in your cart
+      {%- else -%}
+        Your cart is empty
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (window.__cartDrawerInit) return;
+    window.__cartDrawerInit = true;
+
+    var root = document.querySelector('[data-cart-drawer-root]');
+    if (!root) return;
+
+    /* Always re-query — root.innerHTML is swapped on refresh,
+       so cached references to overlay/panel would go stale. */
+    function getOverlay() { return root.querySelector('[data-cart-drawer-overlay]'); }
+    function getPanel()   { return root.querySelector('[data-cart-drawer-panel]'); }
+
+    var previouslyFocused = null;
+    var isOpen = false;
+    var isUpdating = false;
+
+    /* ── Scroll lock ──────────────────────────────────────── */
+    function lockScroll() {
+      document.body.style.overflow = 'hidden';
+    }
+    function unlockScroll() {
+      document.body.style.overflow = '';
+    }
+
+    /* ── Focus trap (minimal) ─────────────────────────────── */
+    function getFocusables() {
+      var panel = getPanel();
+      if (!panel) return [];
+      return panel.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+    }
+
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      var focusables = getFocusables();
+      var panel = getPanel();
+      if (focusables.length === 0) {
+        e.preventDefault();
+        if (panel) panel.focus();
+        return;
+      }
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    /* ── Skeleton ─────────────────────────────────────────── */
+    /*
+     * Mount the skeleton template into the drawer root and open.
+     * Called from the product-form on Add-to-Bag so the drawer
+     * reveals immediately while /cart/add.js + Section Rendering
+     * API are still in flight. refreshDrawer() overwrites the
+     * skeleton with real content when the response lands.
+     *
+     * If the drawer is already open (with real data), skip the
+     * skeleton — refresh alone is enough and a skeleton flash
+     * would be jarring.
+     */
+    function openWithSkeleton() {
+      if (isOpen) return;
+      var tpl = document.getElementById('cart-drawer-skeleton');
+      if (tpl) root.innerHTML = tpl.innerHTML;
+      open();
+    }
+
+    /* ── Open / Close ─────────────────────────────────────── */
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      previouslyFocused = document.activeElement;
+      /* Match DS: in-animation is on the base class and runs as
+         soon as the element renders. Clearing any stale
+         [data-state='closed'] from a previous close swaps the
+         matching animation-name back to the in-animation, which
+         replays it the moment `hidden` is removed. No RAF hack,
+         no one-frame flash at the final position. */
+      var overlay = getOverlay();
+      var panel = getPanel();
+      if (overlay) overlay.removeAttribute('data-state');
+      if (panel) panel.removeAttribute('data-state');
+      root.hidden = false;
+      lockScroll();
+      /* Focus close button for keyboard users */
+      var closeBtn = panel && panel.querySelector('[data-cart-drawer-close]');
+      (closeBtn || panel || root).focus();
+    }
+
+    function close() {
+      if (!isOpen) return;
+      isOpen = false;
+      var overlay = getOverlay();
+      var panel = getPanel();
+      /* If refreshDrawer() froze the in-animation with an inline
+         `animation: none`, clear it so the [data-state='closed']
+         out-animation can take over. */
+      if (overlay) overlay.style.animation = '';
+      if (panel) panel.style.animation = '';
+      if (overlay) overlay.setAttribute('data-state', 'closed');
+      if (panel) panel.setAttribute('data-state', 'closed');
+
+      var onEnd = function () {
+        root.hidden = true;
+        if (overlay) overlay.removeEventListener('animationend', onEnd);
+      };
+      if (overlay) overlay.addEventListener('animationend', onEnd);
+      /* Fallback if animationend doesn't fire (reduced-motion) */
+      setTimeout(function () { if (!isOpen) root.hidden = true; }, 400);
+
+      unlockScroll();
+      if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+    }
+
+    /* ── Delegated listeners (survive innerHTML swaps) ────── */
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest && e.target.closest('[data-cart-drawer-trigger]');
+      if (trigger) {
+        e.preventDefault();
+        open();
+        return;
+      }
+      var closeBtn = e.target.closest && e.target.closest('[data-cart-drawer-close]');
+      if (closeBtn && root.contains(closeBtn)) {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.target === getOverlay()) {
+        close();
+        return;
+      }
+      /* Remove link inside drawer — intercept for AJAX */
+      var removeLink = e.target.closest && e.target.closest('[data-cart-remove]');
+      if (removeLink && root.contains(removeLink)) {
+        e.preventDefault();
+        var key = removeLink.closest('[data-line-key]');
+        if (!key) return;
+        changeLine(key.getAttribute('data-line-key'), 0);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!isOpen) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      } else {
+        trapFocus(e);
+      }
+    });
+
+    /* Custom event bus — product-form dispatches cart:open
+       after a successful async add. */
+    document.addEventListener('cart:open', open);
+
+    /* ── Quantity form submit within drawer ───────────────── */
+    document.addEventListener('submit', function (e) {
+      var form = e.target.closest && e.target.closest('[data-cart-drawer-form]');
+      if (!form) return;
+      e.preventDefault();
+      /* Submitter tells us which +/- button triggered — use its
+         name/value to build the update. Or fall back to form data. */
+      var submitter = e.submitter;
+      if (submitter && submitter.name && submitter.name.indexOf('updates[') === 0) {
+        var key = submitter.name.slice(8, -1);
+        var qty = parseInt(submitter.value, 10);
+        if (!isNaN(qty)) {
+          changeLine(key, qty);
+          return;
+        }
+      }
+      /* Fallback — gather all updates[] inputs */
+      var formData = new FormData(form);
+      var updates = {};
+      formData.forEach(function (value, name) {
+        var match = name.match(/^updates\[(.+)\]$/);
+        if (match) updates[match[1]] = parseInt(value, 10) || 0;
+      });
+      updateCart(updates);
+    });
+
+    /* ── Manual qty input change inside drawer ────────────── */
+    document.addEventListener('change', function (e) {
+      var input = e.target;
+      if (!input.matches || !input.matches('[data-qty-input]')) return;
+      var row = input.closest('[data-line-key]');
+      var form = input.closest('[data-cart-drawer-form]');
+      if (!row || !form) return;
+      var key = row.getAttribute('data-line-key');
+      var qty = parseInt(input.value, 10);
+      if (isNaN(qty) || qty < 0) return;
+      changeLine(key, qty);
+    });
+
+    /* ── AJAX helpers ─────────────────────────────────────── */
+    function changeLine(id, quantity) {
+      if (isUpdating) return;
+      isUpdating = true;
+      fetch('{{ routes.cart_change_url }}.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: id, quantity: quantity }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          refreshDrawer();
+          updateHeaderBadge(cart.item_count);
+        })
+        .catch(function () {})
+        .finally(function () { isUpdating = false; });
+    }
+
+    function updateCart(updates) {
+      if (isUpdating) return;
+      isUpdating = true;
+      fetch('{{ routes.cart_update_url }}.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ updates: updates }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          refreshDrawer();
+          updateHeaderBadge(cart.item_count);
+        })
+        .catch(function () {})
+        .finally(function () { isUpdating = false; });
+    }
+
+    function refreshDrawer() {
+      return fetch('{{ routes.root_url }}?sections=cart-drawer')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var html = data['cart-drawer'];
+          if (!html) return;
+          /* Section Rendering API returns the section wrapped in
+             <div id="shopify-section-..."> — extract our root. */
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var freshRoot = doc.querySelector('[data-cart-drawer-root]');
+          if (!freshRoot) return;
+          root.innerHTML = freshRoot.innerHTML;
+          /* If the drawer was open during refresh, the fresh
+             overlay/panel have no data-state → base-class
+             in-animation would replay unwantedly. Freeze them by
+             marking their in-animation as already-finished. */
+          if (isOpen) {
+            var overlay = getOverlay();
+            var panel = getPanel();
+            if (overlay) overlay.style.animation = 'none';
+            if (panel) panel.style.animation = 'none';
+          }
+        });
+    }
+
+    function updateHeaderBadge(count) {
+      var cartLink = document.querySelector('.ds-header__cart');
+      if (!cartLink) return;
+      cartLink.setAttribute(
+        'aria-label',
+        'Shopping bag (' + count + ' ' + (count === 1 ? 'item' : 'items') + ')'
+      );
+      var badge = cartLink.querySelector('.ds-header__cart-count');
+      if (count > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'ds-badge ds-badge--sm ds-badge--default ds-header__cart-count';
+          badge.setAttribute('aria-hidden', 'true');
+          cartLink.appendChild(badge);
+        }
+        badge.textContent = count;
+      } else if (badge) {
+        badge.remove();
+      }
+    }
+
+    /* Expose API for product-form after add-to-cart */
+    window.cartDrawer = {
+      open: open,
+      openWithSkeleton: openWithSkeleton,
+      close: close,
+      refresh: refreshDrawer,
+      updateHeaderBadge: updateHeaderBadge,
+    };
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

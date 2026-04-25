@@ -110,6 +110,13 @@
     {{ 'price-display.css' | asset_url | stylesheet_tag }}
     {{ 'breadcrumb.css' | asset_url | stylesheet_tag }}
 
+    {%- comment -%} Cart drawer is a global section → its deps load globally {%- endcomment -%}
+    {{ 'drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'cart-line-item.css' | asset_url | stylesheet_tag }}
+    {{ 'quantity-selector.css' | asset_url | stylesheet_tag }}
+    {{ 'skeleton.css' | asset_url | stylesheet_tag }}
+
     {{ content_for_header }}
   </head>
 
@@ -122,5 +129,7 @@
     </main>
 
     {% section 'footer' %}
+
+    {% section 'cart-drawer' %}
   </body>
 </html>

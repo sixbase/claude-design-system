@@ -59,9 +59,9 @@
   {%- comment -%} ── Info ───────────────────────────────────────── {%- endcomment -%}
   <div class="ds-cart-line-item__info">
     <a href="{{ lip.url }}" class="ds-cart-line-item__link">
-      <span class="ds-text ds-text--sm ds-text--semibold ds-cart-line-item__name">
+      <p class="ds-text ds-text--sm ds-text--semibold ds-cart-line-item__name">
         {{- lip.product.title | escape -}}
-      </span>
+      </p>
     </a>
 
     {%- if has_variant_title or show_vendor or lip.properties.size > 0 -%}
@@ -151,10 +151,19 @@
   </div>
 
   {%- comment -%} ── Line total ────────────────────────────────── {%- endcomment -%}
+  {%- comment -%}
+    Match DS CartLineItem: single <p> with ds-text--sm + ds-text--semibold
+    for the line total. Do NOT nest the {% render 'price' %} snippet here —
+    its outer <div class="ds-price-display"> forces an invalid
+    <span>…<div>…</span> structure and the visible text inherits the inner
+    span's ds-text--base ds-text--medium (16px / 500) instead of the
+    intended sm / semibold (14px / 600). The line total is a single scalar
+    value and has no compare-at, so we format it directly with `money`.
+  {%- endcomment -%}
   <div class="ds-cart-line-item__price">
-    <span class="ds-text ds-text--sm ds-text--semibold">
-      {% render 'price', price: lip.final_line_price, size: 'sm' %}
-    </span>
+    <p class="ds-text ds-text--sm ds-text--semibold">
+      {{- lip.final_line_price | money -}}
+    </p>
   </div>
 
   {%- comment -%} ── Remove ────────────────────────────────────── {%- endcomment -%}

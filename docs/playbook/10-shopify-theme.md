@@ -237,7 +237,7 @@ Each section that maps to a page type includes the relevant JSON-LD schema inlin
 | Customer templates | Port Alert + 7 customer sections (login, register, reset, activate, account, addresses, order) | ✅ Complete |
 | Home page sections | hero, featured-collection, feature-block — composed in `templates/index.json` | ✅ Complete |
 | SEO structured data | Per-page JSON-LD (Product, CollectionPage, BreadcrumbList) shipped by each stream. Site-wide `Organization` + `WebSite` in `theme.liquid`. OG tags + Twitter Card. | ✅ Complete |
-| Cart drawer | Port CartDrawer — offer from any page, not just /cart | Phase 2 |
+| Cart drawer | Port CartDrawer → global section `sections/cart-drawer.liquid` + `assets/drawer.css` + `assets/cart-drawer.css`. Header cart icon and product-form add-to-cart both open it via AJAX `/cart/add.js` + Section Rendering API. See 06-decisions-log → "Cart Drawer: Vanilla JS + Section Rendering API". | ✅ Complete |
 | Mega menu | Port MegaMenu for multi-level header navigation | Phase 2 |
 | Predictive search | Port PredictiveSearch as a header-triggered overlay | Phase 2 |
 | QA pass | Real browser testing, mobile sanity, checkout flow verification | Pending |

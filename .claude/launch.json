@@ -12,6 +12,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "@ds/storybook", "dev"],
       "port": 6006
+    },
+    {
+      "name": "shopify-theme",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd apps/theme && shopify theme dev --store=mason-ufqqwrle.myshopify.com"],
+      "port": 9292
     }
   ]
 }

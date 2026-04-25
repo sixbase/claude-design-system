@@ -99,6 +99,7 @@
         href="{{ routes.cart_url }}"
         class="ds-header__icon-btn ds-header__cart"
         aria-label="Shopping bag ({{ cart_count }} {% if cart_count == 1 %}item{% else %}items{% endif %})"
+        data-cart-drawer-trigger
       >
         {% render 'icon', name: 'cart' %}
         {%- if cart_count > 0 -%}

@@ -82,12 +82,19 @@
 }
 
 /* ─── Size variants ──────────────────────────────────────── */
+/*
+ * Theme uses <input type="number"> for the value, which has an
+ * intrinsic flex-basis of ~20ch (from the default `size` attr).
+ * Pin `width` (not just `min-width`) so the input matches the DS
+ * <output> element's fixed-square layout.
+ */
 .ds-quantity-selector--sm .ds-quantity-selector__btn {
   width: var(--size-control-sm);
   height: var(--size-control-sm);
 }
 
 .ds-quantity-selector--sm .ds-quantity-selector__value {
+  width: var(--size-control-sm);
   min-width: var(--size-control-sm);
   height: var(--size-control-sm);
   font-size: var(--font-size-xs);
@@ -99,6 +106,7 @@
 }
 
 .ds-quantity-selector--md .ds-quantity-selector__value {
+  width: var(--size-control-md);
   min-width: var(--size-control-md);
   height: var(--size-control-md);
   font-size: var(--font-size-sm);
@@ -108,15 +116,6 @@
 @supports not (text-box-trim: both) {
   .ds-quantity-selector__value {
     transform: translateY(0.05em);
-  }
-}
-
-/* Touch target floor on mobile (WCAG 2.5.5). */
-@media (max-width: 767px) {
-  .ds-quantity-selector__btn,
-  .ds-quantity-selector__value {
-    min-width: var(--size-touch-target-lg);
-    min-height: var(--size-touch-target-lg);
   }
 }
 
