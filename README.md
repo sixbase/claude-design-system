@@ -1,6 +1,8 @@
-# Claude Design System
+# Mason Design System
 
 A token-driven, accessible React component library built for premium ecommerce. Golden ratio proportions, warm editorial aesthetic, dark mode, and full test coverage from day one.
+
+🔗 **Live docs:** https://sixbase.github.io/mason-design-system/
 
 ## Quick Start
 
