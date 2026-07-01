@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
-  Button, Carousel, CarouselSlide,
-  Heading, Input, ProductCard, Text,
+  Button, Carousel, CarouselSlide, Heading, Highlight, Highlights,
+  Input, ProductCard, Text,
 } from '@ds/components';
 import { PRODUCTS } from '../data/products';
 import { makePlaceholder } from '../lib/placeholder';
@@ -86,23 +86,16 @@ export function HomepageDemo({ basePath = '' }: { basePath?: string }) {
 
       {/* ── Highlights ───────────────────────────────────── */}
       <section className="ds-section">
-        <div className="ds-homepage__highlights">
+        <Highlights>
           {FEATURES.map((feature) => (
-            <div key={feature.title} className="ds-homepage__highlight">
-              <div className="ds-homepage__highlight-media">
-                <img
-                  src={feature.image}
-                  alt=""
-                  className="ds-homepage__highlight-img"
-                />
-              </div>
-              <p className="ds-homepage__highlight-text">
-                <span className="ds-homepage__highlight-title">{feature.title}</span>{' '}
-                <span className="ds-homepage__highlight-desc">{feature.description}</span>
-              </p>
-            </div>
+            <Highlight
+              key={feature.title}
+              title={feature.title}
+              description={feature.description}
+              image={<img src={feature.image} alt="" className="ds-highlights__img" />}
+            />
           ))}
-        </div>
+        </Highlights>
       </section>
 
       {/* ── Newsletter ───────────────────────────────────── */}

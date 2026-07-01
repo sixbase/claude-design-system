@@ -1,0 +1,74 @@
+/* ─── Highlights ──────────────────────────────────────────── */
+/*
+ * A responsive row of cards (default 3). Each card = a 4:5 portrait image on
+ * a light surface with 34px (--radius-3xl) corners, plus an inline title +
+ * description below. Mobile-first: 1 column, 2 from 640px, 3 from 1024px.
+ * All values are design-system tokens.
+ */
+
+.ds-highlights {
+  display: grid;
+  grid-template-columns: 1fr;             /* phones: single column */
+  column-gap: var(--spacing-4);           /* 16px between cards in a row */
+  row-gap: var(--spacing-phi-21);         /* 42px when stacked */
+}
+
+@media (min-width: 640px) {
+  .ds-highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-highlights {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ds-highlights__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-highlights__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-3xl);       /* 34px */
+  background-color: var(--color-background-subtle);
+}
+
+.ds-highlights__img,
+.ds-highlights__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ds-highlights__text {
+  /* Golden-ratio spacing: top gap is the phi step up from the 16px card
+     gutter (≈26px); side insets are that divided by phi (≈16px). */
+  margin: var(--spacing-phi-13) var(--spacing-phi-8) 0;
+  /* Title + description flow inline as one continuous sentence. */
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+}
+
+.ds-highlights__title {
+  /* Slightly heavier than the description to lead the sentence. */
+  font-weight: var(--font-weight-medium);
+}
+
+/* Terminal period on each title — kept out of the content so stored titles
+   stay clean; inherits the title's weight and color. */
+.ds-highlights__title::after {
+  content: ".";
+}
+
+.ds-highlights__desc {
+  /* Lighter than the body default (400) and muted, deepening the contrast
+     with the medium-weight title. Source Serif 4 is variable (200–900), so
+     300 is a real weight, not synthesized. */
+  font-weight: var(--font-weight-light);
+  color: var(--color-foreground-muted);
+}

@@ -35,6 +35,7 @@ export * from './star-rating';
 export * from './price-display';
 export * from './stock-indicator';
 export * from './feature-block';
+export * from './highlights';
 export * from './cart-line-item';
 export * from './cart-drawer';
 export * from './add-to-cart-button';
